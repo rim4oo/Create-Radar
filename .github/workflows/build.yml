@@ -53,12 +53,14 @@ jobs:
           path: build/libs/*.jar
 
       - name: Send building message to discord
+        if: env.DISCORD_WEBHOOK != ''
         uses: fateyan/action-discord-notifier@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           message-title: Building mod from branch ${{ steps.get_branch.outputs.branch }}
 
       - name: Send built file to discord
+        if: env.DISCORD_WEBHOOK != ''
         uses: sinshutu/upload-to-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}

@@ -10,5 +10,5 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "refmap": "createradar.refmap.json"
+  "refmap": "create_radar.refmap.json"
 }

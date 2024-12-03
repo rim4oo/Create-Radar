@@ -1,0 +1,7 @@
+{
+  "block.create_radar.monitor": "Monitor",
+  "block.create_radar.radar_dish_block": "Radar Dish Block",
+  "block.create_radar.radar_plate_block": "Radar Plate Block",
+  "block.create_radar.radar_receiver_block": "Radar Receiver Block",
+  "itemGroup.create_radar.radar": "Create: Radars"
+}

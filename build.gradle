@@ -14,12 +14,6 @@ base {
     archivesName = mod_id
 }
 
-
-base {
-    archivesName = mod_id
-}
-
-// Mojang ships Java 17 to end users in 1.18+, so your radar should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
@@ -60,7 +54,7 @@ minecraft {
 
         data {
             workingDirectory project.file('run-data')
-            args '--radar', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
 }
@@ -90,16 +84,27 @@ repositories {
         url 'https://www.cursemaven.com'
         content { includeGroup "curse.maven" }
     }
+    maven { // Ritchie's Projectile Library && CBC
+        url = "https://maven.realrobotix.me/master/"
+        content {
+            includeGroup("com.rbasamoyai")
+        }
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
+    //Create
     implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
+    //CBC
+    implementation fg.deobf("com.rbasamoyai:createbigcannons:${cbc_version}") { transitive = false }
+    implementation fg.deobf("com.rbasamoyai:ritchiesprojectilelib:${rpl_version}") { transitive = false }
+
+    //JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
@@ -110,8 +115,8 @@ dependencies {
 
 
 mixin {
-    add sourceSets.main, 'createradar.refmap.json'
-    config 'createradar.mixins.json'
+    add sourceSets.main, 'create_radar.refmap.json'
+    config 'create_radar.mixins.json'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
