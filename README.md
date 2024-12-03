@@ -1,0 +1,37 @@
+# Create Radars
+
+Create Radars is a Minecraft mod that offers a variety of tools and blocks for surveillance, detection, and controlling
+weapons.
+
+## Features
+
+- **Radar Bearing Multiblock**: Shape your radar however you like, with each characteristic influencing its capability.
+- **Scalable Monitor Multiblock**: Visualize your radar to have an overview of the battlefield and effortlessly spot any
+  intruders.
+- **CBC Cannon Controller**: Direct your autocannons at intruders with the help of your radars.
+
+## Overview
+
+The added elements of tech are designed to leave as many design choices to the player as possible. With Create Radars,
+the game isn't played inside a bunch of UIs; it challenges you to set up contraptions of animated components working
+together in many possible arrangements. A wide variety of techniques and features ensure strategic depth and immersion.
+
+The mechanics are inspired by real-life detection technology but simplified to the extent that any player can utilize
+them, ensuring faster development and easier gameplay.
+
+## Installation
+
+1. Download the mod from the [official website](https://modrinth.com/project/create-radars).
+2. Place the downloaded file into the `mods` folder of your Minecraft directory.
+3. Launch Minecraft and enjoy the new features!
+
+## Contributing
+
+We welcome contributions from the community. If you have any ideas, suggestions, or bug reports, please open an issue or
+submit a pull request on our [GitHub repository](https://github.com/Arsenalists-of-Create/Create-Radar).
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+Enjoy playing with Create Radars!
