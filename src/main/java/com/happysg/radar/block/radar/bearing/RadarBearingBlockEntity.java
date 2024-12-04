@@ -48,6 +48,11 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         updateRadarContraption();
     }
 
+    @Override
+    public float calculateStressApplied() {
+        return super.calculateStressApplied() + getDishCount();
+    }
+
     private void updateRadarContraption() {
         if (movedContraption == null || movedContraption.getContraption() == null) {
             dishCount = 0;

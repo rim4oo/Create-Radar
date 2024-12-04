@@ -39,7 +39,7 @@ public class ModBlocks {
     public static final BlockEntry<RadarBearingBlock> RADAR_BEARING_BLOCK =
             REGISTRATE.block("radar_bearing", RadarBearingBlock::new)
                     .initialProperties(SharedProperties::softMetal)
-                    .transform(BlockStressDefaults.setImpact(64))
+                    .transform(BlockStressDefaults.setImpact(4))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
                     .item()
