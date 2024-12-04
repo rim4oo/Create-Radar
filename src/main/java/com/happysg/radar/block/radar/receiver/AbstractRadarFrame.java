@@ -36,6 +36,11 @@ public class AbstractRadarFrame extends WrenchableDirectionalBlock {
         this.shaper = shaper;
     }
 
+    @Override
+    public boolean isStickyBlock(BlockState state) {
+        return true;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {

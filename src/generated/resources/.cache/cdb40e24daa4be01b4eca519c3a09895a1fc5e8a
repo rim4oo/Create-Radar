@@ -1,15 +1,18 @@
-// 1.20.1	2024-12-03T13:40:13.8740057	Registrate Provider for create_radar [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.20.1	2024-12-03T14:39:36.6700747	Registrate Provider for create_radar [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 bfdee35245193d3864339df4282befcc851dc4a5 assets/create_radar/blockstates/monitor.json
+66a2079dcc1b1f5dfc01f4065580ec20f647847a assets/create_radar/blockstates/radar_bearing.json
 743a6e261a444a2ff6ed4092ad78358c08c93dcf assets/create_radar/blockstates/radar_dish_block.json
 802436ac5c28235b21c7c7053c4adf4854114bc0 assets/create_radar/blockstates/radar_plate_block.json
 6ebe881b05211829ceda7bf291b6493c915174ac assets/create_radar/blockstates/radar_receiver_block.json
-0d3b3e88f2274c3455132dd79841a32dd44e172e assets/create_radar/lang/en_ud.json
-79a1718530d6dfefd69b6f43b4714b8d641990f9 assets/create_radar/lang/en_us.json
+04928fc01ff43b9db198a55b8a39d358c4db5da4 assets/create_radar/lang/en_ud.json
+d364ca24a94a6323c8e267ac7f87472a62858f10 assets/create_radar/lang/en_us.json
 045bd977956d97aacaf175888f5183c329a6627e assets/create_radar/models/item/monitor.json
+1eceebddb8c3d0097f8de84b73df0543c8c21278 assets/create_radar/models/item/radar_bearing.json
 d3703d13d87f39376ad87af9c5104ddc1296ba00 assets/create_radar/models/item/radar_dish_block.json
 4302285f36d2ff386ad455b74231f6d36f31fcb8 assets/create_radar/models/item/radar_plate_block.json
 8fd077aa0107824d00727e386f4e8871dcf1bbfb assets/create_radar/models/item/radar_receiver_block.json
 471fecd3cdc6e560cb7fb50790c3c3dcdefdf3b7 data/create_radar/loot_tables/blocks/monitor.json
+8a09901a0f8d14a678ef34a2360aa35b54295c09 data/create_radar/loot_tables/blocks/radar_bearing.json
 573b472eca002eac68aad2e25a849823b0aeb601 data/create_radar/loot_tables/blocks/radar_dish_block.json
 f36e6dfba82dd3f410afaffdee2b97f1182cbbcb data/create_radar/loot_tables/blocks/radar_plate_block.json
 8feac7797a7c4f13a4a25dca1f7785bf14db8171 data/create_radar/loot_tables/blocks/radar_receiver_block.json

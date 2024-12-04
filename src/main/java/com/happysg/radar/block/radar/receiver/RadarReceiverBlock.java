@@ -20,5 +20,10 @@ public class RadarReceiverBlock extends WrenchableDirectionalBlock {
                                         @NotNull CollisionContext p_220071_4_) {
         return AllShapes.CASING_12PX.get(state.getValue(FACING).getOpposite());
     }
+
+    @Override
+    public boolean isStickyBlock(BlockState state) {
+        return true;
+    }
 }
 

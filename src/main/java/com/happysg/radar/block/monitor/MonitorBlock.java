@@ -8,7 +8,6 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -50,11 +49,6 @@ public class MonitorBlock extends HorizontalDirectionalBlock implements IBE<Moni
     @Override
     public BlockEntityType<? extends MonitorBlockEntity> getBlockEntityType() {
         return ModBlockEntityTypes.MONITOR.get();
-    }
-
-    @Override
-    public RenderShape getRenderShape(BlockState pState) {
-        return super.getRenderShape(pState);
     }
 
     @Override
