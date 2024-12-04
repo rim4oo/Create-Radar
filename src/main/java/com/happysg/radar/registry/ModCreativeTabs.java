@@ -33,7 +33,7 @@ public class ModCreativeTabs {
     }
 
     private static void displayItems(CreativeModeTab.ItemDisplayParameters pParameters, CreativeModeTab.Output pOutput) {
-        //pOutput.accept(ModBlocks.MONITOR);
+        pOutput.accept(ModBlocks.MONITOR);
         pOutput.accept(ModBlocks.RADAR_BEARING_BLOCK);
         pOutput.accept(ModBlocks.RADAR_RECEIVER_BLOCK);
         pOutput.accept(ModBlocks.RADAR_PLATE_BLOCK);

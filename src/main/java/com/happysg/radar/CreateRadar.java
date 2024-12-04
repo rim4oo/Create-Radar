@@ -33,6 +33,7 @@ public class CreateRadar {
         ModBlockEntityTypes.register();
         ModCreativeTabs.register(modEventBus);
         ModLang.register();
+        ModContraptionTypes.register();
         modEventBus.addListener(CreateRadar::init);
     }
 

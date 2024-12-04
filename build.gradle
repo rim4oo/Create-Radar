@@ -7,7 +7,7 @@ plugins {
 }
 
 String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
-version = "${mod_version}${buildNumber != null ? ".${buildNumber}-" : ""}+mc${minecraft_version}"
+version = "${mod_version}${buildNumber != null ? ".${buildNumber}" : ""}+mc${minecraft_version}"
 group = mod_group_id
 
 base {
