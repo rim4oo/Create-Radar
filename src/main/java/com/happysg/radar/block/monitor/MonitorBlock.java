@@ -3,9 +3,11 @@ package com.happysg.radar.block.monitor;
 import com.happysg.radar.registry.ModBlockEntityTypes;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.Lang;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -30,6 +32,18 @@ public class MonitorBlock extends HorizontalDirectionalBlock implements IBE<Moni
         return this.defaultBlockState()
                 .setValue(FACING, context.getHorizontalDirection()
                         .getOpposite());
+    }
+
+    @Override
+    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
+        super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
+        MonitorMultiBlockHelper.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        MonitorMultiBlockHelper.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
 
     public enum Shape implements StringRepresentable {
