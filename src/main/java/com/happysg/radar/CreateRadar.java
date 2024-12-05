@@ -34,6 +34,7 @@ public class CreateRadar {
         ModCreativeTabs.register(modEventBus);
         ModLang.register();
         ModContraptionTypes.register();
+        ModPonderIndex.register();
         modEventBus.addListener(CreateRadar::init);
     }
 
