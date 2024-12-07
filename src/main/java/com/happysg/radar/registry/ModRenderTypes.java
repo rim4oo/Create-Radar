@@ -1,11 +1,13 @@
 package com.happysg.radar.registry;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.util.function.BiFunction;
 
@@ -19,8 +21,15 @@ public class ModRenderTypes extends RenderType {
     private static final BiFunction<ResourceLocation, Boolean, RenderType> POLYGON_OFFSET = Util.memoize((texture, affectsOutline) -> {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
                 .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
-                .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false) {
+                    @Override
+                    public void setupRenderState() {
+                        super.setupRenderState();
+                        //clamp the UV coordinates to prevent the texture from wrapping
+                        RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+                        RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+                    }
+                }).setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                 .setLayeringState(POLYGON_OFFSET_LAYERING)
                 .setCullState(NO_CULL)
                 .setLightmapState(LIGHTMAP)

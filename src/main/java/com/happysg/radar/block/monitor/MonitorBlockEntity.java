@@ -8,29 +8,23 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
 
 public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoveringInformation {
+    public static final int MAX_RADIUS = 5;
+    protected BlockPos controller;
+    protected int radius = 1;
+
     public MonitorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    protected BlockPos controller;
-    protected boolean updateConnectivity;
-    protected int radius = 1;
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-    }
-
-    @Override
-    public void lazyTick() {
-        super.lazyTick();
-        //annoying way to fix multiblock refresh issue
-        if (radius > 1 && getControllerPos().equals(getBlockPos()))
-            MonitorMultiBlockHelper.formMulti(getBlockState(), getLevel(), getBlockPos(), radius);
     }
 
     public BlockPos getControllerPos() {
@@ -67,6 +61,11 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
 
 
     public boolean isController() {
-        return getBlockPos().equals(controller);
+        return getBlockPos().equals(controller) || controller == null;
+    }
+
+    @Override
+    protected AABB createRenderBoundingBox() {
+        return super.createRenderBoundingBox().inflate(MAX_RADIUS);
     }
 }

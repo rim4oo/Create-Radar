@@ -49,7 +49,6 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         float alpha = 1f;
         float deptY = 0.95f;
 
-        // Define UV coordinates
         float u0 = 0;
         float v0 = 0;
         float u1 = 1;
@@ -59,14 +58,11 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         float u3 = 0;
         float v3 = 1;
 
-        // Increase the number of iterations to create more squares
-        // Adjust this value to create more squares
-
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 buffer
                         .vertex(m, 1f - size + i, deptY, 1f - size + j)
-                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                        .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                         .uv(u0, v0)
                         .overlayCoords(OverlayTexture.NO_OVERLAY)
                         .uv2(255)
@@ -75,7 +71,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
                 buffer
                         .vertex(m, 1f - size + i + 1, deptY, 1f - size + j)
-                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                        .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                         .uv(u1, v1)
                         .overlayCoords(OverlayTexture.NO_OVERLAY)
                         .uv2(255)
@@ -84,7 +80,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
                 buffer
                         .vertex(m, 1f - size + i + 1, deptY, 1f - size + j + 1)
-                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                        .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                         .uv(u2, v2)
                         .overlayCoords(OverlayTexture.NO_OVERLAY)
                         .uv2(255)
@@ -93,7 +89,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
                 buffer
                         .vertex(m, 1f - size + i, deptY, 1f - size + j + 1)
-                        .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                        .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                         .uv(u3, v3)
                         .overlayCoords(OverlayTexture.NO_OVERLAY)
                         .uv2(255)
@@ -122,7 +118,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         buffer
                 .vertex(m, 1f - size, deptY, 1f - size)
-                .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u0, v0)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
@@ -131,7 +127,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         buffer
                 .vertex(m, 1, deptY, 1f - size)
-                .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u1, v1)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
@@ -140,7 +136,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         buffer
                 .vertex(m, 1, deptY, 1f)
-                .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u2, v2)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
@@ -149,7 +145,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         buffer
                 .vertex(m, 1f - size, deptY, 1f)
-                .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u3, v3)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
@@ -189,7 +185,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         buffer
                 .vertex(m, 1f - size, deptY, 1f - size)
-                .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u0, v0)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
@@ -198,7 +194,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         buffer
                 .vertex(m, 1, deptY, 1f - size)
-                .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u1, v1)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
@@ -207,7 +203,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         buffer
                 .vertex(m, 1, deptY, 1f)
-                .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u2, v2)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
@@ -216,7 +212,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         buffer
                 .vertex(m, 1f - size, deptY, 1f)
-                .color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alpha)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u3, v3)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
