@@ -1,5 +1,6 @@
 package com.happysg.radar.ponder;
 
+import com.happysg.radar.registry.ModBlocks;
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
@@ -27,9 +28,11 @@ public class ProcessingScenes {
                 .text("Place Radar Bearing");
         scene.idle(60);
 
-        BlockPos receiver = util.grid.at(2, 3, 2);
-        scene.world.showSection(util.select.position(receiver), Direction.DOWN);
-        Vec3 receiverSide = util.vector.blockSurface(receiver, Direction.EAST);
+        BlockPos receiverPos = util.grid.at(2, 3, 2);
+        ElementLink<WorldSectionElement> receiver =
+                scene.world.showIndependentSection(util.select.position(receiverPos), Direction.DOWN, 15);
+        Vec3 receiverSide = util.vector.blockSurface(receiverPos, Direction.EAST);
+
         scene.overlay.showText(40)
                 .pointAt(receiverSide)
                 .placeNearTarget()
@@ -39,37 +42,50 @@ public class ProcessingScenes {
 
         BlockPos dish1 = util.grid.at(3, 3, 2);
         BlockPos dish2 = util.grid.at(1, 3, 2);
-        scene.world.showSection(util.select.position(dish1), Direction.DOWN);
-        scene.world.showSection(util.select.position(dish2), Direction.DOWN);
+        ElementLink<WorldSectionElement> simple_dishes =
+                scene.world.showIndependentSection(util.select.position(dish1).add(util.select.position(dish2)), Direction.DOWN, 15);
         Vec3 dishSide = util.vector.blockSurface(dish1, Direction.EAST);
         scene.overlay.showText(40)
                 .pointAt(dishSide)
                 .placeNearTarget()
                 .attachKeyFrame()
-                .text("Add Radar Dishes");
-        scene.idle(40);
+                .text("Add Radar Plates");
+        scene.idle(50);
 
-        scene.world.showSection(util.select.layer(4), Direction.DOWN);
+
+        scene.world.replaceBlocks(util.select.position(dish1), ModBlocks.RADAR_DISH_BLOCK.get().defaultBlockState(), true);
+        scene.world.replaceBlocks(util.select.position(dish2), ModBlocks.RADAR_DISH_BLOCK.get().defaultBlockState(), true);
+        scene.overlay.showText(40)
+                .pointAt(dishSide)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("Radar Dishes can be used interchangeably with plates");
+        scene.idle(50);
+
+        ElementLink<WorldSectionElement> large_dishes =
+                scene.world.showIndependentSection(util.select.layer(4), Direction.DOWN, 15);
         scene.overlay.showText(40)
                 .pointAt(dishSide.add(0, 1, 0))
                 .placeNearTarget()
                 .attachKeyFrame()
-                .text("Additional dishes extend range");
+                .text("Additional dishes/plates extend range");
         scene.idle(40);
+
 
         scene.overlay.showText(40)
                 .pointAt(bearingSide)
                 .placeNearTarget()
                 .attachKeyFrame()
                 .text("Power Radar Bearing");
-        scene.world.hideSection(util.select.layers(3, 2), Direction.UP);
-        scene.idle(15);
+
+        scene.idle(10);
         scene.world.rotateBearing(bearing, 360, 200);
-        ElementLink<WorldSectionElement> radar =
-                scene.world.showIndependentSection(util.select.layers(3, 2), Direction.UP, 10);
-        scene.world.rotateSection(radar, 0, 360, 0, 200);
+        scene.world.rotateSection(receiver, 0, 360, 0, 200);
+        scene.world.rotateSection(simple_dishes, 0, 360, 0, 200);
+        scene.world.rotateSection(large_dishes, 0, 360, 0, 200);
         scene.world.setKineticSpeed(util.select.layer(1), 32);
-        scene.idle(40);
+        scene.idle(100);
+        scene.markAsFinished();
     }
 
 }

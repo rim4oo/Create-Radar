@@ -32,6 +32,6 @@ submit a pull request on our [GitHub repository](https://github.com/Arsenalists-
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+The code is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 Enjoy playing with Create Radars!

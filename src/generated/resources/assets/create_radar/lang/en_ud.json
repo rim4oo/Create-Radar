@@ -1,14 +1,15 @@
 {
   "block.create_radar.monitor": "ɹoʇıuoW",
   "block.create_radar.radar_bearing": "buıɹɐǝᗺ ɹɐpɐᴚ",
-  "block.create_radar.radar_dish_block": "ʞɔoןᗺ ɥsıᗡ ɹɐpɐᴚ",
-  "block.create_radar.radar_plate_block": "ʞɔoןᗺ ǝʇɐןԀ ɹɐpɐᴚ",
+  "block.create_radar.radar_dish_block": "ɥsıᗡ ɹɐpɐᴚ",
+  "block.create_radar.radar_plate_block": "ǝʇɐןԀ ɹɐpɐᴚ",
   "block.create_radar.radar_receiver_block": "ʞɔoןᗺ ɹǝʌıǝɔǝᴚ ɹɐpɐᴚ",
   "create_radar.ponder.radar_contraption.header": "¡ɹɐpɐᴚ ɐ buıʇɐǝɹƆ",
   "create_radar.ponder.radar_contraption.text_1": "buıɹɐǝᗺ ɹɐpɐᴚ ǝɔɐןԀ",
   "create_radar.ponder.radar_contraption.text_2": "ɹǝʌıǝɔǝᴚ ɹɐpɐᴚ ǝɔɐןԀ",
   "create_radar.ponder.radar_contraption.text_3": "sǝɥsıᗡ ɹɐpɐᴚ ppⱯ",
-  "create_radar.ponder.radar_contraption.text_4": "ǝbuɐɹ puǝʇxǝ sǝʇɐןd/sǝɥsıp ןɐuoıʇıppⱯ",
-  "create_radar.ponder.radar_contraption.text_5": "buıɹɐǝᗺ ɹɐpɐᴚ ɹǝʍoԀ",
+  "create_radar.ponder.radar_contraption.text_4": "sǝʇɐןԀ ɹɐpɐᴚ ɥʇıʍ ʎןqɐǝbuɐɥɔɹǝʇuı pǝsn ǝq uɐɔ sǝɥsıᗡ ɹɐpɐᴚ",
+  "create_radar.ponder.radar_contraption.text_5": "ǝbuɐɹ puǝʇxǝ sǝʇɐןd/sǝɥsıp ןɐuoıʇıppⱯ",
+  "create_radar.ponder.radar_contraption.text_6": "buıɹɐǝᗺ ɹɐpɐᴚ ɹǝʍoԀ",
   "itemGroup.create_radar.radar": "sɹɐpɐᴚ :ǝʇɐǝɹƆ"
 }

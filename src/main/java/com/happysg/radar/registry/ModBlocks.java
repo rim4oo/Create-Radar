@@ -61,6 +61,7 @@ public class ModBlocks {
     @SuppressWarnings("unused")
     public static final BlockEntry<AbstractRadarFrame> RADAR_DISH_BLOCK =
             REGISTRATE.block("radar_dish_block", properties -> new AbstractRadarFrame(properties, ModShapes.RADAR_DISH))
+                    .lang("Radar Dish")
                     .initialProperties(SharedProperties::softMetal)
                     .transform(BlockStressDefaults.setImpact(0))
                     .properties(BlockBehaviour.Properties::noOcclusion)
@@ -73,6 +74,7 @@ public class ModBlocks {
     @SuppressWarnings("unused")
     public static final BlockEntry<AbstractRadarFrame> RADAR_PLATE_BLOCK =
             REGISTRATE.block("radar_plate_block", properties -> new AbstractRadarFrame(properties, ModShapes.RADAR_PLATE))
+                    .lang("Radar Plate")
                     .initialProperties(SharedProperties::softMetal)
                     .transform(BlockStressDefaults.setImpact(0))
                     .properties(BlockBehaviour.Properties::noOcclusion)

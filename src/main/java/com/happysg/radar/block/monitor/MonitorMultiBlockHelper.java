@@ -13,6 +13,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.happysg.radar.block.monitor.MonitorBlock.SHAPE;
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
+
+//this is messy but couldn't figure out how to use Create MultiblockHelper
+//todo make better
 public class MonitorMultiBlockHelper {
 
     public static int MAX_SIZE = 5;

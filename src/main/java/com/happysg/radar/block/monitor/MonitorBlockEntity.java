@@ -6,7 +6,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -24,14 +23,6 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-    }
-
-    @Override
-    public boolean addToTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        IHaveHoveringInformation.super.addToTooltip(tooltip, isPlayerSneaking);
-        tooltip.add(Component.literal("    radius: " + radius));
-        tooltip.add(Component.literal("  controller: " + controller));
-        return true;
     }
 
     @Override
@@ -75,4 +66,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     }
 
 
+    public boolean isController() {
+        return getBlockPos().equals(controller);
+    }
 }
