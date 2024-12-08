@@ -12,6 +12,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,11 +50,10 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     }
 
     public void setRadarPos(BlockPos pPos) {
-        radarPos = pPos;
-        if (level.getBlockEntity(pPos) instanceof RadarBearingBlockEntity radar) {
-            this.radar = radar;
+        if (level.getBlockEntity(getControllerPos()) instanceof MonitorBlockEntity monitor) {
+            monitor.radarPos = pPos;
+            monitor.notifyUpdate();
         }
-        notifyUpdate();
     }
 
     @Override
@@ -100,7 +100,11 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     public AABB getMultiblockBounds(LevelAccessor level, BlockPos pos) {
         Direction facing = level.getBlockState(getControllerPos())
                 .getValue(MonitorBlock.FACING).getClockWise();
-        AABB aabb = new AABB(getControllerPos(), getControllerPos().offset(facing.getStepX() * (radius), radius, facing.getStepZ() * (radius)));
-        return aabb;
+        BlockPos controllerPos = facing.getAxisDirection() == Direction.AxisDirection.POSITIVE ? getControllerPos() : getControllerPos().relative(facing.getOpposite());
+        VoxelShape shape = level.getBlockState(pos)
+                .getShape(level, pos);
+        return shape.bounds()
+                .move(pos).expandTowards(facing.getStepX() * (radius - 1), radius - 1, facing.getStepZ() * (radius - 1));
+
     }
 }
