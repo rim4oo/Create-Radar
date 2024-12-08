@@ -53,7 +53,6 @@ public class RadarContraption extends BearingContraption {
     public void tickStorage(AbstractContraptionEntity entity) {
         super.tickStorage(entity);
         if (entity instanceof ControlledContraptionEntity contraptionEntity) {
-            System.out.println(contraptionEntity.getAngle(1));
         }
     }
 

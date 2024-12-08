@@ -7,6 +7,7 @@ import com.simibubi.create.content.contraptions.bearing.MechanicalBearingBlockEn
 import com.simibubi.create.content.kinetics.BlockStressValues;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.utility.ServerSpeedProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private int dishCount;
-
+    private Direction receiverFacing;
     public RadarBearingBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -36,6 +37,19 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         updateDishCount();
     }
 
+    public float getAngularSpeed() {
+        float speed = convertToAngular(getSpeed());
+        if (getSpeed() == 0)
+            speed = 0;
+        if (level.isClientSide) {
+            speed *= ServerSpeedProvider.get();
+            speed += clientAngleDiff / 3f;
+        }
+
+        //integer division used to step down the speed
+        //TODO rebalance speed
+        return speed / (4f + getDishCount() / 10);
+    }
 
     //code copied in order to replace with radar contraption and radar advancements
     @Override
@@ -101,6 +115,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
 
     private void updateDishCount() {
         dishCount = getContraption().map(RadarContraption::getDishCount).orElse(0);
+        receiverFacing = getContraption().map(RadarContraption::getReceiverFacing).orElse(Direction.NORTH);
         notifyUpdate();
     }
 
@@ -116,12 +131,16 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         dishCount = compound.getInt("dishCount");
+        if (compound.contains("receiverFacing"))
+            receiverFacing = Direction.from3DDataValue(compound.getInt("receiverFacing"));
     }
 
     @Override
     public void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
         compound.putInt("dishCount", dishCount);
+        if (receiverFacing != null)
+            compound.putInt("receiverFacing", receiverFacing.get3DDataValue());
 
     }
 
@@ -135,5 +154,14 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
                 .filter(c -> c instanceof RadarContraption)
                 .map(c -> (RadarContraption) c);
     }
+
+    public float getAngle() {
+        return angle;
+    }
+
+    public Direction getReceiverFacing() {
+        return receiverFacing;
+    }
+
 
 }

@@ -1,7 +1,7 @@
 package com.happysg.radar.block.monitor;
 
+import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
 import com.happysg.radar.registry.ModRenderTypes;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.jozufozu.flywheel.util.Color;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -34,10 +34,14 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         ms.translate(0.5, 0.5, 0.5);
         ms.mulPose(Axis.XP.rotationDegrees(90));
         ms.translate(-0.5, -0.5, -0.5);
-        renderGrid(blockEntity, ms, bufferSource);
-        renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_CIRCLE);
-        renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_FILLER);
-        renderSweep(blockEntity, ms, bufferSource);
+        blockEntity.getRadar().ifPresent(radar -> {
+            if (!radar.isRunning())
+                return;
+            // renderGrid(blockEntity, ms, bufferSource);
+            renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_FILLER);
+            renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_CIRCLE);
+            renderSweep(radar, blockEntity, ms, bufferSource);
+        });
     }
 
     private void renderGrid(MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
@@ -155,24 +159,29 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
     }
 
-    public void renderSweep(MonitorBlockEntity controller, PoseStack ms, MultiBufferSource bufferSource) {
+    public void renderSweep(RadarBearingBlockEntity radar, MonitorBlockEntity controller, PoseStack ms, MultiBufferSource bufferSource) {
+        if (!radar.isRunning())
+            return;
         VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.polygonOffset(MonitorSprite.RADAR_SWEEP.getTexture()));
-        int speed = 20;
-
-
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
         Color color = new Color(0, 255, 0);
-        float alpha = .5f;
-        int timer = AnimationTickHolder.getTicks();
-        float angle = (timer * speed % 360) * (float) Math.PI / 180.0f;
+        float alpha = 0.5f;
+        Direction monitorFacing = controller.getBlockState().getValue(MonitorBlock.FACING);
+        Direction radarFacing = radar.getReceiverFacing();
+        float angleDiff = monitorFacing.toYRot() - radarFacing.toYRot();
+        float angle = ((radar.getAngle() + angleDiff) % 360.0f) * (float) Math.PI / 180.0f;
+        // System.out.println(angle);
         float cos = (float) Math.cos(angle);
         float sin = (float) Math.sin(angle);
+
+        //center to change when panning and partial rendering added
         float centerX = 0.5f;
         float centerY = 0.5f;
-        float deptY = 0.94f;
+        float deptY = .96f;
 
         int size = controller.getSize();
+
 
         float u0 = centerX + (0 - centerX) * cos - (0 - centerY) * sin;
         float v0 = centerY + (0 - centerX) * sin + (0 - centerY) * cos;
