@@ -71,7 +71,9 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         float v2 = 1;
         float u3 = 0;
         float v3 = 1;
-        float scale = 20;
+        float scale = radar.getRange();
+
+        Direction monitorFacing = blockEntity.getBlockState().getValue(MonitorBlock.FACING);
         Vec3 radarPos = radar.getBlockPosition().getCenter();
         Vec3 entityPos = track.position();
         Vec3 relativePos = entityPos.subtract(radarPos);
@@ -81,12 +83,30 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         float xOff = (x / scale);
         float zOff = (z / scale);
-        if (Math.abs(xOff) > 1 || Math.abs(zOff) > 1)
+        if (Math.abs(xOff) > .5f || Math.abs(zOff) > .5f)
             return;
+
+
+        if (monitorFacing == Direction.NORTH) {
+            xOff = -xOff;
+            zOff = -zOff;
+        }
+
+        if (monitorFacing == Direction.WEST) {
+            float temp = xOff;
+            xOff = zOff;
+            zOff = -temp;
+        }
+
+        if (monitorFacing == Direction.EAST) {
+            float temp = xOff;
+            xOff = zOff;
+            xOff = -xOff;
+            zOff = temp;
+        }
 
         xOff = xOff + (size - 1) / 2f;
         zOff = zOff + (size - 1) / 2f;
-
 
 
         buffer
