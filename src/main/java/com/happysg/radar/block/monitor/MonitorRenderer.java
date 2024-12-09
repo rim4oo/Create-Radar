@@ -42,18 +42,17 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
             if (!radar.isRunning())
                 return;
             // renderGrid(blockEntity, ms, bufferSource);
+            renderRadarTracks(radar, blockEntity, ms, bufferSource);
             renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_FILLER);
             renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_CIRCLE);
             renderSweep(radar, blockEntity, ms, bufferSource);
-            renderRadarTracks(radar, blockEntity, ms, bufferSource);
         });
     }
 
     private void renderRadarTracks(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
         List<RadarTrack> tracks = radar.getEntityPositions();
-        for (RadarTrack track : tracks) {
-            renderTrack(track, blockEntity, radar, ms, bufferSource);
-        }
+        tracks.forEach(track -> renderTrack(track, blockEntity, radar, ms, bufferSource));
+
     }
 
     private void renderTrack(RadarTrack track, MonitorBlockEntity blockEntity, RadarBearingBlockEntity radar, PoseStack ms, MultiBufferSource bufferSource) {
@@ -72,10 +71,9 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         float v2 = 1;
         float u3 = 0;
         float v3 = 1;
-        float scale = 50;
+        float scale = 20;
         Vec3 radarPos = radar.getBlockPosition().getCenter();
         Vec3 entityPos = track.position();
-
         Vec3 relativePos = entityPos.subtract(radarPos);
 
         float x = (float) relativePos.x();
@@ -83,10 +81,13 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         float xOff = (x / scale);
         float zOff = (z / scale);
-        xOff = xOff + 0.5f;
-        zOff = zOff + 0.5f;
         if (Math.abs(xOff) > 1 || Math.abs(zOff) > 1)
             return;
+
+        xOff = xOff + (size - 1) / 2f;
+        zOff = zOff + (size - 1) / 2f;
+
+
 
         buffer
                 .vertex(m, 1f - size + xOff, deptY, 1f - size + zOff)
