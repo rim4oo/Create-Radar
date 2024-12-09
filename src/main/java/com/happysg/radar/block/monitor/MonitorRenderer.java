@@ -56,12 +56,12 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
     }
 
     private void renderTrack(RadarTrack track, MonitorBlockEntity blockEntity, RadarBearingBlockEntity radar, PoseStack ms, MultiBufferSource bufferSource) {
-        VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.polygonOffset(MonitorSprite.ENTITY_HITBOX.getTexture()));
+        VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.polygonOffset(track.contraption() ? MonitorSprite.CONTRAPTION_HITBOX.getTexture() : MonitorSprite.ENTITY_HITBOX.getTexture()));
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
-        Color color = new Color(255, 255, 255);
+        Color color = track.color();
         float alpha = 1f;
-        float deptY = 0.97f;
+        float deptY = 0.95f;
         float size = blockEntity.getSize();
         float u0 = 0;
         float v0 = 0;
@@ -77,13 +77,12 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         Vec3 radarPos = radar.getBlockPosition().getCenter();
         Vec3 entityPos = track.position();
         Vec3 relativePos = entityPos.subtract(radarPos);
-
         float x = (float) relativePos.x();
         float z = (float) relativePos.z();
 
         float xOff = (x / scale);
         float zOff = (z / scale);
-        if (Math.abs(xOff) > .5f || Math.abs(zOff) > .5f)
+        if (Math.abs(xOff) > 1f || Math.abs(zOff) > 1f)
             return;
 
 
@@ -105,9 +104,10 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
             zOff = temp;
         }
 
+        xOff = xOff / 2f;
+        zOff = zOff / 2f;
         xOff = xOff + (size - 1) / 2f;
         zOff = zOff + (size - 1) / 2f;
-
 
         buffer
                 .vertex(m, 1f - size + xOff, deptY, 1f - size + zOff)
