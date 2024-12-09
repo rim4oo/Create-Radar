@@ -56,16 +56,6 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         }
     }
 
-    @Override
-    public void lazyTick() {
-        super.lazyTick();
-        if (!level.isClientSide())
-            return;
-        getRadar().ifPresent(radar -> {
-            if (radar.isRunning())
-                radar.getEntityPositions().forEach(radarTrack -> System.out.println(radarTrack.position()));
-        });
-    }
 
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {

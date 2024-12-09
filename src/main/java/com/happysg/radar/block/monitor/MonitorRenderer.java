@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -51,16 +52,16 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
     private void renderRadarTracks(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
         List<RadarTrack> tracks = radar.getEntityPositions();
         for (RadarTrack track : tracks) {
-            renderTrack(track, blockEntity, ms, bufferSource);
+            renderTrack(track, blockEntity, radar, ms, bufferSource);
         }
     }
 
-    private void renderTrack(RadarTrack track, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
+    private void renderTrack(RadarTrack track, MonitorBlockEntity blockEntity, RadarBearingBlockEntity radar, PoseStack ms, MultiBufferSource bufferSource) {
         VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.polygonOffset(MonitorSprite.ENTITY_HITBOX.getTexture()));
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
-        Color color = new Color(0, 0, 255);
-        float alpha = 0.5f;
+        Color color = new Color(255, 255, 255);
+        float alpha = 1f;
         float deptY = 0.97f;
         float size = blockEntity.getSize();
         float u0 = 0;
@@ -71,9 +72,24 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         float v2 = 1;
         float u3 = 0;
         float v3 = 1;
+        float scale = 50;
+        Vec3 radarPos = radar.getBlockPosition().getCenter();
+        Vec3 entityPos = track.position();
+
+        Vec3 relativePos = entityPos.subtract(radarPos);
+
+        float x = (float) relativePos.x();
+        float z = (float) relativePos.z();
+
+        float xOff = (x / scale);
+        float zOff = (z / scale);
+        xOff = xOff + 0.5f;
+        zOff = zOff + 0.5f;
+        if (Math.abs(xOff) > 1 || Math.abs(zOff) > 1)
+            return;
 
         buffer
-                .vertex(m, 1f - size, deptY, 1f - size)
+                .vertex(m, 1f - size + xOff, deptY, 1f - size + zOff)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u0, v0)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -82,7 +98,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
                 .endVertex();
 
         buffer
-                .vertex(m, 1, deptY, 1f - size)
+                .vertex(m, 1f - size + xOff + 1, deptY, 1f - size + zOff)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u1, v1)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -91,7 +107,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
                 .endVertex();
 
         buffer
-                .vertex(m, 1, deptY, 1f)
+                .vertex(m, 1f - size + xOff + 1, deptY, 1f - size + zOff + 1)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u2, v2)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -100,14 +116,13 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
                 .endVertex();
 
         buffer
-                .vertex(m, 1f - size, deptY, 1f)
+                .vertex(m, 1f - size + xOff, deptY, 1f - size + zOff + 1)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u3, v3)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
                 .normal(n, 0, 1, 0)
                 .endVertex();
-
 
     }
 
@@ -177,7 +192,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         Matrix3f n = ms.last().normal();
         Color color = new Color(0, 255, 0);
         float alpha = .6f;
-        float deptY = 0.95f;
+        float deptY = 0.94f;
         float u0 = 0;
         float v0 = 0;
         float u1 = 1;
@@ -245,7 +260,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         //center to change when panning and partial rendering added
         float centerX = 0.5f;
         float centerY = 0.5f;
-        float deptY = .96f;
+        float deptY = .95f;
 
         int size = controller.getSize();
 
