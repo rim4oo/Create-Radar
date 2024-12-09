@@ -1,6 +1,7 @@
 package com.happysg.radar.block.monitor;
 
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
+import com.happysg.radar.block.radar.bearing.RadarTrack;
 import com.happysg.radar.registry.ModRenderTypes;
 import com.jozufozu.flywheel.util.Color;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,6 +14,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+
+import java.util.List;
 
 public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity> {
 
@@ -41,7 +44,71 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
             renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_FILLER);
             renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_CIRCLE);
             renderSweep(radar, blockEntity, ms, bufferSource);
+            renderRadarTracks(radar, blockEntity, ms, bufferSource);
         });
+    }
+
+    private void renderRadarTracks(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
+        List<RadarTrack> tracks = radar.getEntityPositions();
+        for (RadarTrack track : tracks) {
+            renderTrack(track, blockEntity, ms, bufferSource);
+        }
+    }
+
+    private void renderTrack(RadarTrack track, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
+        VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.polygonOffset(MonitorSprite.ENTITY_HITBOX.getTexture()));
+        Matrix4f m = ms.last().pose();
+        Matrix3f n = ms.last().normal();
+        Color color = new Color(0, 0, 255);
+        float alpha = 0.5f;
+        float deptY = 0.97f;
+        float size = blockEntity.getSize();
+        float u0 = 0;
+        float v0 = 0;
+        float u1 = 1;
+        float v1 = 0;
+        float u2 = 1;
+        float v2 = 1;
+        float u3 = 0;
+        float v3 = 1;
+
+        buffer
+                .vertex(m, 1f - size, deptY, 1f - size)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
+                .uv(u0, v0)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(255)
+                .normal(n, 0, 0, 0)
+                .endVertex();
+
+        buffer
+                .vertex(m, 1, deptY, 1f - size)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
+                .uv(u1, v1)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(255)
+                .normal(n, 0, 1, 0)
+                .endVertex();
+
+        buffer
+                .vertex(m, 1, deptY, 1f)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
+                .uv(u2, v2)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(255)
+                .normal(n, 0, 1, 0)
+                .endVertex();
+
+        buffer
+                .vertex(m, 1f - size, deptY, 1f)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
+                .uv(u3, v3)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(255)
+                .normal(n, 0, 1, 0)
+                .endVertex();
+
+
     }
 
     private void renderGrid(MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {

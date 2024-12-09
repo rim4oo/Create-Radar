@@ -12,15 +12,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
+    private static final int MAX_TRACK_TICKS = 100;
+
     private int dishCount;
     private Direction receiverFacing;
+    Map<UUID, RadarTrack> entityPositions = new HashMap<>();
     public RadarBearingBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -31,10 +35,62 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         movementMode.setValue(MovementMode.MOVE_NEVER_PLACE.ordinal());
     }
 
+
     @Override
-    public void initialize() {
-        super.initialize();
-        updateDishCount();
+    public void tick() {
+        super.tick();
+        if (isRunning()) {
+            scanForEntityTracks();
+        }
+        clearOldTracks();
+    }
+
+    private void clearOldTracks() {
+        List<UUID> toRemove = new ArrayList<>();
+        entityPositions.forEach((entity, track) -> {
+            if (level.getGameTime() - track.scannedTime() > MAX_TRACK_TICKS) {
+                toRemove.add(entity);
+            }
+        });
+        toRemove.forEach(uuid -> {
+            entityPositions.remove(uuid);
+            notifyUpdate();
+        });
+    }
+
+    private void scanForEntityTracks() {
+        AABB aabb = getRadarAABB();
+        level.getEntities(movedContraption, aabb).stream().filter(this::isEntityInRadarFov).forEach(
+                entity -> {
+                    entityPositions.put(entity.getUUID(), new RadarTrack(entity));
+                    notifyUpdate();
+                }
+        );
+    }
+
+    private AABB getRadarAABB() {
+        return new AABB(worldPosition).inflate(20, 2, 20);
+    }
+
+    private boolean isEntityInRadarFov(Entity entity) {
+        float radarAngle = getGlobalAngle();
+        BlockPos entityPos = entity.blockPosition();
+        double fovDegrees = 90;
+        BlockPos radarPos = worldPosition;
+
+        // Calculate the angle between the radar and the entity
+        double angleToEntity = Math.toDegrees(Math.atan2(entityPos.getX() - radarPos.getX(), radarPos.getZ() - entityPos.getZ()));
+        if (angleToEntity < 0) {
+            angleToEntity += 360;
+        }
+        double relativeAngle = Math.abs(angleToEntity - radarAngle);
+
+        // Check if the entity is within the field of view
+        return relativeAngle <= fovDegrees / 2;
+    }
+
+    public float getGlobalAngle() {
+        return (receiverFacing.toYRot() - angle + 360) % 360;
     }
 
     public float getAngularSpeed() {
@@ -69,7 +125,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
             award(AllAdvancements.WINDMILL_MAXED);
 
         updateGeneratedRotation();
-        updateDishCount();
+        updateContraptionData();
         notifyUpdate();
     }
 
@@ -77,7 +133,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     @Override
     public void disassemble() {
         super.disassemble();
-        updateDishCount();
+        updateContraptionData();
     }
 
     @Override
@@ -113,7 +169,8 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         return contraption;
     }
 
-    private void updateDishCount() {
+    //capturing from radar contraption to save on client side BE, contraption data only server side
+    private void updateContraptionData() {
         dishCount = getContraption().map(RadarContraption::getDishCount).orElse(0);
         receiverFacing = getContraption().map(RadarContraption::getReceiverFacing).orElse(Direction.NORTH);
         notifyUpdate();
@@ -133,6 +190,8 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         dishCount = compound.getInt("dishCount");
         if (compound.contains("receiverFacing"))
             receiverFacing = Direction.from3DDataValue(compound.getInt("receiverFacing"));
+        if (clientPacket && compound.contains("entityPositions"))
+            RadarTrack.deserializeListNBT(compound.getCompound("entityPositions")).forEach(track -> entityPositions.put(track.entityId(), track));
     }
 
     @Override
@@ -141,6 +200,8 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         compound.putInt("dishCount", dishCount);
         if (receiverFacing != null)
             compound.putInt("receiverFacing", receiverFacing.get3DDataValue());
+        if (clientPacket)
+            compound.put("entityPositions", RadarTrack.serializeNBTList(entityPositions.values()));
 
     }
 
@@ -163,5 +224,8 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         return receiverFacing;
     }
 
+    public List<RadarTrack> getEntityPositions() {
+        return new ArrayList<>(entityPositions.values());
+    }
 
 }

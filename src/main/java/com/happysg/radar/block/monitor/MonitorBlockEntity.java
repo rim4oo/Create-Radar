@@ -57,6 +57,17 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     }
 
     @Override
+    public void lazyTick() {
+        super.lazyTick();
+        if (!level.isClientSide())
+            return;
+        getRadar().ifPresent(radar -> {
+            if (radar.isRunning())
+                radar.getEntityPositions().forEach(radarTrack -> System.out.println(radarTrack.position()));
+        });
+    }
+
+    @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
         if (tag.contains("Controller"))
@@ -100,11 +111,10 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     public AABB getMultiblockBounds(LevelAccessor level, BlockPos pos) {
         Direction facing = level.getBlockState(getControllerPos())
                 .getValue(MonitorBlock.FACING).getClockWise();
-        BlockPos controllerPos = facing.getAxisDirection() == Direction.AxisDirection.POSITIVE ? getControllerPos() : getControllerPos().relative(facing.getOpposite());
-        VoxelShape shape = level.getBlockState(pos)
-                .getShape(level, pos);
+        VoxelShape shape = level.getBlockState(getControllerPos())
+                .getShape(level, getControllerPos());
         return shape.bounds()
-                .move(pos).expandTowards(facing.getStepX() * (radius - 1), radius - 1, facing.getStepZ() * (radius - 1));
+                .move(getControllerPos()).expandTowards(facing.getStepX() * (radius - 1), radius - 1, facing.getStepZ() * (radius - 1));
 
     }
 }

@@ -3,10 +3,8 @@ package com.happysg.radar.block.radar.bearing;
 import com.happysg.radar.block.radar.receiver.AbstractRadarFrame;
 import com.happysg.radar.block.radar.receiver.RadarReceiverBlock;
 import com.happysg.radar.registry.ModContraptionTypes;
-import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.ContraptionType;
-import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
 import com.simibubi.create.content.contraptions.bearing.BearingContraption;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -49,12 +47,6 @@ public class RadarContraption extends BearingContraption {
 
     }
 
-    @Override
-    public void tickStorage(AbstractContraptionEntity entity) {
-        super.tickStorage(entity);
-        if (entity instanceof ControlledContraptionEntity contraptionEntity) {
-        }
-    }
 
     public int getDishCount() {
         return dishCount;
@@ -67,6 +59,7 @@ public class RadarContraption extends BearingContraption {
     public Direction getReceiverFacing() {
         return receiverFacing;
     }
+
 
     @Override
     public ContraptionType getType() {
