@@ -30,14 +30,7 @@ public class ModRenderTypes extends RenderType {
                         RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
                     }
                 })
-                .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency",
-                        () -> {
-                            RenderSystem.enableBlend();
-                            RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-                        },
-                        () -> {
-                            RenderSystem.disableBlend();
-                        }))
+                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                 .setLayeringState(POLYGON_OFFSET_LAYERING)
                 .setCullState(NO_CULL)
                 .setLightmapState(LIGHTMAP)

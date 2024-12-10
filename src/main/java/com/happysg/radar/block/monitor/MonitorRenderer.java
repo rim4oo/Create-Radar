@@ -55,71 +55,70 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
     }
 
-    private void renderTrack(RadarTrack track, MonitorBlockEntity blockEntity, RadarBearingBlockEntity radar, PoseStack ms, MultiBufferSource bufferSource) {
-        VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.polygonOffset(track.contraption() ? MonitorSprite.CONTRAPTION_HITBOX.getTexture() : MonitorSprite.ENTITY_HITBOX.getTexture()));
+    private void renderTrack(RadarTrack track, MonitorBlockEntity monitor, RadarBearingBlockEntity radar, PoseStack ms, MultiBufferSource bufferSource) {
+        VertexConsumer buffer = getBuffer(bufferSource, track.contraption() ? MonitorSprite.CONTRAPTION_HITBOX : MonitorSprite.ENTITY_HITBOX);
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
         Color color = track.color();
-        float alpha = 1f;
-        float deptY = 0.95f;
-        float size = blockEntity.getSize();
-        float u0 = 0;
-        float v0 = 0;
-        float u1 = 1;
-        float v1 = 0;
-        float u2 = 1;
-        float v2 = 1;
-        float u3 = 0;
-        float v3 = 1;
+        float alpha = .8f;
+        float deptY = 0.946f;
+        float size = monitor.getSize();
         float scale = radar.getRange();
+        Direction monitorFacing = monitor.getBlockState().getValue(MonitorBlock.FACING);
+        Vec3 relativePos = track.position().subtract(radar.getBlockPos().getCenter());
+        float xOff = monitorFacing.getAxis() == Direction.Axis.Z ? getOffset(relativePos.x(), scale) : getOffset(relativePos.z(), scale);
+        float zOff = monitorFacing.getAxis() == Direction.Axis.Z ? getOffset(relativePos.z(), scale) : getOffset(relativePos.x(), scale);
 
-        Direction monitorFacing = blockEntity.getBlockState().getValue(MonitorBlock.FACING);
-        Vec3 radarPos = radar.getBlockPosition().getCenter();
-        Vec3 entityPos = track.position();
-        Vec3 relativePos = entityPos.subtract(radarPos);
-        float x = (float) relativePos.x();
-        float z = (float) relativePos.z();
-
-        float xOff = (x / scale);
-        float zOff = (z / scale);
-        if (Math.abs(xOff) > 1f || Math.abs(zOff) > 1f)
-            return;
-
-
+        //todo improve this, very hacky
         if (monitorFacing == Direction.NORTH) {
             xOff = -xOff;
             zOff = -zOff;
         }
-
         if (monitorFacing == Direction.WEST) {
-            float temp = xOff;
-            xOff = zOff;
-            zOff = -temp;
+            zOff = -zOff;
         }
-
         if (monitorFacing == Direction.EAST) {
-            float temp = xOff;
-            xOff = zOff;
             xOff = -xOff;
-            zOff = temp;
         }
 
-        xOff = xOff / 2f;
-        zOff = zOff / 2f;
-        xOff = xOff + (size - 1) / 2f;
-        zOff = zOff + (size - 1) / 2f;
+        if (Math.abs(xOff) > .5f || Math.abs(zOff) > .5f)
+            return;
 
-        buffer
-                .vertex(m, 1f - size + xOff, deptY, 1f - size + zOff)
+
+        float xmin = 1 - size + (xOff * size);
+        float zmin = 1 - size + (zOff * size);
+        float xmax = xOff + 1;
+        float zmax = zOff + 1;
+
+        renderVertices(buffer, m, n, color, alpha, deptY, xmin, zmin, xmax, zmax);
+        if (track.entityId().equals(monitor.hoveredEntity))
+            renderVertices(getBuffer(bufferSource, MonitorSprite.TARGET_HOVERED), m, n, new Color(255, 255, 0), alpha, deptY, xmin, zmin, xmax, zmax);
+        if (track.entityId().equals(monitor.selectedEntity))
+            renderVertices(getBuffer(bufferSource, MonitorSprite.TARGET_SELECTED), m, n, new Color(255, 0, 0), alpha, deptY, xmin, zmin, xmax, zmax);
+    }
+
+    private VertexConsumer getBuffer(MultiBufferSource bufferSource, MonitorSprite sprite) {
+        return bufferSource.getBuffer(ModRenderTypes.polygonOffset(sprite.getTexture()));
+    }
+
+
+    private float getOffset(double coordinate, float scale) {
+        return (float) (coordinate / scale) / 2f;
+    }
+
+
+    private void renderVertices(VertexConsumer buffer, Matrix4f m, Matrix3f n, Color color, float alpha, float deptY, float xmin, float zmin, float xmax, float zmax) {
+        float u0 = 0, v0 = 0, u1 = 1, v1 = 0, u2 = 1, v2 = 1, u3 = 0, v3 = 1;
+
+        buffer.vertex(m, xmin, deptY, zmin)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u0, v0)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
-                .normal(n, 0, 0, 0)
+                .normal(n, 0, 1, 0)
                 .endVertex();
 
-        buffer
-                .vertex(m, 1f - size + xOff + 1, deptY, 1f - size + zOff)
+        buffer.vertex(m, xmax, deptY, zmin)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u1, v1)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -127,8 +126,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
                 .normal(n, 0, 1, 0)
                 .endVertex();
 
-        buffer
-                .vertex(m, 1f - size + xOff + 1, deptY, 1f - size + zOff + 1)
+        buffer.vertex(m, xmax, deptY, zmax)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u2, v2)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -136,129 +134,29 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
                 .normal(n, 0, 1, 0)
                 .endVertex();
 
-        buffer
-                .vertex(m, 1f - size + xOff, deptY, 1f - size + zOff + 1)
+        buffer.vertex(m, xmin, deptY, zmax)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
                 .uv(u3, v3)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
                 .normal(n, 0, 1, 0)
                 .endVertex();
-
-    }
-
-    private void renderGrid(MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
-        VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.polygonOffset(MonitorSprite.GRID_SQUARE.getTexture()));
-        int size = blockEntity.getSize();
-        Matrix4f m = ms.last().pose();
-        Matrix3f n = ms.last().normal();
-        Color color = new Color(0, 255, 0);
-        float alpha = 1f;
-        float deptY = 0.95f;
-
-        float u0 = 0;
-        float v0 = 0;
-        float u1 = 1;
-        float v1 = 0;
-        float u2 = 1;
-        float v2 = 1;
-        float u3 = 0;
-        float v3 = 1;
-
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                buffer
-                        .vertex(m, 1f - size + i, deptY, 1f - size + j)
-                        .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
-                        .uv(u0, v0)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY)
-                        .uv2(255)
-                        .normal(n, 0, 0, 0)
-                        .endVertex();
-
-                buffer
-                        .vertex(m, 1f - size + i + 1, deptY, 1f - size + j)
-                        .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
-                        .uv(u1, v1)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY)
-                        .uv2(255)
-                        .normal(n, 0, 1, 0)
-                        .endVertex();
-
-                buffer
-                        .vertex(m, 1f - size + i + 1, deptY, 1f - size + j + 1)
-                        .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
-                        .uv(u2, v2)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY)
-                        .uv2(255)
-                        .normal(n, 0, 1, 0)
-                        .endVertex();
-
-                buffer
-                        .vertex(m, 1f - size + i, deptY, 1f - size + j + 1)
-                        .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
-                        .uv(u3, v3)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY)
-                        .uv2(255)
-                        .normal(n, 0, 1, 0)
-                        .endVertex();
-            }
-        }
     }
 
     private void renderBG(MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource, MonitorSprite monitorSprite) {
-        VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.polygonOffset(monitorSprite.getTexture()));
         int size = blockEntity.getSize();
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
         Color color = new Color(0, 255, 0);
         float alpha = .6f;
         float deptY = 0.94f;
-        float u0 = 0;
-        float v0 = 0;
-        float u1 = 1;
-        float v1 = 0;
-        float u2 = 1;
-        float v2 = 1;
-        float u3 = 0;
-        float v3 = 1;
 
-        buffer
-                .vertex(m, 1f - size, deptY, 1f - size)
-                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
-                .uv(u0, v0)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(255)
-                .normal(n, 0, 0, 0)
-                .endVertex();
+        float minX = 1f - size;
+        float minZ = 1f - size;
+        float maxX = 1;
+        float maxZ = 1;
 
-        buffer
-                .vertex(m, 1, deptY, 1f - size)
-                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
-                .uv(u1, v1)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(255)
-                .normal(n, 0, 1, 0)
-                .endVertex();
-
-        buffer
-                .vertex(m, 1, deptY, 1f)
-                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
-                .uv(u2, v2)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(255)
-                .normal(n, 0, 1, 0)
-                .endVertex();
-
-        buffer
-                .vertex(m, 1f - size, deptY, 1f)
-                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
-                .uv(u3, v3)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(255)
-                .normal(n, 0, 1, 0)
-                .endVertex();
-
+        renderVertices(getBuffer(bufferSource, monitorSprite), m, n, color, alpha, deptY, minX, minZ, maxX, maxZ);
 
     }
 
@@ -281,7 +179,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         //center to change when panning and partial rendering added
         float centerX = 0.5f;
         float centerY = 0.5f;
-        float deptY = .95f;
+        float deptY = .945f;
 
         int size = controller.getSize();
 

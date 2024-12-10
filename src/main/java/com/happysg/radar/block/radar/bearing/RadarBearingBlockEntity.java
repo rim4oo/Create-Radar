@@ -60,7 +60,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
 
     private void scanForEntityTracks() {
         AABB aabb = getRadarAABB();
-        level.getEntities(movedContraption, aabb).stream().filter(this::isEntityInRadarFov).forEach(
+        level.getEntities(null, aabb).stream().filter(this::isEntityInRadarFov).forEach(
                 entity -> {
                     entityPositions.put(entity.getUUID(), new RadarTrack(entity));
                     notifyUpdate();

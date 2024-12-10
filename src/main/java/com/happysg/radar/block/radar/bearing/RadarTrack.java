@@ -26,7 +26,13 @@ public record RadarTrack(UUID entityId, Vec3 position, long scannedTime, Color c
     public static int YELLOW = 16776960;
 
     public RadarTrack(Entity entity) {
-        this(entity.getUUID(), entity.position(), entity.level().getGameTime(), getColor(entity), isContraption(entity));
+        this(entity.getUUID(), getPosition(entity), entity.level().getGameTime(), getColor(entity), isContraption(entity));
+    }
+
+    private static Vec3 getPosition(Entity entity) {
+        if (entity instanceof AbstractContraptionEntity entity1)
+            return entity1.getContraption().anchor.getCenter();
+        return entity.position();
     }
 
     private static Color getColor(Entity entity) {
