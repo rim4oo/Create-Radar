@@ -41,13 +41,78 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         blockEntity.getRadar().ifPresent(radar -> {
             if (!radar.isRunning())
                 return;
-            // renderGrid(blockEntity, ms, bufferSource);
+            renderGrid(radar, blockEntity, ms, bufferSource);
             renderRadarTracks(radar, blockEntity, ms, bufferSource);
             renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_FILLER);
             renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_CIRCLE);
             renderSweep(radar, blockEntity, ms, bufferSource);
         });
     }
+
+    private void renderGrid(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
+        int size = blockEntity.getSize();
+        float range = radar.getRange();
+        final int GRID_BLOCK_SIZE = 20;
+
+        float gridSpacing = range / GRID_BLOCK_SIZE;
+        VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.entityTranslucent(MonitorSprite.GRID_SQUARE.getTexture()));
+        Matrix4f m = ms.last().pose();
+        Matrix3f n = ms.last().normal();
+
+
+        Color color = new Color(0, 255, 0);
+        float alpha = .5f;
+        float deptY = 0.946f;
+
+        float xmin = 1 - size;
+        float zmin = 1 - size;
+        float xmax = 1;
+        float zmax = 1;
+
+
+        // Adjust UV coordinates based on grid spacing
+        float u0 = 0, v0 = 0;
+        float u1 = 1 * gridSpacing;
+        float v1 = 0;
+        float u2 = 1 * gridSpacing;
+        float v2 = 1 * gridSpacing;
+        float u3 = 0;
+        float v3 = 1 * gridSpacing;
+
+        buffer.vertex(m, xmin, deptY, zmin)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
+                .uv(u0, v0)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(255)
+                .normal(n, 0, 1, 0)
+                .endVertex();
+
+        buffer.vertex(m, xmax, deptY, zmin)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
+                .uv(u1, v1)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(255)
+                .normal(n, 0, 1, 0)
+                .endVertex();
+
+        buffer.vertex(m, xmax, deptY, zmax)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
+                .uv(u2, v2)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(255)
+                .normal(n, 0, 1, 0)
+                .endVertex();
+
+        buffer.vertex(m, xmin, deptY, zmax)
+                .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
+                .uv(u3, v3)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(255)
+                .normal(n, 0, 1, 0)
+                .endVertex();
+
+    }
+
 
     private void renderRadarTracks(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
         List<RadarTrack> tracks = radar.getEntityPositions();
