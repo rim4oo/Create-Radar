@@ -23,7 +23,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private static final int MAX_TRACK_TICKS = 100;
 
     private int dishCount;
-    private Direction receiverFacing;
+    private Direction receiverFacing = Direction.NORTH;
     Map<UUID, RadarTrack> entityPositions = new HashMap<>();
     public RadarBearingBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

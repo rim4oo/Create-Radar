@@ -125,7 +125,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
         Color color = track.color();
-        float alpha = .8f;
+        float alpha = 1f;
         float deptY = 0.946f;
         float size = monitor.getSize();
         float scale = radar.getRange();
@@ -232,7 +232,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
         Color color = new Color(0, 255, 0);
-        float alpha = 0.5f;
+        float alpha = 0.8f;
         Direction monitorFacing = controller.getBlockState().getValue(MonitorBlock.FACING);
         Direction radarFacing = radar.getReceiverFacing();
         float angleDiff = monitorFacing.toYRot() - radarFacing.toYRot();
@@ -273,7 +273,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
                 .uv(u1, v1)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
-                .normal(n, 0, 1, 0)
+                .normal(n, 0, 0, 0)
                 .endVertex();
 
         buffer
@@ -282,7 +282,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
                 .uv(u2, v2)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
-                .normal(n, 0, 1, 0)
+                .normal(n, 0, 0, 0)
                 .endVertex();
 
         buffer
@@ -291,7 +291,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
                 .uv(u3, v3)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(255)
-                .normal(n, 0, 1, 0)
+                .normal(n, 0, 0, 0)
                 .endVertex();
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.StringUtils;
@@ -34,8 +35,8 @@ public class CreateRadar {
         ModCreativeTabs.register(modEventBus);
         ModLang.register();
         ModContraptionTypes.register();
-        ModPonderIndex.register();
         modEventBus.addListener(CreateRadar::init);
+        modEventBus.addListener(CreateRadar::clientInit);
     }
 
     public static Logger getLogger() {
@@ -52,6 +53,11 @@ public class CreateRadar {
                 .map(StringUtils::capitalize)
                 .collect(Collectors.joining(" "));
         return StringUtils.normalizeSpace(s);
+    }
+
+    public static void clientInit(final FMLClientSetupEvent event) {
+        ModPonderIndex.register();
+        ModPonderTags.register();
     }
 
     public static void init(final FMLCommonSetupEvent event) {

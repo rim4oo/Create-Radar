@@ -9,9 +9,14 @@ public class ModPonderIndex {
 
     public static void register() {
         CreateRadar.getLogger().info("Registering Ponder!");
-        HELPER.addStoryBoard(ModBlocks.RADAR_BEARING_BLOCK, "radar_contraption", ProcessingScenes::radarContraption);
-        HELPER.addStoryBoard(ModBlocks.RADAR_RECEIVER_BLOCK, "radar_contraption", ProcessingScenes::radarContraption);
-        HELPER.addStoryBoard(ModBlocks.RADAR_DISH_BLOCK, "radar_contraption", ProcessingScenes::radarContraption);
-        HELPER.addStoryBoard(ModBlocks.RADAR_PLATE_BLOCK, "radar_contraption", ProcessingScenes::radarContraption);
+        HELPER.forComponents(ModBlocks.RADAR_BEARING_BLOCK)
+                .addStoryBoard("radar_contraption", ProcessingScenes::radarContraption, ModPonderTags.RADAR_COMPONENT)
+                .addStoryBoard("radar_linking", ProcessingScenes::radarLinking, ModPonderTags.RADAR_COMPONENT);
+
+        HELPER.addStoryBoard(ModBlocks.RADAR_RECEIVER_BLOCK, "radar_contraption", ProcessingScenes::radarContraption, ModPonderTags.RADAR_COMPONENT);
+        HELPER.addStoryBoard(ModBlocks.RADAR_DISH_BLOCK, "radar_contraption", ProcessingScenes::radarContraption, ModPonderTags.RADAR_COMPONENT);
+        HELPER.addStoryBoard(ModBlocks.RADAR_PLATE_BLOCK, "radar_contraption", ProcessingScenes::radarContraption, ModPonderTags.RADAR_COMPONENT);
+
+        HELPER.addStoryBoard(ModBlocks.MONITOR, "radar_linking", ProcessingScenes::radarLinking, ModPonderTags.RADAR_COMPONENT);
     }
 }

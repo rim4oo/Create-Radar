@@ -11,5 +11,12 @@
   "create_radar.ponder.radar_contraption.text_4": "Radar Dishes can be used interchangeably with Radar Plates",
   "create_radar.ponder.radar_contraption.text_5": "Additional dishes/plates extend range",
   "create_radar.ponder.radar_contraption.text_6": "Power Radar Bearing",
+  "create_radar.ponder.radar_linking.header": "Linking a Radar to a Monitor!",
+  "create_radar.ponder.radar_linking.text_1": "Place Monitor",
+  "create_radar.ponder.radar_linking.text_2": "Build Radar Contraption",
+  "create_radar.ponder.radar_linking.text_3": "Link using Display Link",
+  "create_radar.ponder.radar_linking.text_4": "Right click Display Link to activate",
+  "create_radar.ponder.tag.radar_components": "Radars",
+  "create_radar.ponder.tag.radar_components.description": "Components which allow the creation of Radar Tracking System",
   "itemGroup.create_radar.radar": "Create: Radars"
 }
