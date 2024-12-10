@@ -17,6 +17,7 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity> {
 
@@ -52,7 +53,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
     private void renderGrid(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
         int size = blockEntity.getSize();
         float range = radar.getRange();
-        final int GRID_BLOCK_SIZE = 20;
+        final int GRID_BLOCK_SIZE = 50;
 
         float gridSpacing = range / GRID_BLOCK_SIZE;
         VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.entityTranslucent(MonitorSprite.GRID_SQUARE.getTexture()));
@@ -62,7 +63,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         Color color = new Color(0, 255, 0);
         float alpha = .5f;
-        float deptY = 0.946f;
+        float deptY = 0.94f;
 
         float xmin = 1 - size;
         float zmin = 1 - size;
@@ -71,13 +72,10 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
 
         // Adjust UV coordinates based on grid spacing
-        float u0 = 0, v0 = 0;
-        float u1 = 1 * gridSpacing;
-        float v1 = 0;
-        float u2 = 1 * gridSpacing;
-        float v2 = 1 * gridSpacing;
-        float u3 = 0;
-        float v3 = 1 * gridSpacing;
+        float u0 = -0.5f * gridSpacing, v0 = -0.5f * gridSpacing;
+        float u1 = 0.5f * gridSpacing, v1 = -0.5f * gridSpacing;
+        float u2 = 0.5f * gridSpacing, v2 = 0.5f * gridSpacing;
+        float u3 = -0.5f * gridSpacing, v3 = 0.5f * gridSpacing;
 
         buffer.vertex(m, xmin, deptY, zmin)
                 .color(color.getRedAsFloat(), color.getGreenAsFloat(), color.getBlueAsFloat(), alpha)
@@ -116,17 +114,18 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
     private void renderRadarTracks(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
         List<RadarTrack> tracks = radar.getEntityPositions();
-        tracks.forEach(track -> renderTrack(track, blockEntity, radar, ms, bufferSource));
+        AtomicInteger depthCounter = new AtomicInteger(0);
+        tracks.forEach(track -> renderTrack(track, blockEntity, radar, ms, bufferSource, depthCounter.getAndIncrement()));
 
     }
 
-    private void renderTrack(RadarTrack track, MonitorBlockEntity monitor, RadarBearingBlockEntity radar, PoseStack ms, MultiBufferSource bufferSource) {
+    private void renderTrack(RadarTrack track, MonitorBlockEntity monitor, RadarBearingBlockEntity radar, PoseStack ms, MultiBufferSource bufferSource, int depthMultiplier) {
         VertexConsumer buffer = getBuffer(bufferSource, track.contraption() ? MonitorSprite.CONTRAPTION_HITBOX : MonitorSprite.ENTITY_HITBOX);
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
         Color color = track.color();
         float alpha = 1f;
-        float deptY = 0.946f;
+        float deptY = 0.95f + (depthMultiplier * 0.0001f);
         float size = monitor.getSize();
         float scale = radar.getRange();
         Direction monitorFacing = monitor.getBlockState().getValue(MonitorBlock.FACING);
@@ -157,7 +156,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
 
         float fade = (track.scannedTime() - monitor.getLevel().getGameTime()) / 100f;
 
-        renderVertices(buffer, m, n, color, alpha - Math.abs(fade * .8f), deptY, xmin, zmin, xmax, zmax);
+        renderVertices(buffer, m, n, color, alpha - Math.abs(fade * .99f), deptY, xmin, zmin, xmax, zmax);
 
         if (track.entityId().equals(monitor.hoveredEntity))
             renderVertices(getBuffer(bufferSource, MonitorSprite.TARGET_HOVERED), m, n, new Color(255, 255, 0), alpha, deptY, xmin, zmin, xmax, zmax);

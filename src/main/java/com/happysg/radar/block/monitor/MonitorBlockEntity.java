@@ -118,6 +118,8 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         return super.createRenderBoundingBox().inflate(MAX_RADIUS);
     }
 
+
+    //messy caching radar reference
     public Optional<RadarBearingBlockEntity> getRadar() {
         if (radar != null)
             return Optional.of(radar);

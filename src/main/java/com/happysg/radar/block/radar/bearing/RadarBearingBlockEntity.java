@@ -69,7 +69,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
     private AABB getRadarAABB() {
-        return new AABB(worldPosition).inflate(getRange(), 10, getRange());
+        return new AABB(getBlockPos()).inflate(getRange(), 10, getRange());
     }
 
     private boolean isEntityInRadarFov(Entity entity) {
