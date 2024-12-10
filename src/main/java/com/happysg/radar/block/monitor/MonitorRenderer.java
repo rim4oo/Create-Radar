@@ -155,7 +155,10 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         float xmax = xOff + 1;
         float zmax = zOff + 1;
 
-        renderVertices(buffer, m, n, color, alpha, deptY, xmin, zmin, xmax, zmax);
+        float fade = (track.scannedTime() - monitor.getLevel().getGameTime()) / 100f;
+
+        renderVertices(buffer, m, n, color, alpha - Math.abs(fade * .8f), deptY, xmin, zmin, xmax, zmax);
+
         if (track.entityId().equals(monitor.hoveredEntity))
             renderVertices(getBuffer(bufferSource, MonitorSprite.TARGET_HOVERED), m, n, new Color(255, 255, 0), alpha, deptY, xmin, zmin, xmax, zmax);
         if (track.entityId().equals(monitor.selectedEntity))
