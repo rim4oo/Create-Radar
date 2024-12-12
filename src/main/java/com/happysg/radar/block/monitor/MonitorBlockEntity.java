@@ -145,12 +145,12 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         if (pPlayer.isShiftKeyDown()) {
             selectedEntity = null;
         } else {
-            setSelectedEntity(pHit.getLocation());
+            setSelectedEntity(pHit.getLocation(), pHit.getDirection(), pHit.getDirection());
         }
         return InteractionResult.SUCCESS;
     }
 
-    private void setSelectedEntity(Vec3 location) {
+    private void setSelectedEntity(Vec3 location, Direction blockFacing, Direction monitorFacing) {
         if (level.isClientSide())
             return;
         if (radarPos == null)
@@ -162,6 +162,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
                 .add(facing.getStepX() * (size - 1) / 2.0, (size - 1) / 2.0, facing.getStepZ() * (size - 1) / 2.0);
         Vec3 relative = location.subtract(center);
         relative = new Vec3(facing.getAxis() == Direction.Axis.Z ? relative.y() : relative.x(), 0, facing.getAxis() == Direction.Axis.X ? -relative.y() : relative.z());
+        relative = adjustRelativeVectorForFacing(relative, blockFacing, monitorFacing);
         System.out.println("relative = " + relative);
         Vec3 RadarPos = radarPos.getCenter();
         float range = getRadar().map(RadarBearingBlockEntity::getRange).orElse(0f);
@@ -184,6 +185,21 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
                         }
                     }
                 });
+    }
+
+    private Vec3 adjustRelativeVectorForFacing(Vec3 relative, Direction blockFacing, Direction monitorFacing) {
+        switch (monitorFacing) {
+            case NORTH:
+                return new Vec3(-relative.x(), relative.y(), -relative.z());
+            case SOUTH:
+                return relative;
+            case WEST:
+                return new Vec3(relative.z(), relative.y(), -relative.x());
+            case EAST:
+                return new Vec3(-relative.z(), relative.y(), relative.x());
+            default:
+                return relative;
+        }
     }
 
     public MonitorBlockEntity getController() {

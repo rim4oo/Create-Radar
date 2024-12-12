@@ -54,7 +54,7 @@ public class MonitorBlock extends HorizontalDirectionalBlock implements IBE<Moni
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pPlayer.getMainHandItem().isEmpty() || pHand == InteractionHand.OFF_HAND)
             return InteractionResult.PASS;
-        return onBlockEntityUse(pLevel, pPos, monitorBlockEntity -> monitorBlockEntity.getController().onUse(pPlayer, pHand, pHit));
+        return onBlockEntityUse(pLevel, pPos, monitorBlockEntity -> monitorBlockEntity.getController().onUse(pPlayer, pHand, pHit, pState.getValue(FACING)));
     }
 
     public enum Shape implements StringRepresentable {
