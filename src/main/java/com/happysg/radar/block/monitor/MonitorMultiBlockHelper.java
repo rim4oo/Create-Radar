@@ -4,6 +4,7 @@ import com.happysg.radar.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -21,7 +22,7 @@ public class MonitorMultiBlockHelper {
     public static int MAX_SIZE = 5;
 
     public static void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
-        if (pState.getValue(SHAPE) != MonitorBlock.Shape.SINGLE)
+        if (pState.getValue(SHAPE) != MonitorBlock.Shape.SINGLE && !pIsMoving)
             return;
         BlockPos.betweenClosedStream(new AABB(pPos).inflate(MAX_SIZE)).forEach(p -> {
                     if (pLevel.getBlockEntity(p) instanceof MonitorBlockEntity monitor) {
@@ -34,7 +35,7 @@ public class MonitorMultiBlockHelper {
     }
 
     public static void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (ModBlocks.MONITOR.has(pNewState))
+        if (ModBlocks.MONITOR.has(pNewState) && !pIsMoving)
             return;
         if (pLevel.getBlockEntity(pPos) instanceof MonitorBlockEntity monitor) {
             destroyMulti(pState, pLevel, pPos, monitor.getControllerPos(), monitor.getSize());
@@ -124,6 +125,9 @@ public class MonitorMultiBlockHelper {
     }
 
 
+    //todo add a size verification and reupdate multiblock if necessary
+    public static void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
 
 
+    }
 }

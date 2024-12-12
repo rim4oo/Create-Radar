@@ -86,6 +86,10 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
 
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
+        controller = null;
+        radarPos = null;
+        radar = null;
+
         super.read(tag, clientPacket);
         if (tag.contains("Controller"))
             controller = NbtUtils.readBlockPos(tag.getCompound("Controller"));
@@ -132,6 +136,11 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     }
 
     public AABB getMultiblockBounds(LevelAccessor level, BlockPos pos) {
+        //extra safety check due to contrapation moving bug
+        if (getControllerPos() == null)
+            return new AABB(pos);
+        if (!level.getBlockState(getControllerPos()).hasProperty(MonitorBlock.FACING))
+            return new AABB(pos);
         Direction facing = level.getBlockState(getControllerPos())
                 .getValue(MonitorBlock.FACING).getClockWise();
         VoxelShape shape = level.getBlockState(getControllerPos())
@@ -141,16 +150,16 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
 
     }
 
-    public InteractionResult onUse(Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult onUse(Player pPlayer, InteractionHand pHand, BlockHitResult pHit, Direction facing) {
         if (pPlayer.isShiftKeyDown()) {
             selectedEntity = null;
         } else {
-            setSelectedEntity(pHit.getLocation(), pHit.getDirection(), pHit.getDirection());
+            setSelectedEntity(pHit.getLocation(), facing);
         }
         return InteractionResult.SUCCESS;
     }
 
-    private void setSelectedEntity(Vec3 location, Direction blockFacing, Direction monitorFacing) {
+    private void setSelectedEntity(Vec3 location, Direction monitorFacing) {
         if (level.isClientSide())
             return;
         if (radarPos == null)
@@ -161,8 +170,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         Vec3 center = Vec3.atCenterOf(getControllerPos())
                 .add(facing.getStepX() * (size - 1) / 2.0, (size - 1) / 2.0, facing.getStepZ() * (size - 1) / 2.0);
         Vec3 relative = location.subtract(center);
-        relative = new Vec3(facing.getAxis() == Direction.Axis.Z ? relative.y() : relative.x(), 0, facing.getAxis() == Direction.Axis.X ? -relative.y() : relative.z());
-        relative = adjustRelativeVectorForFacing(relative, blockFacing, monitorFacing);
+        relative = adjustRelativeVectorForFacing(relative, monitorFacing);
         System.out.println("relative = " + relative);
         Vec3 RadarPos = radarPos.getCenter();
         float range = getRadar().map(RadarBearingBlockEntity::getRange).orElse(0f);
@@ -187,16 +195,16 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
                 });
     }
 
-    private Vec3 adjustRelativeVectorForFacing(Vec3 relative, Direction blockFacing, Direction monitorFacing) {
+    private Vec3 adjustRelativeVectorForFacing(Vec3 relative, Direction monitorFacing) {
         switch (monitorFacing) {
             case NORTH:
-                return new Vec3(-relative.x(), relative.y(), -relative.z());
+                return new Vec3(-relative.x(), 0, -relative.y());
             case SOUTH:
-                return relative;
+                return new Vec3(relative.x(), 0, relative.y());
             case WEST:
-                return new Vec3(relative.z(), relative.y(), -relative.x());
+                return new Vec3(relative.y(), 0, -relative.z());
             case EAST:
-                return new Vec3(-relative.z(), relative.y(), relative.x());
+                return new Vec3(-relative.y(), 0, relative.z());
             default:
                 return relative;
         }

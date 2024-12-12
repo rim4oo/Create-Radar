@@ -25,5 +25,6 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_3", "Link using Display Link");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_4", "Right click Display Link to activate");
 
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".display_source.radar", "Radar");
     }
 }
