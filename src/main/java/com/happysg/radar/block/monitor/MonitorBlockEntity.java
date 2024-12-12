@@ -171,12 +171,9 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
                 .add(facing.getStepX() * (size - 1) / 2.0, (size - 1) / 2.0, facing.getStepZ() * (size - 1) / 2.0);
         Vec3 relative = location.subtract(center);
         relative = adjustRelativeVectorForFacing(relative, monitorFacing);
-        System.out.println("relative = " + relative);
         Vec3 RadarPos = radarPos.getCenter();
         float range = getRadar().map(RadarBearingBlockEntity::getRange).orElse(0f);
-        System.out.println("normal = " + relative.scale(range));
         Vec3 selected = RadarPos.add(relative.scale(range));
-        System.out.println("selected = " + selected);
         getRadar().map(RadarBearingBlockEntity::getEntityPositions)
                 .ifPresent(entityPositions -> {
                     double distance = .1f * range;
@@ -185,24 +182,24 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
                         entityPos = entityPos.multiply(1, 0, 1);
                         Vec3 selectedNew = selected.multiply(1, 0, 1);
                         double newDistance = entityPos.distanceTo(selectedNew);
+
                         if (newDistance < distance) {
                             distance = newDistance;
                             selectedEntity = track.entityId();
-                            System.out.println("selectedEntity = " + selectedEntity);
                             notifyUpdate();
                         }
                     }
                 });
     }
 
-    private Vec3 adjustRelativeVectorForFacing(Vec3 relative, Direction monitorFacing) {
+    Vec3 adjustRelativeVectorForFacing(Vec3 relative, Direction monitorFacing) {
         switch (monitorFacing) {
             case NORTH:
-                return new Vec3(-relative.x(), 0, -relative.y());
-            case SOUTH:
                 return new Vec3(relative.x(), 0, relative.y());
+            case SOUTH:
+                return new Vec3(relative.x(), 0, -relative.y());
             case WEST:
-                return new Vec3(relative.y(), 0, -relative.z());
+                return new Vec3(relative.y(), 0, relative.z());
             case EAST:
                 return new Vec3(-relative.y(), 0, relative.z());
             default:

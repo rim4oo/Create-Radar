@@ -53,6 +53,7 @@ public class MonitorBlock extends HorizontalDirectionalBlock implements IBE<Moni
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+        //todo deal with this for contraption movements
         MonitorMultiBlockHelper.onNeighborChange(state, level, pos, neighbor);
         super.onNeighborChange(state, level, pos, neighbor);
     }

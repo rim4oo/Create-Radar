@@ -1,5 +1,6 @@
 package com.happysg.radar;
 
+import com.happysg.radar.block.monitor.MonitorInputHandler;
 import com.happysg.radar.networking.ModMessages;
 import com.happysg.radar.registry.*;
 import com.mojang.logging.LogUtils;
@@ -37,6 +38,7 @@ public class CreateRadar {
         ModContraptionTypes.register();
         modEventBus.addListener(CreateRadar::init);
         modEventBus.addListener(CreateRadar::clientInit);
+        MinecraftForge.EVENT_BUS.addListener(MonitorInputHandler::monitorPlayerHovering);
     }
 
     public static Logger getLogger() {
