@@ -3,6 +3,8 @@ package com.happysg.radar.registry;
 import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.monitor.MonitorDisplayBehavior;
 import com.happysg.radar.block.radar.bearing.RadarDisplayBehavior;
+import com.happysg.radar.compat.Mods;
+import com.happysg.radar.compat.cbc.CBC;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.content.redstone.displayLink.DisplayBehaviour;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -11,7 +13,7 @@ import static com.simibubi.create.content.redstone.displayLink.AllDisplayBehavio
 
 public class ModDisplayBehaviors {
 
-    private static void register(String id, DisplayBehaviour behaviour, BlockEntityType<?> be) {
+    public static void register(String id, DisplayBehaviour behaviour, BlockEntityType<?> be) {
         assignBlockEntity(AllDisplayBehaviours.register(CreateRadar.asResource(id), behaviour), be);
     }
 
@@ -19,5 +21,7 @@ public class ModDisplayBehaviors {
         CreateRadar.getLogger().info("Registering Display Behaviors!");
         register("monitor", new MonitorDisplayBehavior(), ModBlockEntityTypes.MONITOR.get());
         register("radar", new RadarDisplayBehavior(), ModBlockEntityTypes.RADAR_BEARING.get());
+        if (Mods.CREATEBIGCANNONS.isLoaded())
+            CBC.registerDisplayBehaviors();
     }
 }

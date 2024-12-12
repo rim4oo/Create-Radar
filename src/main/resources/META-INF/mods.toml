@@ -30,3 +30,9 @@ mandatory = true
 versionRange = "${create_version_range}"
 ordering = "BEFORE"
 side = "BOTH"
+[[dependencies.create_radar]]
+modId = "createbigcannons"
+mandatory = false
+versionRange = "[5.6.0,)"
+ordering = "BEFORE"
+side = "BOTH"

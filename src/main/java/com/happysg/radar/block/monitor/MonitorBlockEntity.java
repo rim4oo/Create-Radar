@@ -214,4 +214,11 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
             return controller;
         return null;
     }
+
+    public Vec3 getTargetPos() {
+        return selectedEntity == null ? null : getRadar().map(radar -> radar.getEntityPositions().stream()
+                .filter(track -> track.entityId().equals(selectedEntity))
+                .map(RadarTrack::position)
+                .findFirst().orElse(null)).orElse(null);
+    }
 }

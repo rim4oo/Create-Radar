@@ -4,6 +4,8 @@ import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import com.happysg.radar.block.monitor.MonitorRenderer;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
+import com.happysg.radar.compat.cbc.block.CannonControllerBlockEntity;
+import com.happysg.radar.compat.cbc.block.CannonControllerRenderer;
 import com.simibubi.create.content.contraptions.bearing.BearingInstance;
 import com.simibubi.create.content.contraptions.bearing.BearingRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -23,6 +25,12 @@ public class ModBlockEntityTypes {
             .instance(() -> BearingInstance::new, true)
             .validBlocks(ModBlocks.RADAR_BEARING_BLOCK)
             .renderer(() -> BearingRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<CannonControllerBlockEntity> CANNON_CONTROLLER = REGISTRATE
+            .blockEntity("cannon_controller", CannonControllerBlockEntity::new)
+            .validBlocks(ModBlocks.CANNON_CONTROLLER_BLOCK)
+            .renderer(() -> CannonControllerRenderer::new)
             .register();
 
     public static void register() {
