@@ -69,14 +69,14 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
     private AABB getRadarAABB() {
-        return new AABB(getBlockPos()).inflate(getRange(), 10, getRange());
+        return new AABB(getBlockPos()).inflate(getRange(), 20, getRange());
     }
 
     private boolean isEntityInRadarFov(Entity entity) {
         float radarAngle = getGlobalAngle();
         BlockPos entityPos = entity.blockPosition();
         double fovDegrees = 90;
-        BlockPos radarPos = worldPosition;
+        BlockPos radarPos = getBlockPosition();
 
         // Calculate the angle between the radar and the entity
         double angleToEntity = Math.toDegrees(Math.atan2(entityPos.getX() - radarPos.getX(), radarPos.getZ() - entityPos.getZ()));
@@ -110,7 +110,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     //code copied in order to replace with radar contraption and radar advancements
     @Override
     public void assemble() {
-        if (!(level.getBlockState(worldPosition)
+        if (!(level.getBlockState(getBlockPos())
                 .getBlock() instanceof RadarBearingBlock))
             return;
 
@@ -146,7 +146,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private RadarContraption createContraption() {
         RadarContraption contraption = new RadarContraption();
         try {
-            if (!contraption.assemble(level, worldPosition))
+            if (!contraption.assemble(level, getBlockPos()))
                 return null;
 
             lastException = null;
@@ -157,12 +157,12 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         }
         contraption.removeBlocksFromWorld(level, BlockPos.ZERO);
         movedContraption = ControlledContraptionEntity.create(level, this, contraption);
-        BlockPos anchor = worldPosition.above();
+        BlockPos anchor = getBlockPosition().above();
         movedContraption.setPos(anchor.getX(), anchor.getY(), anchor.getZ());
         movedContraption.setRotationAxis(Direction.Axis.Y);
         level.addFreshEntity(movedContraption);
 
-        AllSoundEvents.CONTRAPTION_ASSEMBLE.playOnServer(level, worldPosition);
+        AllSoundEvents.CONTRAPTION_ASSEMBLE.playOnServer(level, getBlockPos());
 
         running = true;
         angle = 0;

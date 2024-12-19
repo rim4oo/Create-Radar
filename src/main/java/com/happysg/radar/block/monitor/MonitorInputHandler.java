@@ -12,6 +12,7 @@ import net.minecraftforge.event.TickEvent;
 
 public class MonitorInputHandler {
 
+
     public static void monitorPlayerHovering(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         Level level = event.player.level();

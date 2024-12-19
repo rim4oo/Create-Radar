@@ -34,6 +34,8 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     RadarBearingBlockEntity radar;
     protected UUID hoveredEntity;
     protected UUID selectedEntity;
+    MonitorFilter filter = MonitorFilter.ALL_ENTITIES;
+
     public MonitorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -97,6 +99,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
             radarPos = NbtUtils.readBlockPos(tag.getCompound("radarPos"));
         if (tag.contains("SelectedEntity"))
             selectedEntity = tag.getUUID("SelectedEntity");
+        filter = MonitorFilter.values()[tag.getInt("Filter")];
         radius = tag.getInt("Size");
     }
 
@@ -109,6 +112,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
             tag.put("radarPos", NbtUtils.writeBlockPos(radarPos));
         if (selectedEntity != null)
             tag.putUUID("SelectedEntity", selectedEntity);
+        tag.putInt("Filter", filter.ordinal());
         tag.putInt("Size", radius);
     }
 
@@ -220,5 +224,9 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
                 .filter(track -> track.entityId().equals(selectedEntity))
                 .map(RadarTrack::position)
                 .findFirst().orElse(null)).orElse(null);
+    }
+
+    public void setFilter(MonitorFilter filter) {
+        this.filter = filter;
     }
 }

@@ -1,6 +1,8 @@
 package com.happysg.radar.block.radar.bearing;
 
+import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
+import com.happysg.radar.block.monitor.MonitorFilter;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.source.DisplaySource;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTarget;
@@ -11,7 +13,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class RadarDisplayBehavior extends DisplaySource {
 
@@ -39,14 +43,12 @@ public class RadarDisplayBehavior extends DisplaySource {
     @OnlyIn(Dist.CLIENT)
     protected void addFilterConfig(ModularGuiLineBuilder builder) {
         builder.addSelectionScrollInput(0, 100,
-                (si, l) -> si.forOptions(List.of(
-                                Component.literal("All Entities"),
-                                Component.literal("No Mobs"),
-                                Component.literal("Players Only"),
-                                Component.literal("Projectiles Only"),
-                                Component.literal("VS2 Only"),
-                                Component.literal("Mob Bosses Only")))
-                        .titled(Component.literal("Show")),
+                (si, l) -> si
+                        .forOptions(Arrays.stream(MonitorFilter.values())
+                                .map(MonitorFilter::name)
+                                .map(name -> Component.translatable(CreateRadar.MODID + ".filter." + name.toLowerCase(Locale.ROOT)))
+                                .toList())
+                        .titled(Component.translatable(CreateRadar.MODID + ".filter.show")),
                 "Filter");
     }
 }

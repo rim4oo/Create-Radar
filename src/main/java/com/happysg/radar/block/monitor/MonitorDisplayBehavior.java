@@ -14,11 +14,13 @@ import java.util.List;
 public class MonitorDisplayBehavior extends DisplayTarget {
     @Override
     public void acceptText(int line, List<MutableComponent> text, DisplayLinkContext context) {
-        if (!(context.getSourceBlockEntity() instanceof RadarBearingBlockEntity radar))
+        if (!(context.getTargetBlockEntity() instanceof MonitorBlockEntity monitor) || !(context.getSourceBlockEntity() instanceof RadarBearingBlockEntity radar))
             return;
 
         if (!radar.isRunning())
             return;
+        MonitorFilter filter = MonitorFilter.values()[context.sourceConfig().getInt("Filter")];
+        monitor.getController().setFilter(filter);
     }
 
     @Override

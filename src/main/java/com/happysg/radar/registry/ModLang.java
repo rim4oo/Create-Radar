@@ -26,5 +26,15 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_4", "Right click Display Link to activate");
 
         REGISTRATE.addRawLang(CreateRadar.MODID + ".display_source.radar", "Radar");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".display_source.cannon_mount", "Cannon Mount");
+
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.show", "Show");
+
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.all_entities", "All Entities");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.no_mobs", "No Mobs");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.players_only", "Players Only");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.projectiles_only", "Projectiles Only");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.vs2_only", "VS2 Only");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.mob_bosses_only", "Mob Bosses Only");
     }
 }

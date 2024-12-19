@@ -43,7 +43,7 @@ public class TurretGuidanceBehavior extends DisplaySource {
         if (targetPos == null)
             return;
 
-        Vec3 turretPos = turret.getBlockPos().above(2).getCenter();
+        Vec3 turretPos = turret.getBlockPos().above().getCenter();
 
         double dx = targetPos.x() - turretPos.x;
         double dy = targetPos.y() - turretPos.y;
