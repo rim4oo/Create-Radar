@@ -9,13 +9,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
+import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
 
 import java.util.Optional;
 
 public class CannonControllerBlockEntity extends KineticBlockEntity {
 
-    Vec3 requestedTarget;
-    Vec3 currentTarget;
+    double targetYaw;
+    double targetPitch;
 
     public CannonControllerBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -31,49 +32,45 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
     }
 
     private void aimCannonAtTarget(CannonMountBlockEntity cannon) {
-
-        if (requestedTarget == null || requestedTarget.equals(Vec3.ZERO))
+        PitchOrientedContraptionEntity contraption = cannon.getContraption();
+        if (contraption == null)
             return;
 
-        if (currentTarget != null && currentTarget.equals(requestedTarget))
+        if (targetYaw == 0 && targetPitch == 0)
             return;
 
-        if (cannon.getContraption() == null)
+        if (level.isClientSide)
             return;
 
-        Vec3 cannonCenter = getBlockPos().above(2).getCenter();
-        double dx = requestedTarget.x - cannonCenter.x;
-        double dy = requestedTarget.y - cannonCenter.y;
-        double dz = requestedTarget.z - cannonCenter.z;
-        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+        double currentYaw = contraption.yaw;
+        double currentPitch = contraption.pitch;
 
-        double newYaw = Math.toDegrees(Math.atan2(dz, dx)) - 90;
-        double newPitch = Math.toDegrees(Math.atan2(dy, horizontalDistance));
+        if (currentYaw == targetYaw && currentPitch == targetPitch)
+            return;
 
-        // Normalize yaw to 0-360 degrees
-        if (newYaw < 0) {
-            newYaw += 360;
+        double yawDifference = targetYaw - currentYaw;
+        double pitchDifference = targetPitch - currentPitch;
+        double speedFactor = Math.abs(getSpeed()) / 32.0;
+        double tolerance = 2; // Tolerance in degrees
+
+        if (Math.abs(yawDifference) > tolerance) {
+            if (Math.abs(yawDifference) > speedFactor) {
+                currentYaw += Math.signum(yawDifference) * speedFactor;
+            } else {
+                currentYaw = targetYaw;
+            }
+        } else {
+            currentYaw = targetYaw;
         }
 
-        // Ensure pitch is within -90 to 90 degrees
-        if (newPitch < -90) {
-            newPitch = -90;
-        } else if (newPitch > 90) {
-            newPitch = 90;
-        }
+        //todo can't get pitch to work
+        currentPitch = targetPitch;
 
-
-        System.out.println("Cannon: " + cannonCenter.x + ", " + cannonCenter.y + ", " + cannonCenter.z);
-        System.out.println("Target: " + requestedTarget.x + ", " + requestedTarget.y + ", " + requestedTarget.z());
-        System.out.println("Yaw: " + newYaw);
-        System.out.println("Pitch: " + newPitch);
-        cannon.setYaw((float) newYaw);
-        cannon.setPitch((float) newPitch);
-        cannon.getContraption().yaw = (float) newYaw;
-        cannon.getContraption().pitch = (float) newPitch;
-        currentTarget = requestedTarget;
+        contraption.yaw = (float) currentYaw;
+        contraption.pitch = (float) currentPitch;
+        cannon.setYaw((float) currentYaw);
+        cannon.setPitch((float) currentPitch);
         cannon.notifyUpdate();
-
     }
 
     private Optional<CannonMountBlockEntity> getCannon() {
@@ -88,36 +85,42 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
     public void setTarget(Vec3 pos) {
         if (pos == null)
             return;
-        if (requestedTarget != null && requestedTarget.equals(pos))
-            return;
-        this.requestedTarget = pos;
+
+
+        Vec3 cannonCenter = getBlockPos().above(2).getCenter();
+        double dx = pos.x - cannonCenter.x;
+        double dy = pos.y - cannonCenter.y;
+        double dz = pos.z - cannonCenter.z;
+        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+
+        targetYaw = Math.toDegrees(Math.atan2(dz, dx)) - 90;
+        targetPitch = Math.toDegrees(Math.atan2(dy, horizontalDistance));
+
+        // Normalize yaw to 0-360 degrees
+        if (targetYaw < 0) {
+            targetYaw += 360;
+        }
+
+        // Ensure pitch is within -90 to 90 degrees
+        if (targetPitch < -90) {
+            targetPitch = -90;
+        } else if (targetPitch > 90) {
+            targetPitch = 90;
+        }
         notifyUpdate();
     }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
-        if (compound.contains("targetx")) {
-            requestedTarget = new Vec3(compound.getDouble("targetx"), compound.getDouble("targety"), compound.getDouble("targetz"));
-        }
-        if (compound.contains("currentx")) {
-            currentTarget = new Vec3(compound.getDouble("currentx"), compound.getDouble("currenty"), compound.getDouble("currentz"));
-        }
-
+        targetYaw = compound.getDouble("targetYaw");
+        targetPitch = compound.getDouble("targetPitch");
     }
 
     @Override
     protected void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
-        if (requestedTarget != null) {
-            compound.putDouble("targetx", requestedTarget.x);
-            compound.putDouble("targety", requestedTarget.y);
-            compound.putDouble("targetz", requestedTarget.z);
-        }
-        if (currentTarget != null) {
-            compound.putDouble("currentx", currentTarget.x);
-            compound.putDouble("currenty", currentTarget.y);
-            compound.putDouble("currentz", currentTarget.z);
-        }
+        compound.putDouble("targetYaw", targetYaw);
+        compound.putDouble("targetPitch", targetPitch);
     }
 }
