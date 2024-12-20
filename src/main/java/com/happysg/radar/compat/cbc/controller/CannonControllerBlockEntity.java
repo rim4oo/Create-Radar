@@ -27,8 +27,9 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         super.tick();
         if (getSpeed() == 0)
             return;
-        if (Mods.CREATEBIGCANNONS.isLoaded())
+        if (Mods.CREATEBIGCANNONS.isLoaded()) {
             getCannon().ifPresent(this::aimCannonAtTarget);
+        }
     }
 
     private void aimCannonAtTarget(CannonMountBlockEntity cannon) {
@@ -36,8 +37,10 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         if (contraption == null)
             return;
 
-        if (targetYaw == 0 && targetPitch == 0)
+        if (targetYaw == 0 && targetPitch == 0) {
+            stopCannon(cannon);
             return;
+        }
 
         if (level.isClientSide)
             return;
@@ -45,8 +48,9 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         double currentYaw = contraption.yaw;
         double currentPitch = contraption.pitch;
 
-        if (currentYaw == targetYaw && currentPitch == targetPitch)
+        if (currentYaw == targetYaw && currentPitch == targetPitch) {
             return;
+        }
 
         double yawDifference = targetYaw - currentYaw;
         double pitchDifference = targetPitch - currentPitch;
@@ -70,7 +74,21 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         contraption.pitch = (float) currentPitch;
         cannon.setYaw((float) currentYaw);
         cannon.setPitch((float) currentPitch);
+        if (currentYaw == targetYaw && currentPitch == targetPitch) {
+            fireCannon(cannon);
+            return;
+        }
         cannon.notifyUpdate();
+    }
+
+    private void fireCannon(CannonMountBlockEntity cannon) {
+        cannon.onRedstoneUpdate(true, true, true, false, 15);
+        notifyUpdate();
+    }
+
+    private void stopCannon(CannonMountBlockEntity cannon) {
+        cannon.onRedstoneUpdate(true, true, false, true, 0);
+        notifyUpdate();
     }
 
     private Optional<CannonMountBlockEntity> getCannon() {
@@ -83,8 +101,12 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
     }
 
     public void setTarget(Vec3 pos) {
-        if (pos == null)
+        if (pos == null || pos.equals(Vec3.ZERO)) {
+            targetYaw = 0;
+            targetPitch = 0;
+            notifyUpdate();
             return;
+        }
 
 
         Vec3 cannonCenter = getBlockPos().above(2).getCenter();

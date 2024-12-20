@@ -34,8 +34,6 @@ public class TurretGuidanceBehavior extends DisplaySource {
 
         MonitorBlockEntity monitor = ((MonitorBlockEntity) context.getTargetBlockEntity()).getController();
         Vec3 targetPos = monitor.getTargetPos();
-        if (targetPos == null)
-            return;
 
         controller.setTarget(targetPos);
     }
