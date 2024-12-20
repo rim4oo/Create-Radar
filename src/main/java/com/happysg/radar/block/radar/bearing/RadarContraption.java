@@ -6,6 +6,7 @@ import com.happysg.radar.registry.ModContraptionTypes;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.bearing.BearingContraption;
+import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -27,19 +28,22 @@ public class RadarContraption extends BearingContraption {
     @Override
     public boolean assemble(Level world, BlockPos pos) throws AssemblyException {
         boolean assembled = super.assemble(world, pos);
-        if (!hasReceiver) {
+        if (!hasReceiver()) {
             throw new AssemblyException(Component.literal("No receiver found"));
         }
         return assembled;
     }
 
+
     @Override
     public void addBlock(BlockPos pos, Pair<StructureTemplate.StructureBlockInfo, BlockEntity> capture) {
+        if (capture.getKey().state().getBlock() instanceof DisplayLinkBlock)
+            return;
         super.addBlock(pos, capture);
-        //replace with tag instead of block instance check
+        //todo replace with tag instead of block instance check
         if (capture.getKey().state().getBlock() instanceof AbstractRadarFrame)
             dishCount++;
-        //replace with tag instead of block instance check
+        //todo replace with tag instead of block instance check
         if (capture.getKey().state().getBlock() instanceof RadarReceiverBlock) {
             hasReceiver = true;
             receiverFacing = capture.getKey().state().getValue(RadarReceiverBlock.FACING);

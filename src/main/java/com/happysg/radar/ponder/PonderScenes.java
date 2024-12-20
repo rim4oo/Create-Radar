@@ -8,7 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class ProcessingScenes {
+public class PonderScenes {
     public static void radarContraption(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("radar_contraption", "Creating a Radar!");
         scene.rotateCameraY(180);

@@ -26,7 +26,7 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_4", "Right click Display Link to activate");
 
         REGISTRATE.addRawLang(CreateRadar.MODID + ".display_source.radar", "Radar");
-        REGISTRATE.addRawLang(CreateRadar.MODID + ".display_source.cannon_mount", "Cannon Mount");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".display_source.cannon_controller", "Cannon Controller");
 
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.show", "Show");
 

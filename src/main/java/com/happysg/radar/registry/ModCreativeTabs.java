@@ -1,6 +1,7 @@
 package com.happysg.radar.registry;
 
 import com.happysg.radar.CreateRadar;
+import com.happysg.radar.compat.Mods;
 import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.foundation.utility.Components;
 import net.minecraft.core.registries.Registries;
@@ -38,8 +39,8 @@ public class ModCreativeTabs {
         pOutput.accept(ModBlocks.RADAR_RECEIVER_BLOCK);
         pOutput.accept(ModBlocks.RADAR_PLATE_BLOCK);
         pOutput.accept(ModBlocks.RADAR_DISH_BLOCK);
-        // if(Mods.CREATEBIGCANNONS.isLoaded())
-        //   pOutput.accept(ModBlocks.CANNON_CONTROLLER_BLOCK);
+        if (Mods.CREATEBIGCANNONS.isLoaded())
+            pOutput.accept(ModBlocks.CANNON_CONTROLLER_BLOCK);
     }
 
 

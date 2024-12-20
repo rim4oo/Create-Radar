@@ -5,7 +5,7 @@
   "block.create_radar.radar_dish_block": "Radar Dish",
   "block.create_radar.radar_plate_block": "Radar Plate",
   "block.create_radar.radar_receiver_block": "Radar Receiver Block",
-  "create_radar.display_source.cannon_mount": "Cannon Mount",
+  "create_radar.display_source.cannon_controller": "Cannon Controller",
   "create_radar.display_source.radar": "Radar",
   "create_radar.filter.all_entities": "All Entities",
   "create_radar.filter.mob_bosses_only": "Mob Bosses Only",

@@ -1,4 +1,4 @@
-package com.happysg.radar.compat.cbc.block;
+package com.happysg.radar.compat.cbc.controller;
 
 import com.happysg.radar.registry.ModBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlock;

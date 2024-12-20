@@ -1,4 +1,4 @@
-package com.happysg.radar.compat.cbc.block;
+package com.happysg.radar.compat.cbc.controller;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;

@@ -3,8 +3,7 @@ package com.happysg.radar.registry;
 import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.monitor.MonitorDisplayBehavior;
 import com.happysg.radar.block.radar.bearing.RadarDisplayBehavior;
-import com.happysg.radar.compat.Mods;
-import com.happysg.radar.compat.cbc.CBC;
+import com.happysg.radar.compat.cbc.controller.TurretGuidanceBehavior;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.content.redstone.displayLink.DisplayBehaviour;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -21,7 +20,6 @@ public class ModDisplayBehaviors {
         CreateRadar.getLogger().info("Registering Display Behaviors!");
         register("monitor", new MonitorDisplayBehavior(), ModBlockEntityTypes.MONITOR.get());
         register("radar", new RadarDisplayBehavior(), ModBlockEntityTypes.RADAR_BEARING.get());
-        if (Mods.CREATEBIGCANNONS.isLoaded())
-            CBC.registerDisplayBehaviors();
+        register("cannon_controller", new TurretGuidanceBehavior(), ModBlockEntityTypes.CANNON_CONTROLLER.get());
     }
 }
