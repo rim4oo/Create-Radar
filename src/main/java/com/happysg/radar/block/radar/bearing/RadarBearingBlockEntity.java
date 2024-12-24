@@ -1,5 +1,6 @@
 package com.happysg.radar.block.radar.bearing;
 
+import com.happysg.radar.vs2.VS2Utils;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
@@ -68,15 +69,16 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         );
     }
 
+
     private AABB getRadarAABB() {
-        return new AABB(getBlockPos()).inflate(getRange(), 20, getRange());
+        return new AABB(VS2Utils.getWorldPos(this)).inflate(getRange(), 20, getRange());
     }
 
     private boolean isEntityInRadarFov(Entity entity) {
         float radarAngle = getGlobalAngle();
         BlockPos entityPos = entity.blockPosition();
         double fovDegrees = 90;
-        BlockPos radarPos = getBlockPosition();
+        BlockPos radarPos = VS2Utils.getWorldPos(this);
 
         // Calculate the angle between the radar and the entity
         double angleToEntity = Math.toDegrees(Math.atan2(entityPos.getX() - radarPos.getX(), radarPos.getZ() - entityPos.getZ()));

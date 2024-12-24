@@ -3,6 +3,7 @@ package com.happysg.radar.block.monitor;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
 import com.happysg.radar.block.radar.bearing.RadarTrack;
 import com.happysg.radar.registry.ModRenderTypes;
+import com.happysg.radar.vs2.VS2Utils;
 import com.jozufozu.flywheel.util.Color;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -129,7 +130,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         float size = monitor.getSize();
         float scale = radar.getRange();
         Direction monitorFacing = monitor.getBlockState().getValue(MonitorBlock.FACING);
-        Vec3 relativePos = track.position().subtract(radar.getBlockPos().getCenter());
+        Vec3 relativePos = track.position().subtract(VS2Utils.getWorldPos(radar).getCenter());
         float xOff = monitorFacing.getAxis() == Direction.Axis.Z ? getOffset(relativePos.x(), scale) : getOffset(relativePos.z(), scale);
         float zOff = monitorFacing.getAxis() == Direction.Axis.Z ? getOffset(relativePos.z(), scale) : getOffset(relativePos.x(), scale);
 
