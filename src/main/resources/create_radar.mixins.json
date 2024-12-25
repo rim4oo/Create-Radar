@@ -6,6 +6,7 @@
   "client": [
   ],
   "mixins": [
+    "DisplayLinkBlockItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
