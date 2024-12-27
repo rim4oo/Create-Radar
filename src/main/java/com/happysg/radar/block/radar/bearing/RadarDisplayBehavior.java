@@ -29,6 +29,11 @@ public class RadarDisplayBehavior extends DisplaySource {
     }
 
     @Override
+    public int getPassiveRefreshTicks() {
+        return 50;
+    }
+
+    @Override
     public List<MutableComponent> provideText(DisplayLinkContext context, DisplayTargetStats stats) {
         return List.of(Component.literal(""));
     }

@@ -58,7 +58,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     @Override
     public void tick() {
         super.tick();
-        if (ticksSinceLastUpdate > 200)
+        if (ticksSinceLastUpdate > 60)
             setRadarPos(null);
         ticksSinceLastUpdate++;
     }
