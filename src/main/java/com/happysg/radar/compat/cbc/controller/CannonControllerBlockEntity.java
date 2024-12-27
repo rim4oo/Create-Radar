@@ -178,7 +178,7 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
 
         targetYaw = Math.toDegrees(Math.atan2(dz, dx)) - 90;
-        targetPitch = calculatePitch(horizontalDistance);
+        targetPitch = Math.toDegrees(Math.atan2(dy, horizontalDistance)) + calculatePitch(horizontalDistance);
 
         // Normalize yaw to 0-360 degrees
         if (targetYaw < 0) {
