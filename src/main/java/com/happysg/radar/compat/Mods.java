@@ -14,6 +14,7 @@ import java.util.function.Supplier;
  */
 public enum Mods {
     CREATE_MECHAMAYHEM,
+    VALKYRIENSKIES,
     CREATEBIGCANNONS;
 
     private final String id;

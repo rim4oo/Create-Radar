@@ -1,6 +1,6 @@
 package com.happysg.radar.block.radar.bearing;
 
-import com.happysg.radar.vs2.VS2Utils;
+import com.happysg.radar.compat.vs2.VS2Utils;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
@@ -181,8 +181,11 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-        if (dishCount > 0)
+        if (dishCount > 0) {
             tooltip.add(Component.literal("    Dish Count: " + dishCount));
+        }
+        tooltip.add(Component.literal("    Range: " + getRange()));
+        tooltip.add(Component.literal("    Speed: " + Math.round(getAngularSpeed() * 100) / 100f + "°/s"));
         return true;
     }
 

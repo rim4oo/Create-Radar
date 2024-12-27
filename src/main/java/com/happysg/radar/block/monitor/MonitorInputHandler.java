@@ -32,10 +32,13 @@ public class MonitorInputHandler {
                     return;
                 Vec3 RadarPos = monitor.radarPos.getCenter();
                 float range = monitor.getRadar().map(RadarBearingBlockEntity::getRange).orElse(0f);
-                Vec3 selected = RadarPos.add(relative.scale(range));
+                float sizeadj = size == 1 ? 0.5f : ((size - 1) / 2f);
+                if (size == 2)
+                    sizeadj = 0.75f;
+                Vec3 selected = RadarPos.add(relative.scale(range / (sizeadj)));
                 monitor.getRadar().map(RadarBearingBlockEntity::getEntityPositions)
                         .ifPresent(entityPositions -> {
-                            double distance = .1f * range;
+                            double distance = 0.1f * range;
                             for (RadarTrack track : entityPositions) {
                                 Vec3 entityPos = track.position();
                                 entityPos = entityPos.multiply(1, 0, 1);

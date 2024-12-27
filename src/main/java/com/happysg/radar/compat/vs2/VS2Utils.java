@@ -1,5 +1,6 @@
-package com.happysg.radar.vs2;
+package com.happysg.radar.compat.vs2;
 
+import com.happysg.radar.compat.Mods;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -11,6 +12,8 @@ import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 public class VS2Utils {
 
     public static BlockPos getWorldPos(Level level, BlockPos pos) {
+        if (!Mods.VALKYRIENSKIES.isLoaded())
+            return pos;
         if (VSGameUtilsKt.getShipObjectManagingPos(level, pos) != null) {
             final LoadedShip loadedShip = VSGameUtilsKt.getShipObjectManagingPos(level, pos);
             final Vector3d vec = loadedShip.getShipToWorld().transformPosition(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));

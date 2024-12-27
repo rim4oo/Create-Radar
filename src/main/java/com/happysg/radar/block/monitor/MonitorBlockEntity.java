@@ -177,7 +177,10 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         relative = adjustRelativeVectorForFacing(relative, monitorFacing);
         Vec3 RadarPos = radarPos.getCenter();
         float range = getRadar().map(RadarBearingBlockEntity::getRange).orElse(0f);
-        Vec3 selected = RadarPos.add(relative.scale(range));
+        float sizeadj = size == 1 ? 0.5f : ((size - 1) / 2f);
+        if (size == 2)
+            sizeadj = 0.75f;
+        Vec3 selected = RadarPos.add(relative.scale(range / (sizeadj)));
         getRadar().map(RadarBearingBlockEntity::getEntityPositions)
                 .ifPresent(entityPositions -> {
                     double distance = .1f * range;

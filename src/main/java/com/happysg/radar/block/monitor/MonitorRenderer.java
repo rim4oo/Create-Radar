@@ -2,8 +2,8 @@ package com.happysg.radar.block.monitor;
 
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
 import com.happysg.radar.block.radar.bearing.RadarTrack;
+import com.happysg.radar.compat.vs2.VS2Utils;
 import com.happysg.radar.registry.ModRenderTypes;
-import com.happysg.radar.vs2.VS2Utils;
 import com.jozufozu.flywheel.util.Color;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -149,11 +149,13 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         if (Math.abs(xOff) > .5f || Math.abs(zOff) > .5f)
             return;
 
+        xOff = xOff * .75f;
+        zOff = zOff * .75f;
 
         float xmin = 1 - size + (xOff * size);
         float zmin = 1 - size + (zOff * size);
-        float xmax = xOff + 1;
-        float zmax = zOff + 1;
+        float xmax = xOff * size + 1;
+        float zmax = zOff * size + 1;
 
         float fade = (track.scannedTime() - monitor.getLevel().getGameTime()) / 100f;
 

@@ -117,7 +117,7 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
 
         targetYaw = Math.toDegrees(Math.atan2(dz, dx)) - 90;
         targetPitch = Math.toDegrees(Math.atan2(dy, horizontalDistance));
-
+//        targetPitch = CannonTargeting.calculatePitch(120,2, cannonCenter, pos);
         // Normalize yaw to 0-360 degrees
         if (targetYaw < 0) {
             targetYaw += 360;
@@ -130,6 +130,34 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
             targetPitch = 90;
         }
         notifyUpdate();
+    }
+
+    private double calculatePitch(double range) {
+        float bestPitch = 0;
+        double bestRangeDifference = Double.MAX_VALUE;
+        float muzzleVelocity = 80f;
+        float muzzleVelocityPerTick = muzzleVelocity / 20;
+        float gravity = 0.05f;
+        float drag = 0.99f;
+        float magicNumber = 0.0028f;
+
+        for (float pitch = -80; pitch <= 80; pitch += 0.1F) {
+            double part1 = muzzleVelocityPerTick * Math.cos(Math.toRadians(pitch)) / Math.log(drag);
+
+            double part2 = Math.pow(((gravity * drag) /
+                            (gravity * drag + (1 - drag) * muzzleVelocityPerTick * Math.sin(Math.toRadians(pitch)))),
+                    (2 + magicNumber * muzzleVelocity * Math.sin(Math.toRadians(pitch)))) - 1;
+
+            double calculatedRange = part1 * part2;
+
+            double rangeDifference = Math.abs(range - calculatedRange);
+            if (bestRangeDifference > rangeDifference) {
+                bestRangeDifference = rangeDifference;
+                bestPitch = pitch;
+                System.out.println("Best pitch: " + bestPitch);
+            }
+        }
+        return bestPitch;
     }
 
     @Override
