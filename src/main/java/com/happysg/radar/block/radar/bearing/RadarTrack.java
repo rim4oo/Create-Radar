@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-public record RadarTrack(UUID entityId, Vec3 position, long scannedTime, Color color, boolean contraption) {
+public record RadarTrack(UUID entityId, Vec3 position, long scannedTime, Color color, boolean contraption, int id) {
 
     public static int BLUE = 255;
     public static int WHITE = 16777215;
@@ -26,7 +26,7 @@ public record RadarTrack(UUID entityId, Vec3 position, long scannedTime, Color c
     public static int YELLOW = 16776960;
 
     public RadarTrack(Entity entity) {
-        this(entity.getUUID(), getPosition(entity), entity.level().getGameTime(), getColor(entity), isContraption(entity));
+        this(entity.getUUID(), getPosition(entity), entity.level().getGameTime(), getColor(entity), isContraption(entity), entity.getId());
     }
 
     private static Vec3 getPosition(Entity entity) {
@@ -58,11 +58,12 @@ public record RadarTrack(UUID entityId, Vec3 position, long scannedTime, Color c
         tag.putLong("scannedTime", scannedTime);
         tag.putInt("color", color.getRGB());
         tag.putBoolean("contraption", contraption);
+        tag.putInt("id", id);
         return tag;
     }
 
     public static RadarTrack deserializeNBT(CompoundTag tag) {
-        return new RadarTrack(tag.getUUID("entityId"), new Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z")), tag.getLong("scannedTime"), new Color(tag.getInt("color")), tag.getBoolean("contraption"));
+        return new RadarTrack(tag.getUUID("entityId"), new Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z")), tag.getLong("scannedTime"), new Color(tag.getInt("color")), tag.getBoolean("contraption"), tag.getInt("id"));
     }
 
     public static CompoundTag serializeNBTList(Collection<RadarTrack> tracks) {

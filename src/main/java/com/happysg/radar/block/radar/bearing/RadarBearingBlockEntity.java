@@ -49,7 +49,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private void clearOldTracks() {
         List<UUID> toRemove = new ArrayList<>();
         entityPositions.forEach((entity, track) -> {
-            if (level.getGameTime() - track.scannedTime() > MAX_TRACK_TICKS) {
+            if (level.getGameTime() - track.scannedTime() > MAX_TRACK_TICKS || (level.getEntity(track.id()) != null && (level.getEntity(track.id()).isRemoved() || !level.getEntity(track.id()).isAlive()))) {
                 toRemove.add(entity);
             }
         });
@@ -61,7 +61,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
 
     private void scanForEntityTracks() {
         AABB aabb = getRadarAABB();
-        level.getEntities(null, aabb).stream().filter(this::isEntityInRadarFov).forEach(
+        level.getEntities(null, aabb).stream().filter(this::isEntityInRadarFov).filter(Entity::isAlive).forEach(
                 entity -> {
                     entityPositions.put(entity.getUUID(), new RadarTrack(entity));
                     notifyUpdate();
