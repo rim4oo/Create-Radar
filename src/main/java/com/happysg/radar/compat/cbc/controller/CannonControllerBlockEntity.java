@@ -67,7 +67,7 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         double yawDifference = targetYaw - currentYaw;
         double pitchDifference = targetPitch - currentPitch;
         double speedFactor = Math.abs(getSpeed()) / 32.0;
-        double tolerance = 2; // Tolerance in degrees
+        double tolerance = .1; // Tolerance in degrees
 
         if (Math.abs(yawDifference) > tolerance) {
             if (Math.abs(yawDifference) > speedFactor) {
@@ -171,7 +171,7 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         }
 
 
-        Vec3 cannonCenter = getBlockPos().above(2).getCenter();
+        Vec3 cannonCenter = getBlockPos().above(3).getCenter();
         double dx = pos.x - cannonCenter.x;
         double dy = pos.y - cannonCenter.y;
         double dz = pos.z - cannonCenter.z;

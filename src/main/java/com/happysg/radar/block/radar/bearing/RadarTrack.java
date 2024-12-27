@@ -32,7 +32,7 @@ public record RadarTrack(UUID entityId, Vec3 position, long scannedTime, Color c
     private static Vec3 getPosition(Entity entity) {
         if (entity instanceof AbstractContraptionEntity entity1)
             return entity1.getContraption().anchor.getCenter();
-        return entity.position();
+        return entity.getEyePosition();
     }
 
     private static Color getColor(Entity entity) {
