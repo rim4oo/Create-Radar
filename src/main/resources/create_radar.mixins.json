@@ -6,6 +6,7 @@
   "client": [
   ],
   "mixins": [
+    "AutoCannonAccessor",
     "DisplayLinkBlockItemMixin"
   ],
   "injectors": {

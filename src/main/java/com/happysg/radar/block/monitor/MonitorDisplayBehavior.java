@@ -20,7 +20,8 @@ public class MonitorDisplayBehavior extends DisplayTarget {
         if (!radar.isRunning())
             return;
         MonitorFilter filter = MonitorFilter.values()[context.sourceConfig().getInt("Filter")];
-        monitor.getController().setFilter(filter);
+        if (monitor.getController() != null)
+            monitor.getController().setFilter(filter);
     }
 
     @Override
