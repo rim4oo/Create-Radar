@@ -1,6 +1,8 @@
 package com.happysg.radar.mixin;
 
 import com.happysg.radar.CreateRadar;
+import com.happysg.radar.block.controller.pitch.AutoPitchControllerBlockEntity;
+import com.happysg.radar.block.controller.yaw.AutoYawControllerBlockEntity;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
 import com.happysg.radar.compat.cbc.controller.CannonControllerBlockEntity;
@@ -89,6 +91,14 @@ public abstract class DisplayLinkBlockItemMixin extends BlockItem {
         }
         if (level.getBlockEntity(pos) instanceof CannonControllerBlockEntity) {
             data.putString("Id", CreateRadar.asResource("cannon_controller").toString());
+            teTag.put("Source", data);
+        }
+        if (level.getBlockEntity(pos) instanceof AutoYawControllerBlockEntity) {
+            data.putString("Id", CreateRadar.asResource("yaw_controller").toString());
+            teTag.put("Source", data);
+        }
+        if (level.getBlockEntity(pos) instanceof AutoPitchControllerBlockEntity) {
+            data.putString("Id", CreateRadar.asResource("pitch_controller").toString());
             teTag.put("Source", data);
         }
         teTag.put("TargetOffset", NbtUtils.writeBlockPos(selectedPos.subtract(placedPos)));
