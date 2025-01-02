@@ -1,6 +1,7 @@
 package com.happysg.radar.registry;
 
 import com.happysg.radar.CreateRadar;
+import com.happysg.radar.block.controller.yaw.YawLinkBehavior;
 import com.happysg.radar.block.monitor.MonitorDisplayBehavior;
 import com.happysg.radar.block.radar.bearing.RadarDisplayBehavior;
 import com.happysg.radar.compat.cbc.controller.TurretGuidanceBehavior;
@@ -21,5 +22,6 @@ public class ModDisplayBehaviors {
         register("monitor", new MonitorDisplayBehavior(), ModBlockEntityTypes.MONITOR.get());
         register("radar", new RadarDisplayBehavior(), ModBlockEntityTypes.RADAR_BEARING.get());
         register("cannon_controller", new TurretGuidanceBehavior(), ModBlockEntityTypes.CANNON_CONTROLLER.get());
+        register("yaw_controller", new YawLinkBehavior(), ModBlockEntityTypes.AUTO_YAW_CONTROLLER.get());
     }
 }

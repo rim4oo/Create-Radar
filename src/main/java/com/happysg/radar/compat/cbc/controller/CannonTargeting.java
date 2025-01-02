@@ -1,6 +1,19 @@
 package com.happysg.radar.compat.cbc.controller;
 
+import com.happysg.radar.CreateRadar;
+import com.happysg.radar.mixin.AutoCannonAccessor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import rbasamoyai.createbigcannons.cannon_control.contraption.MountedAutocannonContraption;
+import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
+import rbasamoyai.createbigcannons.cannons.ItemCannonBehavior;
+import rbasamoyai.createbigcannons.cannons.autocannon.IAutocannonBlockEntity;
+import rbasamoyai.createbigcannons.cannons.autocannon.breech.AbstractAutocannonBreechBlockEntity;
+import rbasamoyai.createbigcannons.cannons.autocannon.material.AutocannonMaterialProperties;
+import rbasamoyai.createbigcannons.config.CBCConfigs;
+import rbasamoyai.createbigcannons.munitions.autocannon.AutocannonAmmoItem;
+import rbasamoyai.createbigcannons.munitions.autocannon.config.AutocannonProjectilePropertiesComponent;
 
 public class CannonTargeting {
 
@@ -8,29 +21,23 @@ public class CannonTargeting {
     private static final double DRAG = 0.99;
     private static final double GRAVITY = -0.05;
 
-    // Increment for pitch in degrees
-    private static final double PITCH_INCREMENT = 0.125;
 
     // Calculate the optimal pitch to hit the target
     public static double calculatePitch(double power, double length, Vec3 cannonPos, Vec3 targetPos) {
-        // Calculate deltas
         double dX = targetPos.x - cannonPos.x;
         double dZ = targetPos.z - cannonPos.z;
         double dY = targetPos.y - cannonPos.y;
-
-        // Calculate distance
         double distance = Math.sqrt(dX * dX + dZ * dZ);
 
         double bestPitch = 0.0;
         double bestAccuracy = Double.MAX_VALUE;
-        double pitch = -60.0;  // Start with the minimum pitch angle
+        double pitch = -80.0;
+        double pitchIncrement = 0.01; // Increased resolution
 
-        while (pitch <= 60.0) {
-            // Calculate airtime for upward and downward motion
+        while (pitch <= 80.0) {
             double airtimeUp = computeAirtimeUp(power, pitch, dY, length);
             double airtimeDown = computeAirtimeDown(power, pitch, dY, length);
 
-            // Check the accuracy for upward motion
             if (airtimeUp != -1) {
                 double projection = computeProjection(power, pitch, airtimeUp);
                 double accuracy = Math.abs(projection - distance);
@@ -40,7 +47,6 @@ public class CannonTargeting {
                 }
             }
 
-            // Check the accuracy for downward motion
             if (airtimeDown != -1) {
                 double projection = computeProjection(power, pitch, airtimeDown);
                 double accuracy = Math.abs(projection - distance);
@@ -50,13 +56,41 @@ public class CannonTargeting {
                 }
             }
 
-            // Increment pitch
-            pitch += PITCH_INCREMENT;
+            pitch += pitchIncrement;
         }
 
-        return bestPitch;
-    }
+        // Secondary refinement around the best pitch
+        double refinedBestPitch = bestPitch;
+        bestAccuracy = Double.MAX_VALUE;
+        pitch = bestPitch - pitchIncrement;
+        while (pitch <= bestPitch + pitchIncrement) {
+            double airtimeUp = computeAirtimeUp(power, pitch, dY, length);
+            double airtimeDown = computeAirtimeDown(power, pitch, dY, length);
 
+            if (airtimeUp != -1) {
+                double projection = computeProjection(power, pitch, airtimeUp);
+                double accuracy = Math.abs(projection - distance);
+                if (accuracy < bestAccuracy) {
+                    bestAccuracy = accuracy;
+                    refinedBestPitch = pitch;
+                }
+            }
+
+            if (airtimeDown != -1) {
+                double projection = computeProjection(power, pitch, airtimeDown);
+                double accuracy = Math.abs(projection - distance);
+                if (accuracy < bestAccuracy) {
+                    bestAccuracy = accuracy;
+                    refinedBestPitch = pitch;
+                }
+            }
+
+            pitch += pitchIncrement / 10; // Finer increment for refinement
+        }
+
+        CreateRadar.getLogger().info("Best pitch: " + refinedBestPitch);
+        return refinedBestPitch;
+    }
     // Calculate airtime for upward motion
     private static double computeAirtimeUp(double power, double pitch, double dY, double length) {
         double vertVelocity = power * Math.sin(Math.toRadians(pitch));
@@ -76,6 +110,54 @@ public class CannonTargeting {
 
         return -1;
     }
+
+    public static float getSpeed(PitchOrientedContraptionEntity entity) {
+        if (entity == null) return 0;
+        if (!(entity.getContraption() instanceof MountedAutocannonContraption autocannon))
+            return 0;
+
+        if (autocannon.getStartPos() == null
+                || ((AutoCannonAccessor) autocannon).getMaterial() == null
+                || !(autocannon.presentBlockEntities.get(autocannon.getStartPos()) instanceof AbstractAutocannonBreechBlockEntity breech)
+                || !breech.canFire()) return 0;
+
+        ItemStack foundProjectile = breech.extractNextInput();
+        if (!(foundProjectile.getItem() instanceof AutocannonAmmoItem round)) return 0;
+
+        AutocannonMaterialProperties properties = ((AutoCannonAccessor) autocannon).getMaterial().properties();
+        AutocannonProjectilePropertiesComponent roundProperties = round.getAutocannonProperties(foundProjectile);
+
+        boolean canFail = !CBCConfigs.SERVER.failure.disableAllFailure.get();
+
+        float speed = properties.baseSpeed();
+        boolean canSquib = roundProperties == null || roundProperties.canSquib();
+        canSquib &= canFail;
+
+        BlockPos currentPos = autocannon.getStartPos().relative(autocannon.initialOrientation());
+        int barrelTravelled = 0;
+
+        while (autocannon.presentBlockEntities.get(currentPos) instanceof IAutocannonBlockEntity autocannonI) {
+            ItemCannonBehavior behavior = autocannonI.cannonBehavior();
+
+            if (behavior.canLoadItem(foundProjectile)) {
+                ++barrelTravelled;
+                if (barrelTravelled <= properties.maxSpeedIncreases())
+                    speed += properties.speedIncreasePerBarrel();
+                if (canSquib && barrelTravelled > properties.maxBarrelLength()) {
+                    break;
+                }
+                currentPos = currentPos.relative(autocannon.initialOrientation());
+            } else {
+                if (canFail) {
+                    return speed;
+                }
+            }
+        }
+        System.out.println("Speed: " + speed);
+        System.out.println("barrelTravelled: " + barrelTravelled);
+        return speed;
+    }
+
 
     // Calculate airtime for downward motion
     private static double computeAirtimeDown(double power, double pitch, double dY, double length) {

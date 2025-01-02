@@ -1,6 +1,8 @@
 package com.happysg.radar.registry;
 
 import com.happysg.radar.CreateRadar;
+import com.happysg.radar.block.controller.pitch.AutoPitchControllerBlock;
+import com.happysg.radar.block.controller.yaw.AutoYawControllerBlock;
 import com.happysg.radar.block.monitor.MonitorBlock;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlock;
 import com.happysg.radar.block.radar.receiver.AbstractRadarFrame;
@@ -90,6 +92,24 @@ public class ModBlocks {
                     .transform(BlockStressDefaults.setImpact(128))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
+                    .simpleItem()
+                    .register();
+
+    public static final BlockEntry<AutoYawControllerBlock> AUTO_YAW_CONTROLLER_BLOCK =
+            REGISTRATE.block("auto_yaw_controller", AutoYawControllerBlock::new)
+                    .initialProperties(SharedProperties::softMetal)
+                    .transform(BlockStressDefaults.setImpact(128))
+                    .properties(BlockBehaviour.Properties::noOcclusion)
+                    .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
+                    .simpleItem()
+                    .register();
+
+    public static final BlockEntry<AutoPitchControllerBlock> AUTO_PITCH_CONTROLLER_BLOCK =
+            REGISTRATE.block("auto_pitch_controller", AutoPitchControllerBlock::new)
+                    .initialProperties(SharedProperties::softMetal)
+                    .transform(BlockStressDefaults.setImpact(128))
+                    .properties(BlockBehaviour.Properties::noOcclusion)
+                    .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
                     .simpleItem()
                     .register();
 

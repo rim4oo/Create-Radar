@@ -34,8 +34,9 @@ public abstract class DisplayLinkBlockItemMixin extends BlockItem {
     /**
      * @author happysg
      * @reason Add the ability to link to MonitorBlockEntity regardless of the distance
-     * TODO use proper Mixin instead of Overwrite
+     * and links source without opening the screen
      */
+    //TODO use proper Mixin instead of Overwrite
     @Overwrite
     public InteractionResult useOn(UseOnContext pContext) {
         ItemStack stack = pContext.getItemInHand();
