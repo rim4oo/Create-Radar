@@ -77,7 +77,8 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         if (currentYaw == targetYaw && currentPitch == targetPitch) {
             fireCannon(cannon);
             return;
-        }
+        } else
+            stopCannon(cannon);
         cannon.notifyUpdate();
     }
 
@@ -124,7 +125,8 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         targetYaw = Math.toDegrees(Math.atan2(dz, dx)) + 90;
         targetPitch = -Math.toDegrees(Math.atan2(dy, horizontalDistance));
         CreateRadar.getLogger().info("Horizontal distance: " + horizontalDistance);
-        targetPitch += horizontalDistance / 92f;
+        double additionalPitch = horizontalDistance / 350f;
+        targetPitch += horizontalDistance / 150f + additionalPitch * 1.3f;
 
         // Normalize yaw to 0-360 degrees
         if (targetYaw < 0) {
@@ -137,7 +139,6 @@ public class CannonControllerBlockEntity extends KineticBlockEntity {
         } else if (targetPitch > 90) {
             targetPitch = 90;
         }
-        CreateRadar.getLogger().info("Yaw: " + targetYaw + " Pitch: " + targetPitch);
         notifyUpdate();
     }
 

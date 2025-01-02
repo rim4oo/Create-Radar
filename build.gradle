@@ -69,6 +69,10 @@ repositories {
     maven { url 'https://maven.blamejared.com/' }
 
     maven {
+        url = "https://api.modrinth.com/maven"
+    }
+
+    maven {
         url 'https://maven.tterrag.com/'
         content {
             includeGroup 'com.jozufozu.flywheel'
@@ -129,6 +133,9 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
+    //Clockwork
+    compileOnly fg.deobf("maven.modrinth:create-clockwork:${minecraft_version}-${clockwork_version}")
+
 
     implementation("org.valkyrienskies.core:api:${vs_core_version}")
     implementation("org.valkyrienskies.core:impl:${vs_core_version}")
@@ -137,7 +144,7 @@ dependencies {
     implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${vs2_version}")
     implementation "org.joml:joml:1.10.5"
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
-    implementation 'thedarkcolour:kotlinforforge:4.10.0'
+    implementation "thedarkcolour:kotlinforforge:${forge_kotlin_version}"
 
 }
 

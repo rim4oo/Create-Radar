@@ -22,7 +22,7 @@ public class AutoYawControllerBlock extends HorizontalKineticBlock implements IB
 
     @Override
     public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-        return face.getAxis() == Direction.Axis.Y;
+        return face == Direction.DOWN;
     }
 
     @Override
