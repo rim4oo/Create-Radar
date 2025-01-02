@@ -1,0 +1,16 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "minecraft:quartz_slab"
+    }
+  },
+  "pattern": [
+    "QQ"
+  ],
+  "result": {
+    "count": 1,
+    "item": "create_radar:radar_plate_block"
+  }
+}
