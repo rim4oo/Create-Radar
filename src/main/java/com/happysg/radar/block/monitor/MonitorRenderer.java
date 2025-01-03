@@ -113,10 +113,10 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
     }
 
 
-    private void renderRadarTracks(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
+    private void renderRadarTracks(RadarBearingBlockEntity radar, MonitorBlockEntity monitor, PoseStack ms, MultiBufferSource bufferSource) {
         List<RadarTrack> tracks = radar.getEntityPositions();
         AtomicInteger depthCounter = new AtomicInteger(0);
-        tracks.forEach(track -> renderTrack(track, blockEntity, radar, ms, bufferSource, depthCounter.getAndIncrement()));
+        tracks.stream().filter(track -> monitor.filter.test(track.entityType())).forEach(track -> renderTrack(track, monitor, radar, ms, bufferSource, depthCounter.getAndIncrement()));
 
     }
 

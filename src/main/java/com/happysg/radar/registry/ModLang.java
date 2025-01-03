@@ -33,6 +33,7 @@ public class ModLang {
 
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.all_entities", "All Entities");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.no_mobs", "No Mobs");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.only_mobs", "Only Mobs");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.players_only", "Players Only");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.projectiles_only", "Projectiles Only");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.vs2_only", "VS2 Only");
