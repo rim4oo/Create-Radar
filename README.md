@@ -21,7 +21,7 @@ them, ensuring faster development and easier gameplay.
 
 ## Installation
 
-1. Download the mod from the [official website](https://modrinth.com/project/create-radars).
+1. Download the mod from the [official website]((https://www.curseforge.com/minecraft/mc-mods/create-radars)).
 2. Place the downloaded file into the `mods` folder of your Minecraft directory.
 3. Launch Minecraft and enjoy the new features!
 
