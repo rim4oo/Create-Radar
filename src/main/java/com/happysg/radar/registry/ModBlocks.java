@@ -7,7 +7,6 @@ import com.happysg.radar.block.monitor.MonitorBlock;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlock;
 import com.happysg.radar.block.radar.receiver.AbstractRadarFrame;
 import com.happysg.radar.block.radar.receiver.RadarReceiverBlock;
-import com.happysg.radar.compat.cbc.controller.CannonControllerBlock;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -86,14 +85,6 @@ public class ModBlocks {
                     .simpleItem()
                     .register();
 
-    public static final BlockEntry<CannonControllerBlock> CANNON_CONTROLLER_BLOCK =
-            REGISTRATE.block("cannon_controller", CannonControllerBlock::new)
-                    .initialProperties(SharedProperties::softMetal)
-                    .transform(BlockStressDefaults.setImpact(128))
-                    .properties(BlockBehaviour.Properties::noOcclusion)
-                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
-                    .simpleItem()
-                    .register();
 
     public static final BlockEntry<AutoYawControllerBlock> AUTO_YAW_CONTROLLER_BLOCK =
             REGISTRATE.block("auto_yaw_controller", AutoYawControllerBlock::new)

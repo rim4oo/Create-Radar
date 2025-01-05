@@ -5,7 +5,6 @@ import com.happysg.radar.block.controller.pitch.AutoPitchControllerBlockEntity;
 import com.happysg.radar.block.controller.yaw.AutoYawControllerBlockEntity;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
-import com.happysg.radar.compat.cbc.controller.CannonControllerBlockEntity;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlockItem;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
@@ -87,10 +86,6 @@ public abstract class DisplayLinkBlockItemMixin extends BlockItem {
         if (level.getBlockEntity(pos) instanceof RadarBearingBlockEntity) {
             data.putString("Id", CreateRadar.asResource("radar").toString());
             data.putInt("Filter", 0);
-            teTag.put("Source", data);
-        }
-        if (level.getBlockEntity(pos) instanceof CannonControllerBlockEntity) {
-            data.putString("Id", CreateRadar.asResource("cannon_controller").toString());
             teTag.put("Source", data);
         }
         if (level.getBlockEntity(pos) instanceof AutoYawControllerBlockEntity) {

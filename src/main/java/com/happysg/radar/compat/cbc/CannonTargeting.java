@@ -1,4 +1,4 @@
-package com.happysg.radar.compat.cbc.controller;
+package com.happysg.radar.compat.cbc;
 
 import com.happysg.radar.CreateRadar;
 import com.happysg.radar.mixin.AutoCannonAccessor;
@@ -15,6 +15,7 @@ import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.munitions.autocannon.AutocannonAmmoItem;
 import rbasamoyai.createbigcannons.munitions.autocannon.config.AutocannonProjectilePropertiesComponent;
 
+//todo fix calculations
 public class CannonTargeting {
 
     // Constants for drag and gravity

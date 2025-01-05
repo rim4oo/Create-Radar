@@ -6,8 +6,6 @@ import com.happysg.radar.block.controller.yaw.AutoYawControllerBlockEntity;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import com.happysg.radar.block.monitor.MonitorRenderer;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
-import com.happysg.radar.compat.cbc.controller.CannonControllerBlockEntity;
-import com.happysg.radar.compat.cbc.controller.CannonControllerRenderer;
 import com.simibubi.create.content.contraptions.bearing.BearingInstance;
 import com.simibubi.create.content.contraptions.bearing.BearingRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -29,11 +27,6 @@ public class ModBlockEntityTypes {
             .renderer(() -> BearingRenderer::new)
             .register();
 
-    public static final BlockEntityEntry<CannonControllerBlockEntity> CANNON_CONTROLLER = REGISTRATE
-            .blockEntity("cannon_controller", CannonControllerBlockEntity::new)
-            .validBlocks(ModBlocks.CANNON_CONTROLLER_BLOCK)
-            .renderer(() -> CannonControllerRenderer::new)
-            .register();
 
     public static final BlockEntityEntry<AutoYawControllerBlockEntity> AUTO_YAW_CONTROLLER = REGISTRATE
             .blockEntity("auto_yaw_controller", AutoYawControllerBlockEntity::new)
