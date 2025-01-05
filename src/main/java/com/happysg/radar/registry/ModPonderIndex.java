@@ -18,5 +18,8 @@ public class ModPonderIndex {
         HELPER.addStoryBoard(ModBlocks.RADAR_PLATE_BLOCK, "radar_contraption", PonderScenes::radarContraption, ModPonderTags.RADAR_COMPONENT);
 
         HELPER.addStoryBoard(ModBlocks.MONITOR, "radar_linking", PonderScenes::radarLinking, ModPonderTags.RADAR_COMPONENT);
+        HELPER.addStoryBoard(ModBlocks.AUTO_YAW_CONTROLLER_BLOCK, "controller_linking", PonderScenes::controllerLinking, ModPonderTags.RADAR_COMPONENT);
+        HELPER.addStoryBoard(ModBlocks.AUTO_PITCH_CONTROLLER_BLOCK, "controller_linking", PonderScenes::controllerLinking, ModPonderTags.RADAR_COMPONENT);
+
     }
 }

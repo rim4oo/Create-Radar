@@ -44,6 +44,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
             scanForEntityTracks();
         }
         clearOldTracks();
+        notifyUpdate();
     }
 
     private void clearOldTracks() {
@@ -55,21 +56,20 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         });
         toRemove.forEach(uuid -> {
             entityPositions.remove(uuid);
-            notifyUpdate();
         });
     }
 
     private void scanForEntityTracks() {
         AABB aabb = getRadarAABB();
-        level.getEntities(null, aabb).stream().filter(this::isEntityInRadarFov).filter(Entity::isAlive).forEach(
-                entity -> {
+        for (Entity entity : level.getEntities(null, aabb)) {
+            if (entity.isAlive() && isEntityInRadarFov(entity)) {
                     entityPositions.put(entity.getUUID(), new RadarTrack(entity));
-                    notifyUpdate();
-                }
-        );
+            }
+        }
     }
 
 
+    //todo improve performance and area scanning
     private AABB getRadarAABB() {
         return new AABB(VS2Utils.getWorldPos(this)).inflate(getRange(), 20, getRange());
     }
@@ -234,6 +234,6 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
     public float getRange() {
-        return 10 + dishCount * 5;
+        return 20 + dishCount * 5;
     }
 }

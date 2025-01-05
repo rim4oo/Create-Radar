@@ -141,4 +141,71 @@ public class PonderScenes {
         scene.markAsFinished();
     }
 
+    public static void controllerLinking(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("controller_linking", "Linking a Controller to a Monitor!");
+        scene.configureBasePlate(0, 0, 5);
+        scene.world.showSection(util.select.layer(0), Direction.DOWN);
+        scene.idle(10);
+        scene.world.showSection(util.select.layer(1), Direction.DOWN);
+
+        Selection monitor = util.select.fromTo(4, 1, 3, 4, 2, 4);
+        Vec3 monitorSide = util.vector.blockSurface(new BlockPos(4, 1, 3), Direction.WEST);
+        scene.world.showSection(monitor, Direction.DOWN);
+        scene.idle(20);
+
+        Selection yawController = util.select.position(2, 2, 2);
+        Vec3 yawControllerSide = util.vector.blockSurface(new BlockPos(2, 2, 2), Direction.EAST);
+
+        Selection cannonMount = util.select.position(2, 3, 2);
+
+        scene.world.showSection(yawController, Direction.DOWN);
+        scene.idle(20);
+        scene.world.showSection(cannonMount, Direction.DOWN);
+        scene.overlay.showText(40)
+                .text("Yaw Controller is placed under the turret mount")
+                .pointAt(yawControllerSide)
+                .attachKeyFrame()
+                .placeNearTarget();
+        scene.idle(40);
+
+        BlockPos link = util.grid.at(1, 2, 2);
+        scene.world.showSection(util.select.position(link), Direction.EAST);
+        scene.idle(20);
+
+        scene.overlay.chaseBoundingBoxOutline(PonderPalette.INPUT, monitor, new AABB(new BlockPos(4, 1, 3)).expandTowards(0, 1, 1), 60);
+        scene.overlay.chaseBoundingBoxOutline(PonderPalette.OUTPUT, link, new AABB(link).contract(-.5f, 0, 0), 60);
+        scene.overlay.showText(40)
+                .text("Link using Display Links")
+                .pointAt(yawControllerSide)
+                .attachKeyFrame()
+                .colored(PonderPalette.OUTPUT)
+                .placeNearTarget();
+        scene.idle(50);
+
+        BlockPos pitchController = link.above();
+        Vec3 pitchControllerSide = util.vector.blockSurface(pitchController, Direction.EAST);
+        scene.world.showSection(util.select.position(pitchController), Direction.DOWN);
+        scene.idle(20);
+        BlockPos link2 = util.grid.at(1, 3, 1);
+        scene.world.showSection(util.select.position(link2), Direction.EAST);
+        scene.overlay.showText(40)
+                .text("Repeat for pitch Controller")
+                .pointAt(pitchControllerSide)
+                .attachKeyFrame()
+                .placeNearTarget();
+        scene.overlay.chaseBoundingBoxOutline(PonderPalette.INPUT, monitor, new AABB(new BlockPos(4, 1, 3)).expandTowards(0, 1, 1), 60);
+        scene.overlay.chaseBoundingBoxOutline(PonderPalette.OUTPUT, link2, new AABB(link2).contract(0, 0, -.5), 60);
+        scene.idle(50);
+
+        scene.rotateCameraY(-90);
+        scene.idle(20);
+        scene.overlay.showText(40)
+                .text("Select Target on monitor for turret to aim/fire at")
+                .pointAt(monitorSide)
+                .attachKeyFrame()
+                .placeNearTarget();
+        scene.idle(50);
+        scene.markAsFinished();
+
+    }
 }

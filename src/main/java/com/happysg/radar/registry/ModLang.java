@@ -38,5 +38,12 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.projectiles_only", "Projectiles Only");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.vs2_only", "VS2 Only");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".filter.mob_bosses_only", "Mob Bosses Only");
+
+
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.header", "Linking a Controller to a Monitor!");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_1", "Place Yaw Controller under turret mount");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_2", "Link using Display Links");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_3", "Repeat for pitch Controller");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_4", "Select Target on monitor for turret to aim/fire at");
     }
 }
