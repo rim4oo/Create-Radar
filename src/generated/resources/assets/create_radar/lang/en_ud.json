@@ -21,7 +21,7 @@
   "create_radar.ponder.controller_linking.text_1": "ʇunoɯ ʇǝɹɹnʇ ɹǝpun ɹǝןןoɹʇuoƆ ʍɐʎ ǝɔɐןԀ",
   "create_radar.ponder.controller_linking.text_2": "sʞuıꞀ ʎɐןdsıᗡ buısn ʞuıꞀ",
   "create_radar.ponder.controller_linking.text_3": "ɹǝןןoɹʇuoƆ ɥɔʇıd ɹoɟ ʇɐǝdǝᴚ",
-  "create_radar.ponder.controller_linking.text_4": "ʇɐ ǝɹıɟ/ɯıɐ oʇ ʇǝɹɹnʇ ɹoɟ ɹoʇıuoɯ uo ʇǝbɹɐ⟘ ʇɔǝןǝS",
+  "create_radar.ponder.controller_linking.text_4": "ʇɐ ǝɹıɟ/ɯıɐ oʇ ʇǝɹɹnʇ ɹoɟ ɹoʇuoɯ uo ʇǝbɹɐ⟘ ʇɔǝןǝS",
   "create_radar.ponder.radar_contraption.header": "¡ɹɐpɐᴚ ɐ buıʇɐǝɹƆ",
   "create_radar.ponder.radar_contraption.text_1": "buıɹɐǝᗺ ɹɐpɐᴚ ǝɔɐןԀ",
   "create_radar.ponder.radar_contraption.text_2": "ɹǝʌıǝɔǝᴚ ɹɐpɐᴚ ǝɔɐןԀ",
@@ -36,5 +36,6 @@
   "create_radar.ponder.radar_linking.text_4": "ǝʇɐʌıʇɔɐ oʇ ʞuıꞀ ʎɐןdsıᗡ ʞɔıןɔ ʇɥbıᴚ",
   "create_radar.ponder.tag.radar_components": "sɹɐpɐᴚ",
   "create_radar.ponder.tag.radar_components.description": "ɯǝʇsʎS buıʞɔɐɹ⟘ ɹɐpɐᴚ ɟo uoıʇɐǝɹɔ ǝɥʇ ʍoןןɐ ɥɔıɥʍ sʇuǝuodɯoƆ",
+  "item.create_radar.guided_fuze": "ǝznℲ pǝpın⅁",
   "itemGroup.create_radar.radar": "sɹɐpɐᴚ :ǝʇɐǝɹƆ"
 }
