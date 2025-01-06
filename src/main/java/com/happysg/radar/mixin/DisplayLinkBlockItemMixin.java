@@ -34,7 +34,7 @@ public abstract class DisplayLinkBlockItemMixin extends BlockItem {
 
 
     //todo fix this
-    @Inject(method = "useOn", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "useOn", at = @At("HEAD"), cancellable = true, remap = true)
     public void injectUseOn(UseOnContext pContext, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack stack = pContext.getItemInHand();
         BlockPos pos = pContext.getClickedPos();
