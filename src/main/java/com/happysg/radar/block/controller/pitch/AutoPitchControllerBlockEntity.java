@@ -52,7 +52,7 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
             return;
 
         double currentPitch = contraption.pitch;
-        int invert = cannonContraption.initialOrientation().getStepX() + cannonContraption.initialOrientation().getStepZ();
+        int invert = -cannonContraption.initialOrientation().getStepX() + cannonContraption.initialOrientation().getStepZ();
         currentPitch = currentPitch * -invert;
         if (correctPitch(currentPitch) && correctYaw())
             tryFireCannon(mount);
