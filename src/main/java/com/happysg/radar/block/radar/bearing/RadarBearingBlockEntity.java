@@ -26,6 +26,8 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private int dishCount;
     private Direction receiverFacing = Direction.NORTH;
     Map<UUID, RadarTrack> entityPositions = new HashMap<>();
+    Map<UUID, VSRadarTracks> VSPositions = new HashMap<>();
+
     public RadarBearingBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -49,14 +51,13 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
 
     private void clearOldTracks() {
         List<UUID> toRemove = new ArrayList<>();
+        long currentTime = level.getGameTime();
         entityPositions.forEach((entity, track) -> {
-            if (level.getGameTime() - track.scannedTime() > MAX_TRACK_TICKS || (level.getEntity(track.id()) != null && (level.getEntity(track.id()).isRemoved() || !level.getEntity(track.id()).isAlive()))) {
+            if (currentTime - track.scannedTime() > MAX_TRACK_TICKS || (level.getEntity(track.id()) != null && (level.getEntity(track.id()).isRemoved() || !level.getEntity(track.id()).isAlive()))) {
                 toRemove.add(entity);
             }
         });
-        toRemove.forEach(uuid -> {
-            entityPositions.remove(uuid);
-        });
+        toRemove.forEach(uuid -> entityPositions.remove(uuid));
     }
 
     private void scanForEntityTracks() {
@@ -69,9 +70,12 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
 
-    //todo improve performance and area scanning
     private AABB getRadarAABB() {
-        return new AABB(VS2Utils.getWorldPos(this)).inflate(getRange(), 20, getRange());
+        float range = getRange();
+        BlockPos radarPos = VS2Utils.getWorldPos(this);
+        double xOffset = range * Math.sin(Math.toRadians(getGlobalAngle()));
+        double zOffset = range * Math.cos(Math.toRadians(getGlobalAngle()));
+        return new AABB(radarPos.getX() - xOffset, radarPos.getY() - 20, radarPos.getZ() - zOffset, radarPos.getX() + xOffset, radarPos.getY() + 20, radarPos.getZ() + zOffset);
     }
 
     private boolean isEntityInRadarFov(Entity entity) {
