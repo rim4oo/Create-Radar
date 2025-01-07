@@ -4,7 +4,10 @@ import com.jozufozu.flywheel.util.Color;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
+import org.valkyrienskies.core.api.ships.Ship;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +16,16 @@ import java.util.List;
 
 //todo join entityPositions and VSPositions into a single map
 public record VSRadarTracks(String id, Vec3 position, long scannedTime, Color color) {
+    public static int YELLOW = 16776960;
+
+    public VSRadarTracks(Ship serverShip, Level level) {
+        this(String.valueOf(serverShip.getId()), getPosition(serverShip), level.getGameTime(), new Color(YELLOW));
+    }
+
+    private static Vec3 getPosition(Ship serverShip) {
+        Vector3d vecD = serverShip.getWorldAABB().center(new Vector3d());
+        return new Vec3(vecD.x, vecD.y, vecD.z);
+    }
 
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
