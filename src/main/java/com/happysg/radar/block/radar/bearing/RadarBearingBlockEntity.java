@@ -213,7 +213,6 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
             tooltip.add(Component.literal("    Dish Count: " + dishCount));
         }
         tooltip.add(Component.literal("    Range: " + getRange()));
-        tooltip.add(Component.literal("    Speed: " + Math.round(getAngularSpeed() * 100) / 100f + "°/s"));
         return true;
     }
 
