@@ -1,12 +1,14 @@
 package com.happysg.radar;
 
 import com.happysg.radar.block.monitor.MonitorInputHandler;
+import com.happysg.radar.block.radar.link.RadarLinkBlockItem;
 import com.happysg.radar.networking.ModMessages;
 import com.happysg.radar.registry.*;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -39,6 +41,11 @@ public class CreateRadar {
         modEventBus.addListener(CreateRadar::init);
         modEventBus.addListener(CreateRadar::clientInit);
         MinecraftForge.EVENT_BUS.addListener(MonitorInputHandler::monitorPlayerHovering);
+        MinecraftForge.EVENT_BUS.addListener(CreateRadar::clientTick);
+    }
+
+    private static void clientTick(TickEvent.ClientTickEvent event) {
+        RadarLinkBlockItem.clientTick();
     }
 
     public static Logger getLogger() {
@@ -65,5 +72,6 @@ public class CreateRadar {
     public static void init(final FMLCommonSetupEvent event) {
         event.enqueueWork(ModMessages::register);
         ModDisplayBehaviors.register();
+        AllRadarBehaviors.registerDefaults();
     }
 }

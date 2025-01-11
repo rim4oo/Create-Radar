@@ -49,5 +49,11 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".pitch.powder_charge", "Powder Charge");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".guided_fuze.no_monitor", "No Monitor Linked");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar.no_receiver", "No Receiver Found");
+
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_link.fail", "Radar Link has no valid target, try placing it again");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_link.no_source", "Not a Radar Source");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_link.no_target", "Not a Radar Target");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_link.title", "Radar Link");
+
     }
 }

@@ -4,6 +4,7 @@
   "block.create_radar.monitor": "ɹoʇıuoW",
   "block.create_radar.radar_bearing": "buıɹɐǝᗺ ɹɐpɐᴚ",
   "block.create_radar.radar_dish_block": "ɥsıᗡ ɹɐpɐᴚ",
+  "block.create_radar.radar_link": "ʞuıꞀ ɹɐpɐᴚ",
   "block.create_radar.radar_plate_block": "ǝʇɐןԀ ɹɐpɐᴚ",
   "block.create_radar.radar_receiver_block": "ʞɔoןᗺ ɹǝʌıǝɔǝᴚ ɹɐpɐᴚ",
   "create_radar.display_source.pitch_controller": "ɹǝןןoɹʇuoƆ ɥɔʇıԀ oʇnⱯ",
@@ -39,6 +40,7 @@
   "create_radar.ponder.tag.radar_components": "sɹɐpɐᴚ",
   "create_radar.ponder.tag.radar_components.description": "ɯǝʇsʎS buıʞɔɐɹ⟘ ɹɐpɐᴚ ɟo uoıʇɐǝɹɔ ǝɥʇ ʍoןןɐ ɥɔıɥʍ sʇuǝuodɯoƆ",
   "create_radar.radar.no_receiver": "punoℲ ɹǝʌıǝɔǝᴚ oN",
+  "create_radar.radar_link.fail": "uıɐbɐ ʇı buıɔɐןd ʎɹʇ 'ʇǝbɹɐʇ pıןɐʌ ou sɐɥ ʞuıꞀ ɹɐpɐᴚ",
   "item.create_radar.guided_fuze": "ǝznℲ pǝpın⅁",
   "itemGroup.create_radar.radar": "sɹɐpɐᴚ :ǝʇɐǝɹƆ"
 }

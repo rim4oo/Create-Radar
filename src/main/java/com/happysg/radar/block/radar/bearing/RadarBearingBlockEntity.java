@@ -24,7 +24,8 @@ import java.util.*;
 
 public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private static final int MAX_TRACK_TICKS = 100;
-
+    private static final int RANGE_PER_DISH = 5;
+    private static final int MAX_RANGE = 1000;
     private int dishCount;
     private Direction receiverFacing = Direction.NORTH;
     Map<String, RadarTrack> entityPositions = new HashMap<>();
@@ -269,6 +270,6 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
     public float getRange() {
-        return 20 + dishCount * 5;
+        return Math.min(20 + dishCount * RANGE_PER_DISH, MAX_RANGE);
     }
 }
