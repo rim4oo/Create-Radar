@@ -1,8 +1,8 @@
 package com.happysg.radar.registry;
 
 import com.happysg.radar.CreateRadar;
-import com.happysg.radar.block.monitor.MonitorRadarBehavior;
-import com.happysg.radar.block.radar.bearing.BearingRadarBehavior;
+import com.happysg.radar.block.monitor.MonitorLinkBehavior;
+import com.happysg.radar.block.radar.bearing.RadarBearingLinkBehavior;
 import com.happysg.radar.block.radar.link.RadarLinkBehavior;
 import com.happysg.radar.block.radar.link.RadarSource;
 import com.happysg.radar.block.radar.link.RadarTarget;
@@ -214,8 +214,8 @@ public class AllRadarBehaviors {
     }
 
     public static void registerDefaults() {
-        assignBlockEntity(register(CreateRadar.asResource("monitor"), new MonitorRadarBehavior()), ModBlockEntityTypes.MONITOR.get());
-        assignBlockEntity(register(CreateRadar.asResource("radar"), new BearingRadarBehavior()), ModBlockEntityTypes.RADAR_BEARING.get());
+        assignBlockEntity(register(CreateRadar.asResource("monitor"), new MonitorLinkBehavior()), ModBlockEntityTypes.MONITOR.get());
+        assignBlockEntity(register(CreateRadar.asResource("radar"), new RadarBearingLinkBehavior()), ModBlockEntityTypes.RADAR_BEARING.get());
     }
 
 }

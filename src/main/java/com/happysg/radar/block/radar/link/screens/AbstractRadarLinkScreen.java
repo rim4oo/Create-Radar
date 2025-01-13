@@ -3,19 +3,20 @@ package com.happysg.radar.block.radar.link.screens;
 import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
 import com.happysg.radar.block.radar.link.RadarSource;
 import com.happysg.radar.block.radar.link.RadarTarget;
+import com.happysg.radar.networking.packets.RadarLinkConfigurationPacket;
 import com.happysg.radar.registry.AllRadarBehaviors;
 import com.happysg.radar.registry.ModGuiTextures;
+import com.simibubi.create.AllPackets;
 import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.List;
 
 public class AbstractRadarLinkScreen extends AbstractSimiScreen {
 
@@ -27,7 +28,7 @@ public class AbstractRadarLinkScreen extends AbstractSimiScreen {
 
     BlockState sourceState;
     BlockState targetState;
-    List<RadarSource> sources;
+    RadarSource source;
     RadarTarget target;
 
     public AbstractRadarLinkScreen(RadarLinkBlockEntity be) {
@@ -65,11 +66,11 @@ public class AbstractRadarLinkScreen extends AbstractSimiScreen {
         Block targetBlock = targetState.getBlock();
 
         asItem = sourceBlock.getCloneItemStack(level, blockEntity.getSourcePosition(), sourceState);
-        ItemStack sourceIcon = asItem == null || asItem.isEmpty() ? FALLBACK : asItem;
+        ItemStack sourceIcon = asItem.isEmpty() ? FALLBACK : asItem;
         asItem = targetBlock.getCloneItemStack(level, blockEntity.getTargetPosition(), targetState);
-        ItemStack targetIcon = asItem == null || asItem.isEmpty() ? FALLBACK : asItem;
+        ItemStack targetIcon = asItem.isEmpty() ? FALLBACK : asItem;
 
-        sources = AllRadarBehaviors.sourcesOf(level, blockEntity.getSourcePosition());
+        source = AllRadarBehaviors.sourcesOf(level, blockEntity.getSourcePosition()).get(0);
         target = AllRadarBehaviors.targetOf(level, blockEntity.getTargetPosition());
 
     }
@@ -79,4 +80,16 @@ public class AbstractRadarLinkScreen extends AbstractSimiScreen {
     protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 
     }
+
+    @Override
+    public void onClose() {
+        super.onClose();
+        CompoundTag sourceData = new CompoundTag();
+        if (source != null) {
+            sourceData.putString("Id", source.id.toString());
+        }
+
+        AllPackets.getChannel().sendToServer(new RadarLinkConfigurationPacket(blockEntity.getBlockPos(), sourceData));
+    }
+
 }

@@ -26,6 +26,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class RadarLinkBlockItem extends BlockItem {
+    
     public RadarLinkBlockItem(Block pBlock, Properties pProperties) {
         super(pBlock, pProperties);
     }

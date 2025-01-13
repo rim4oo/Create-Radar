@@ -1,7 +1,6 @@
 package com.happysg.radar.block.radar.link;
 
 import com.happysg.radar.CreateRadar;
-import com.happysg.radar.block.radar.link.screens.AbstractRadarLinkScreen;
 import com.happysg.radar.registry.ModBlockEntityTypes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.block.IBE;
@@ -52,7 +51,7 @@ public class RadarLinkBlock extends WrenchableDirectionalBlock implements IBE<Ra
             player.displayClientMessage(Component.translatable(CreateRadar.MODID + "radar_link.fail"), true);
             return;
         }
-        ScreenOpener.open(new AbstractRadarLinkScreen(be));
+        be.getScreen().ifPresent(ScreenOpener::open);
     }
 
     @Override
