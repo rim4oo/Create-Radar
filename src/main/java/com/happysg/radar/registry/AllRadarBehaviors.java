@@ -20,13 +20,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AllRadarBehaviors {
     public static final Map<ResourceLocation, RadarLinkBehavior> GATHERER_BEHAVIOURS = new HashMap<>();
 
-    private static final AttachedRegistry<Block, List<RadarSource>> SOURCES_BY_BLOCK = new AttachedRegistry<>(ForgeRegistries.BLOCKS);
-    private static final AttachedRegistry<BlockEntityType<?>, List<RadarSource>> SOURCES_BY_BLOCK_ENTITY = new AttachedRegistry<>(ForgeRegistries.BLOCK_ENTITY_TYPES);
+    private static final AttachedRegistry<Block, RadarSource> SOURCES_BY_BLOCK = new AttachedRegistry<>(ForgeRegistries.BLOCKS);
+    private static final AttachedRegistry<BlockEntityType<?>, RadarSource> SOURCES_BY_BLOCK_ENTITY = new AttachedRegistry<>(ForgeRegistries.BLOCK_ENTITY_TYPES);
 
     private static final AttachedRegistry<Block, RadarTarget> TARGETS_BY_BLOCK = new AttachedRegistry<>(ForgeRegistries.BLOCKS);
     private static final AttachedRegistry<BlockEntityType<?>, RadarTarget> TARGETS_BY_BLOCK_ENTITY = new AttachedRegistry<>(ForgeRegistries.BLOCK_ENTITY_TYPES);
@@ -40,12 +41,7 @@ public class AllRadarBehaviors {
 
     public static void assignBlock(RadarLinkBehavior behaviour, ResourceLocation block) {
         if (behaviour instanceof RadarSource source) {
-            List<RadarSource> sources = SOURCES_BY_BLOCK.get(block);
-            if (sources == null) {
-                sources = new ArrayList<>();
-                SOURCES_BY_BLOCK.register(block, sources);
-            }
-            sources.add(source);
+            SOURCES_BY_BLOCK.register(block, source);
         }
         if (behaviour instanceof RadarTarget target) {
             TARGETS_BY_BLOCK.register(block, target);
@@ -54,12 +50,7 @@ public class AllRadarBehaviors {
 
     public static void assignBlockEntity(RadarLinkBehavior behaviour, ResourceLocation beType) {
         if (behaviour instanceof RadarSource source) {
-            List<RadarSource> sources = SOURCES_BY_BLOCK_ENTITY.get(beType);
-            if (sources == null) {
-                sources = new ArrayList<>();
-                SOURCES_BY_BLOCK_ENTITY.register(beType, sources);
-            }
-            sources.add(source);
+            SOURCES_BY_BLOCK_ENTITY.register(beType, source);
         }
         if (behaviour instanceof RadarTarget target) {
             TARGETS_BY_BLOCK_ENTITY.register(beType, target);
@@ -68,12 +59,7 @@ public class AllRadarBehaviors {
 
     public static void assignBlock(RadarLinkBehavior behaviour, Block block) {
         if (behaviour instanceof RadarSource source) {
-            List<RadarSource> sources = SOURCES_BY_BLOCK.get(block);
-            if (sources == null) {
-                sources = new ArrayList<>();
-                SOURCES_BY_BLOCK.register(block, sources);
-            }
-            sources.add(source);
+            SOURCES_BY_BLOCK.register(block, source);
         }
         if (behaviour instanceof RadarTarget target) {
             TARGETS_BY_BLOCK.register(block, target);
@@ -82,12 +68,7 @@ public class AllRadarBehaviors {
 
     public static void assignBlockEntity(RadarLinkBehavior behaviour, BlockEntityType<?> beType) {
         if (behaviour instanceof RadarSource source) {
-            List<RadarSource> sources = SOURCES_BY_BLOCK_ENTITY.get(beType);
-            if (sources == null) {
-                sources = new ArrayList<>();
-                SOURCES_BY_BLOCK_ENTITY.register(beType, sources);
-            }
-            sources.add(source);
+            SOURCES_BY_BLOCK_ENTITY.register(beType, source);
         }
         if (behaviour instanceof RadarTarget target) {
             TARGETS_BY_BLOCK_ENTITY.register(beType, target);
@@ -140,27 +121,19 @@ public class AllRadarBehaviors {
 
     //
 
-    public static List<RadarSource> sourcesOf(Block block) {
-        List<RadarSource> sources = SOURCES_BY_BLOCK.get(block);
-        if (sources == null) {
-            return Collections.emptyList();
-        }
-        return sources;
+    public static RadarSource sourcesOf(Block block) {
+        return SOURCES_BY_BLOCK.get(block);
     }
 
-    public static List<RadarSource> sourcesOf(BlockState state) {
+    public static RadarSource sourcesOf(BlockState state) {
         return sourcesOf(state.getBlock());
     }
 
-    public static List<RadarSource> sourcesOf(BlockEntityType<?> blockEntityType) {
-        List<RadarSource> sources = SOURCES_BY_BLOCK_ENTITY.get(blockEntityType);
-        if (sources == null) {
-            return Collections.emptyList();
-        }
-        return sources;
+    public static RadarSource sourcesOf(BlockEntityType<?> blockEntityType) {
+        return SOURCES_BY_BLOCK_ENTITY.get(blockEntityType);
     }
 
-    public static List<RadarSource> sourcesOf(BlockEntity blockEntity) {
+    public static RadarSource sourcesOf(BlockEntity blockEntity) {
         return sourcesOf(blockEntity.getType());
     }
 
@@ -184,14 +157,14 @@ public class AllRadarBehaviors {
         return targetOf(blockEntity.getType());
     }
 
-    public static List<RadarSource> sourcesOf(LevelAccessor level, BlockPos pos) {
+    public static RadarSource sourcesOf(LevelAccessor level, BlockPos pos) {
         BlockState blockState = level.getBlockState(pos);
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
-        List<RadarSource> sourcesOfBlock = sourcesOf(blockState);
-        List<RadarSource> sourcesOfBlockEntity = blockEntity == null ? Collections.emptyList() : sourcesOf(blockEntity);
+        RadarSource sourcesOfBlock = sourcesOf(blockState);
+        RadarSource sourcesOfBlockEntity = blockEntity == null ? null : sourcesOf(blockEntity);
 
-        if (sourcesOfBlockEntity.isEmpty())
+        if (sourcesOfBlockEntity == null)
             return sourcesOfBlock;
         return sourcesOfBlockEntity;
     }

@@ -2,7 +2,6 @@ package com.happysg.radar.block.radar.link;
 
 import com.happysg.radar.block.radar.link.screens.AbstractRadarLinkScreen;
 import com.happysg.radar.registry.AllRadarBehaviors;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.BlockPos;
@@ -24,10 +23,16 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
     public RadarTarget activeTarget;
 
     private CompoundTag sourceConfig;
-    private boolean ledState = false;
+    boolean ledState = false;
 
     public RadarLinkBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        updateGatheredData();
     }
 
     @Override
@@ -43,7 +48,7 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
             return;
 
         RadarTarget target = AllRadarBehaviors.targetOf(level, targetPosition);
-        List<RadarSource> sources = AllRadarBehaviors.sourcesOf(level, sourcePosition);
+        RadarSource source = AllRadarBehaviors.sourcesOf(level, sourcePosition);
         boolean notify = false;
 
         if (activeTarget != target) {
@@ -51,21 +56,23 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
             notify = true;
         }
 
-        if (activeSource != null && !sources.contains(activeSource)) {
-            activeSource = null;
+        if (activeSource != source) {
+            activeSource = source;
             sourceConfig = new CompoundTag();
             notify = true;
         }
 
         if (notify)
             notifyUpdate();
-        if (activeSource == null || activeTarget == null)
+        if (activeSource == null || activeTarget == null) {
+            ledState = false;
             return;
+        }
 
+        ledState = true;
         activeSource.transferData(this, activeTarget);
         sendData();
-
-        award(AllAdvancements.DISPLAY_LINK);
+        //TODO implement advancement
     }
 
     @Override

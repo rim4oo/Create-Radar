@@ -70,7 +70,7 @@ public class AbstractRadarLinkScreen extends AbstractSimiScreen {
         asItem = targetBlock.getCloneItemStack(level, blockEntity.getTargetPosition(), targetState);
         ItemStack targetIcon = asItem.isEmpty() ? FALLBACK : asItem;
 
-        source = AllRadarBehaviors.sourcesOf(level, blockEntity.getSourcePosition()).get(0);
+        source = AllRadarBehaviors.sourcesOf(level, blockEntity.getSourcePosition());
         target = AllRadarBehaviors.targetOf(level, blockEntity.getTargetPosition());
 
     }
