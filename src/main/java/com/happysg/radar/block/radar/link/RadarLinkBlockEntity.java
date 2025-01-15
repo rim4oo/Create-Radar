@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -32,25 +33,6 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 
-    }
-
-    Optional<AbstractRadarLinkScreen> getScreen() {
-        return activeSource == null ? Optional.empty() : Optional.ofNullable(activeSource.getScreen(this));
-    }
-    public BlockPos getSourcePosition() {
-        return null;
-    }
-
-    public BlockPos getTargetPosition() {
-        return null;
-    }
-
-    public void setSourceConfig(CompoundTag config) {
-        this.sourceConfig = config;
-    }
-
-    public CompoundTag getSourceConfig() {
-        return sourceConfig;
     }
 
     public void updateGatheredData() {
@@ -129,5 +111,36 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
         if (activeSource != null)
             sourceConfig = data.copy();
     }
+
+    Optional<AbstractRadarLinkScreen> getScreen() {
+        return activeSource == null ? Optional.empty() : Optional.ofNullable(activeSource.getScreen(this));
+    }
+
+    public void target(BlockPos targetPosition) {
+        this.targetOffset = targetPosition.subtract(worldPosition);
+    }
+
+    public BlockPos getSourcePosition() {
+        return worldPosition.relative(getDirection());
+    }
+
+    public CompoundTag getSourceConfig() {
+        return sourceConfig;
+    }
+
+    public void setSourceConfig(CompoundTag sourceConfig) {
+        this.sourceConfig = sourceConfig;
+    }
+
+    public Direction getDirection() {
+        return getBlockState().getOptionalValue(RadarLinkBlock.FACING)
+                .orElse(Direction.UP)
+                .getOpposite();
+    }
+
+    public BlockPos getTargetPosition() {
+        return worldPosition.offset(targetOffset);
+    }
+
 
 }

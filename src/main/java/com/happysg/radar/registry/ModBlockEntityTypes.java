@@ -2,6 +2,7 @@ package com.happysg.radar.registry;
 
 import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.controller.pitch.AutoPitchControllerBlockEntity;
+import com.happysg.radar.block.controller.track.TrackControllerBlockEntity;
 import com.happysg.radar.block.controller.yaw.AutoYawControllerBlockEntity;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import com.happysg.radar.block.monitor.MonitorRenderer;
@@ -42,6 +43,11 @@ public class ModBlockEntityTypes {
     public static final BlockEntityEntry<AutoPitchControllerBlockEntity> AUTO_PITCH_CONTROLLER = REGISTRATE
             .blockEntity("auto_pitch_controller", AutoPitchControllerBlockEntity::new)
             .validBlocks(ModBlocks.AUTO_PITCH_CONTROLLER_BLOCK)
+            .register();
+
+    public static final BlockEntityEntry<TrackControllerBlockEntity> TRACK_CONTROLLER = REGISTRATE
+            .blockEntity("track_controller", TrackControllerBlockEntity::new)
+            .validBlocks(ModBlocks.TRACK_CONTROLLER_BLOCK)
             .register();
 
     public static void register() {

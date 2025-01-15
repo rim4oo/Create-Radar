@@ -1,5 +1,6 @@
 package com.happysg.radar.block.radar.bearing;
 
+import com.happysg.radar.config.RadarConfig;
 import com.jozufozu.flywheel.util.Color;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -16,10 +17,9 @@ import java.util.List;
 
 //todo join entityPositions and VSPositions into a single map
 public record VSRadarTracks(String id, Vec3 position, long scannedTime, Color color) {
-    public static int YELLOW = 16776960;
 
     public VSRadarTracks(Ship serverShip, Level level) {
-        this(String.valueOf(serverShip.getId()), getPosition(serverShip), level.getGameTime(), new Color(YELLOW));
+        this(String.valueOf(serverShip.getId()), getPosition(serverShip), level.getGameTime(), new Color(RadarConfig.client().VS2Color.get()));
     }
 
     private static Vec3 getPosition(Ship serverShip) {

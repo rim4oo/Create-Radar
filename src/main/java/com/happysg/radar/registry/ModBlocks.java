@@ -2,6 +2,7 @@ package com.happysg.radar.registry;
 
 import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.controller.pitch.AutoPitchControllerBlock;
+import com.happysg.radar.block.controller.track.TrackControllerBlock;
 import com.happysg.radar.block.controller.yaw.AutoYawControllerBlock;
 import com.happysg.radar.block.monitor.MonitorBlock;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlock;
@@ -108,6 +109,16 @@ public class ModBlocks {
                     .initialProperties(SharedProperties::softMetal)
                     .properties(properties -> properties.isRedstoneConductor((pState, pLevel, pPos) -> false))
                     .transform(BlockStressDefaults.setImpact(128))
+                    .properties(BlockBehaviour.Properties::noOcclusion)
+                    .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
+                    .simpleItem()
+                    .register();
+
+    public static final BlockEntry<TrackControllerBlock> TRACK_CONTROLLER_BLOCK =
+            REGISTRATE.block("test_controller", TrackControllerBlock::new)
+                    .initialProperties(SharedProperties::softMetal)
+                    .properties(properties -> properties.isRedstoneConductor((pState, pLevel, pPos) -> false))
+                    .transform(BlockStressDefaults.setImpact(16))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
                     .simpleItem()

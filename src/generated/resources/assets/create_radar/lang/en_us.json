@@ -7,6 +7,7 @@
   "block.create_radar.radar_link": "Radar Link",
   "block.create_radar.radar_plate_block": "Radar Plate",
   "block.create_radar.radar_receiver_block": "Radar Receiver Block",
+  "block.create_radar.test_controller": "Test Controller",
   "create_radar.display_source.pitch_controller": "Auto Pitch Controller",
   "create_radar.display_source.radar": "Radar",
   "create_radar.display_source.yaw_controller": "Auto Yaw Controller",
@@ -41,6 +42,9 @@
   "create_radar.ponder.tag.radar_components.description": "Components which allow the creation of Radar Tracking System",
   "create_radar.radar.no_receiver": "No Receiver Found",
   "create_radar.radar_link.fail": "Radar Link has no valid target, try placing it again",
+  "create_radar.radar_link.no_source": "Not a Radar Source",
+  "create_radar.radar_link.no_target": "Not a Radar Target",
+  "create_radar.radar_link.title": "Radar Link",
   "item.create_radar.guided_fuze": "Guided Fuze",
   "itemGroup.create_radar.radar": "Create: Radars"
 }

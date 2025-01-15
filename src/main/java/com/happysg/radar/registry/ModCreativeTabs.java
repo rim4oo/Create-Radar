@@ -46,6 +46,8 @@ public class ModCreativeTabs {
         if (Mods.CREATEBIGCANNONS.isLoaded()) {
             pOutput.accept(CBCItemsCompat.GUIDED_FUZE);
         }
+        if (Mods.TRACKWORK.isLoaded()) {
+        }
     }
 
 

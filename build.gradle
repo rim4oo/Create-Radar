@@ -30,7 +30,6 @@ minecraft {
         configureEach {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
             mods {
                 "${mod_id}" {
                     source sourceSets.main
@@ -152,6 +151,10 @@ dependencies {
     implementation "org.joml:joml:1.10.5"
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     implementation "thedarkcolour:kotlinforforge:${forge_kotlin_version}"
+
+    //trackworks
+    implementation fg.deobf("curse.maven:trackwork-1057662:5809071")
+
 
     //CC
     compileOnly("cc.tweaked:cc-tweaked-${minecraft_version}-core-api:${cc_tweaked_version}")

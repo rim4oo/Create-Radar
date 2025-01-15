@@ -17,6 +17,7 @@ public enum Mods {
     VALKYRIENSKIES,
     VS_CLOCKWORK,
     COMPUTERCRAFT,
+    TRACKWORK,
     CREATEBIGCANNONS;
 
     private final String id;

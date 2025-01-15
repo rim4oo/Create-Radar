@@ -55,5 +55,6 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_link.no_target", "Not a Radar Target");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_link.title", "Radar Link");
 
+
     }
 }

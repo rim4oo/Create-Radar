@@ -2,6 +2,7 @@ package com.happysg.radar.block.radar.bearing;
 
 import com.happysg.radar.compat.Mods;
 import com.happysg.radar.compat.vs2.VS2Utils;
+import com.happysg.radar.config.RadarConfig;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
@@ -24,8 +25,6 @@ import java.util.*;
 
 public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private static final int MAX_TRACK_TICKS = 100;
-    private static final int RANGE_PER_DISH = 5;
-    private static final int MAX_RANGE = 1000;
     private int dishCount;
     private Direction receiverFacing = Direction.NORTH;
     Map<String, RadarTrack> entityPositions = new HashMap<>();
@@ -101,12 +100,12 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         BlockPos radarPos = VS2Utils.getWorldPos(this);
         double xOffset = range * Math.sin(Math.toRadians(getGlobalAngle()));
         double zOffset = range * Math.cos(Math.toRadians(getGlobalAngle()));
-        return new AABB(radarPos.getX() - xOffset, radarPos.getY() - 20, radarPos.getZ() - zOffset, radarPos.getX() + xOffset, radarPos.getY() + 20, radarPos.getZ() + zOffset);
+        return new AABB(radarPos.getX() - xOffset, radarPos.getY() - RadarConfig.server().radarYScanRange.get(), radarPos.getZ() - zOffset, radarPos.getX() + xOffset, radarPos.getY() + RadarConfig.server().radarYScanRange.get(), radarPos.getZ() + zOffset);
     }
 
     private boolean isEntityInRadarFov(BlockPos entityPos) {
         float radarAngle = getGlobalAngle();
-        double fovDegrees = 90;
+        int fovDegrees = RadarConfig.server().radarFOV.get();
         BlockPos radarPos = VS2Utils.getWorldPos(this);
 
         // Calculate the angle between the radar and the entity
@@ -125,6 +124,9 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
     public float getAngularSpeed() {
+        if (!RadarConfig.server().gearRadarBearingSpeed.get())
+            return super.getAngularSpeed();
+
         float speed = convertToAngular(getSpeed());
         if (getSpeed() == 0)
             speed = 0;
@@ -133,9 +135,26 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
             speed += clientAngleDiff / 3f;
         }
 
-        //integer division used to step down the speed
-        //TODO rebalance speed
-        return speed / (4f + getDishCount() / 10);
+        return gearRadarBearingSpeed(speed);
+    }
+
+    public float gearRadarBearingSpeed(float speed) {
+        int dishCount = getDishCount();
+        float maxSpeed;
+
+        if (dishCount >= 100) {
+            maxSpeed = 64;
+        } else if (dishCount >= 75) {
+            maxSpeed = 96 + (64 - 96) * (dishCount - 75) / 25.0f;
+        } else if (dishCount >= 50) {
+            maxSpeed = 128 + (96 - 128) * (dishCount - 50) / 25.0f;
+        } else if (dishCount >= 25) {
+            maxSpeed = 196 + (128 - 196) * (dishCount - 25) / 25.0f;
+        } else {
+            maxSpeed = 256 + (196 - 256) * dishCount / 25.0f;
+        }
+
+        return Math.min(speed, maxSpeed);
     }
 
     //code copied in order to replace with radar contraption and radar advancements
@@ -210,9 +229,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-        if (dishCount > 0) {
-            tooltip.add(Component.literal("    Dish Count: " + dishCount));
-        }
+        tooltip.add(Component.literal("    Dish Count: " + dishCount));
         tooltip.add(Component.literal("    Range: " + getRange()));
         return true;
     }
@@ -270,6 +287,6 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
     public float getRange() {
-        return Math.min(20 + dishCount * RANGE_PER_DISH, MAX_RANGE);
+        return Math.min(RadarConfig.server().radarBaseRange.get() + dishCount * RadarConfig.server().dishRangeIncrease.get(), RadarConfig.server().maxRadarRange.get());
     }
 }

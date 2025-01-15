@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 public class RadarLinkConfigurationPacket extends BlockEntityConfigurationPacket<RadarLinkBlockEntity> {
 
     private CompoundTag configData;
-    private int targetLine;
 
     public RadarLinkConfigurationPacket(BlockPos pos, CompoundTag configData) {
         super(pos);

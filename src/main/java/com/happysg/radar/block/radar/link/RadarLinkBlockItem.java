@@ -1,5 +1,6 @@
 package com.happysg.radar.block.radar.link;
 
+import com.happysg.radar.config.RadarConfig;
 import com.happysg.radar.registry.AllRadarBehaviors;
 import com.happysg.radar.registry.ModBlocks;
 import com.simibubi.create.CreateClient;
@@ -26,7 +27,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class RadarLinkBlockItem extends BlockItem {
-    
+
     public RadarLinkBlockItem(Block pBlock, Properties pProperties) {
         super(pBlock, pProperties);
     }
@@ -77,7 +78,7 @@ public class RadarLinkBlockItem extends BlockItem {
         BlockPos selectedPos = NbtUtils.readBlockPos(tag.getCompound("SelectedPos"));
         BlockPos placedPos = pos.relative(pContext.getClickedFace(), state.canBeReplaced() ? 0 : 1);
 
-        if (!selectedPos.closerThan(placedPos, RadarLinkBehavior.RANGE)) {
+        if (!selectedPos.closerThan(placedPos, RadarConfig.server().radarLinkRange.get())) {
             player.displayClientMessage(Lang.translateDirect("display_link.too_far")
                     .withStyle(ChatFormatting.RED), true);
             return InteractionResult.FAIL;
