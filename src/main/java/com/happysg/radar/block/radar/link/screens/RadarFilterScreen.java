@@ -1,5 +1,6 @@
 package com.happysg.radar.block.radar.link.screens;
 
+import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.monitor.MonitorFilter;
 import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
 import com.happysg.radar.registry.ModGuiTextures;
@@ -46,6 +47,7 @@ public class RadarFilterScreen extends AbstractRadarLinkScreen {
     protected void init() {
         super.init();
         playerButton = new IconButton(guiLeft + 42, guiTop + 32, ModGuiTextures.PLAYER_BUTTON);
+        playerButton.setToolTip(Component.translatable(CreateRadar.MODID + ".radar_button.player"));
         playerIndicator = new Indicator(guiLeft + 42, guiTop + 25, Component.empty());
         playerIndicator.state = player ? Indicator.State.GREEN : Indicator.State.RED;
         playerButton.withCallback((x, y) -> {
@@ -56,6 +58,7 @@ public class RadarFilterScreen extends AbstractRadarLinkScreen {
         addRenderableWidget(playerIndicator);
 
         vs2Button = new IconButton(guiLeft + 70, guiTop + 32, ModGuiTextures.VS2_BUTTON);
+        vs2Button.setToolTip(Component.translatable(CreateRadar.MODID + ".radar_button.vs2"));
         vs2Indicator = new Indicator(guiLeft + 70, guiTop + 25, Component.empty());
         vs2Indicator.state = vs2 ? Indicator.State.GREEN : Indicator.State.RED;
         vs2Button.withCallback((x, y) -> {
@@ -66,6 +69,7 @@ public class RadarFilterScreen extends AbstractRadarLinkScreen {
         addRenderableWidget(vs2Indicator);
 
         contraptionButton = new IconButton(guiLeft + 98, guiTop + 32, ModGuiTextures.CONTRAPTION_BUTTON);
+        contraptionButton.setToolTip(Component.translatable(CreateRadar.MODID + ".radar_button.contraption"));
         contraptionIndicator = new Indicator(guiLeft + 98, guiTop + 25, Component.empty());
         contraptionIndicator.state = contraption ? Indicator.State.GREEN : Indicator.State.RED;
         contraptionButton.withCallback((x, y) -> {
@@ -76,6 +80,7 @@ public class RadarFilterScreen extends AbstractRadarLinkScreen {
         addRenderableWidget(contraptionIndicator);
 
         mobButton = new IconButton(guiLeft + 126, guiTop + 32, ModGuiTextures.MOB_BUTTON);
+        mobButton.setToolTip(Component.translatable(CreateRadar.MODID + ".radar_button.mob"));
         mobIndicator = new Indicator(guiLeft + 126, guiTop + 25, Component.empty());
         mobIndicator.state = mob ? Indicator.State.GREEN : Indicator.State.RED;
         mobButton.withCallback((x, y) -> {
@@ -86,6 +91,7 @@ public class RadarFilterScreen extends AbstractRadarLinkScreen {
         addRenderableWidget(mobIndicator);
 
         projectileButton = new IconButton(guiLeft + 154, guiTop + 32, ModGuiTextures.PROJECTILE_BUTTON);
+        projectileButton.setToolTip(Component.translatable(CreateRadar.MODID + ".radar_button.projectile"));
         projectileIndicator = new Indicator(guiLeft + 154, guiTop + 25, Component.empty());
         projectileIndicator.state = projectile ? Indicator.State.GREEN : Indicator.State.RED;
         projectileButton.withCallback((x, y) -> {

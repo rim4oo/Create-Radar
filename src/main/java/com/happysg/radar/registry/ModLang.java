@@ -55,6 +55,16 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_link.no_target", "Not a Radar Target");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_link.title", "Radar Link");
 
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.player", "Player");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.vs2", "VS2");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.contraption", "Contraption");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.mob", "Mob");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.projectile", "Projectile");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.animal", "Animal");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.auto_target", "Auto Target");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.auto_fire", "Auto Fire");
+
+
 
     }
 }

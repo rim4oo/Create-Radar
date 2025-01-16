@@ -6,6 +6,7 @@ import com.happysg.radar.block.radar.link.RadarLinkContext;
 import com.happysg.radar.block.radar.link.RadarSource;
 import com.happysg.radar.block.radar.link.RadarTarget;
 import com.happysg.radar.block.radar.link.screens.AbstractRadarLinkScreen;
+import com.happysg.radar.block.radar.link.screens.TargetingConfig;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +24,8 @@ public class YawLinkBehavior extends RadarSource {
         if (monitor == null)
             return;
 
-        Vec3 targetPos = monitor.getTargetPos();
+        TargetingConfig targetingConfig = TargetingConfig.fromTag(context.sourceConfig().getCompound("targeting"));
+        Vec3 targetPos = monitor.getTargetPos(targetingConfig);
         controller.setTarget(targetPos);
     }
 

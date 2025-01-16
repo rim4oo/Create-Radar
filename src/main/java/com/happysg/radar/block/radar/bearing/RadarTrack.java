@@ -32,6 +32,8 @@ public record RadarTrack(String entityId, Vec3 position, long scannedTime, Color
             return EntityType.PLAYER;
         if (entity instanceof Projectile)
             return EntityType.PROJECTILE;
+        if (entity instanceof Animal)
+            return EntityType.ANIMAL;
         if (entity instanceof Mob)
             return EntityType.MOB;
         if (entity instanceof AbstractContraptionEntity)
@@ -105,6 +107,7 @@ public record RadarTrack(String entityId, Vec3 position, long scannedTime, Color
         PLAYER,
         PROJECTILE,
         MOB,
+        ANIMAL,
         CONTRAPTION,
         VS2,
     }

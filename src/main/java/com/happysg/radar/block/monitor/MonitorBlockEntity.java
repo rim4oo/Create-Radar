@@ -2,6 +2,8 @@ package com.happysg.radar.block.monitor;
 
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
 import com.happysg.radar.block.radar.bearing.RadarTrack;
+import com.happysg.radar.block.radar.bearing.VSRadarTracks;
+import com.happysg.radar.block.radar.link.screens.TargetingConfig;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -198,6 +200,19 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
                 }
             }
 
+            for (VSRadarTracks track : radar.getVS2Positions()) {
+                if (!filter.test(RadarTrack.EntityType.VS2))
+                    continue;
+                Vec3 entityPos = track.position();
+                entityPos = entityPos.multiply(1, 0, 1);
+                Vec3 selectedNew = selected.multiply(1, 0, 1);
+                double newDistance = entityPos.distanceTo(selectedNew);
+                if (newDistance < bestDistance) {
+                    bestDistance = newDistance;
+                    selectedEntity = track.id();
+                }
+            }
+
         });
         notifyUpdate();
     }
@@ -220,19 +235,54 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         return null;
     }
 
-    public Vec3 getTargetPos() {
+    public Vec3 getTargetPos(TargetingConfig targetingConfig) {
         AtomicReference<Vec3> targetPos = new AtomicReference<>();
         getRadar().ifPresent(
                 radar -> {
+                    if (selectedEntity == null)
+                        tryFindAutoTarget(targetingConfig);
                     if (selectedEntity == null)
                         return;
                     for (RadarTrack track : radar.getEntityPositions()) {
                         if (track.entityId().equals(selectedEntity))
                             targetPos.set(track.position());
                     }
+
+                    for (VSRadarTracks track : radar.getVS2Positions()) {
+                        if (track.id().equals(selectedEntity))
+                            targetPos.set(track.position());
+                    }
+
                 }
         );
+        if (targetPos.get() == null)
+            selectedEntity = null;
         return targetPos.get();
+    }
+
+    private void tryFindAutoTarget(TargetingConfig targetingConfig) {
+        if (!targetingConfig.autoTarget())
+            return;
+        final double[] distance = {Double.MAX_VALUE};
+        getRadar().ifPresent(
+                radar -> {
+                    for (RadarTrack track : radar.getEntityPositions()) {
+                        if (targetingConfig.test(track.entityType()) && track.position().distanceTo(Vec3.atCenterOf(getControllerPos())) < distance[0]) {
+                            selectedEntity = track.entityId();
+                            distance[0] = track.position().distanceTo(Vec3.atCenterOf(getControllerPos()));
+                        }
+                    }
+
+                    for (VSRadarTracks track : radar.getVS2Positions()) {
+                        if (targetingConfig.test(RadarTrack.EntityType.VS2) && track.position().distanceTo(Vec3.atCenterOf(getControllerPos())) < distance[0]) {
+                            selectedEntity = track.id();
+                            distance[0] = track.position().distanceTo(Vec3.atCenterOf(getControllerPos()));
+                        }
+                    }
+                }
+        );
+        if (selectedEntity != null)
+            notifyUpdate();
     }
 
     public void setFilter(MonitorFilter filter) {

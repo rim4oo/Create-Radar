@@ -52,7 +52,7 @@ public record MonitorFilter(boolean player, boolean vs2, boolean contraption, bo
             return vs2;
         } else if (entityType == RadarTrack.EntityType.CONTRAPTION) {
             return contraption;
-        } else if (entityType == RadarTrack.EntityType.MOB) {
+        } else if (entityType == RadarTrack.EntityType.MOB || entityType == RadarTrack.EntityType.ANIMAL) {
             return mob;
         } else if (entityType == RadarTrack.EntityType.PROJECTILE) {
             return projectile;

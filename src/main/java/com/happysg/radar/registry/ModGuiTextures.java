@@ -19,12 +19,12 @@ public enum ModGuiTextures implements ScreenElement {
     CONTRAPTION_BUTTON("filter", 99, 33, 18, 18),
     MOB_BUTTON("filter", 127, 33, 18, 18),
     PROJECTILE_BUTTON("filter", 155, 33, 18, 18),
-    GREEN_BAR("targeting", 3, 143, 18, 6),
-    RED_BAR("targeting", 23, 143, 18, 6),
+    ANIMAL_BUTTON("targeting", 127, 27, 18, 18),
     X("targeting", 23, 123, 18, 18),
     CHECKMARK("targeting", 3, 123, 18, 18),
-    AUTO_TARGET("targeting", 43, 123, 18, 18),
-    MANUAL_TARGET("targeting", 63, 123, 18, 18);
+    AUTO_TARGET("targeting", 203, 48, 18, 18),
+    AUTO_FIRE("targeting", 44, 124, 18, 18),
+    MANUAL_FIRE("targeting", 64, 124, 18, 18);
 
 
     public static final int FONT_COLOR = 0x575F7A;
