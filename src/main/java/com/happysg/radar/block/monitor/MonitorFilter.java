@@ -38,10 +38,10 @@ public record MonitorFilter(boolean player, boolean vs2, boolean contraption, bo
         boolean contraption = tag.getBoolean("contraption");
         boolean mob = tag.getBoolean("mob");
         boolean projectile = tag.getBoolean("projectile");
-        List<String> blacklistPlayers = tag.getCompound("playerList").getAllKeys().stream().filter(key -> !tag.getCompound("players").getBoolean(key)).toList();
-        List<String> whitelistPlayers = tag.getCompound("playerList").getAllKeys().stream().filter(key -> tag.getCompound("players").getBoolean(key)).toList();
-        List<String> blacklistVS2 = tag.getCompound("vs2Ships").getAllKeys().stream().filter(key -> !tag.getCompound("vs2").getBoolean(key)).toList();
-        List<String> whitelistVS = tag.getCompound("vs2Ships").getAllKeys().stream().filter(key -> tag.getCompound("vs2").getBoolean(key)).toList();
+        List<String> blacklistPlayers = tag.getCompound("playerList").getAllKeys().stream().filter(key -> !tag.getCompound("playerList").getBoolean(key)).toList();
+        List<String> whitelistPlayers = tag.getCompound("playerList").getAllKeys().stream().filter(key -> tag.getCompound("playerList").getBoolean(key)).toList();
+        List<String> blacklistVS2 = tag.getCompound("vs2Ships").getAllKeys().stream().filter(key -> !tag.getCompound("vs2Ships").getBoolean(key)).toList();
+        List<String> whitelistVS = tag.getCompound("vs2Ships").getAllKeys().stream().filter(key -> tag.getCompound("vs2Ships").getBoolean(key)).toList();
         return new MonitorFilter(player, vs2, contraption, mob, projectile, blacklistPlayers, whitelistPlayers, blacklistVS2, whitelistVS);
     }
 
