@@ -8,6 +8,7 @@ import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import com.happysg.radar.block.monitor.MonitorRenderer;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
 import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
+import com.happysg.radar.block.radar.link.RadarLinkRenderer;
 import com.simibubi.create.content.contraptions.bearing.BearingInstance;
 import com.simibubi.create.content.contraptions.bearing.BearingRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -31,6 +32,7 @@ public class ModBlockEntityTypes {
 
     public static final BlockEntityEntry<RadarLinkBlockEntity> RADAR_LINK = REGISTRATE
             .blockEntity("radar_link", RadarLinkBlockEntity::new)
+            .renderer(() -> RadarLinkRenderer::new)
             .validBlocks(ModBlocks.RADAR_LINK)
             .register();
 

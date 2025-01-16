@@ -14,6 +14,11 @@ public enum ModGuiTextures implements ScreenElement {
 
     RADAR_FILTER("filter", 219, 113),
     CANNON_TARGETING("targeting", 256, 120),
+    PLAYER_BUTTON("filter", 43, 33, 18, 18),
+    VS2_BUTTON("filter", 71, 33, 18, 18),
+    CONTRAPTION_BUTTON("filter", 99, 33, 18, 18),
+    MOB_BUTTON("filter", 127, 33, 18, 18),
+    PROJECTILE_BUTTON("filter", 155, 33, 18, 18),
     GREEN_BAR("targeting", 3, 143, 18, 6),
     RED_BAR("targeting", 23, 143, 18, 6),
     X("targeting", 23, 123, 18, 18),

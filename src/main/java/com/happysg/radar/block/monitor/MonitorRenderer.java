@@ -56,7 +56,7 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
     private void renderGrid(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
         int size = blockEntity.getSize();
         float range = radar.getRange();
-        final int GRID_BLOCK_SIZE = 50;
+        final int GRID_BLOCK_SIZE = RadarConfig.client().gridBoxScale.get();
 
         float gridSpacing = range / GRID_BLOCK_SIZE;
         VertexConsumer buffer = bufferSource.getBuffer(ModRenderTypes.entityTranslucent(MonitorSprite.GRID_SQUARE.getTexture()));

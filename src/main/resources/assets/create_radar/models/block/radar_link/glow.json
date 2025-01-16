@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "parent": "block/block",
   "textures": {
-    "0": "create:block/radar_link"
+    "0": "create_radar:block/radar_link"
   },
   "elements": [
     {

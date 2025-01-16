@@ -22,8 +22,8 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.header", "Linking a Radar to a Monitor!");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_1", "Place Monitor");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_2", "Build Radar Contraption");
-        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_3", "Link using Display Link");
-        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_4", "Right click Display Link to activate");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_3", "Link using Radar Link");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.radar_linking.text_4", "Right click Radar Link to configure");
 
         REGISTRATE.addRawLang(CreateRadar.MODID + ".display_source.radar", "Radar");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".display_source.yaw_controller", "Auto Yaw Controller");
@@ -42,7 +42,7 @@ public class ModLang {
 
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.header", "Linking a Controller to a Monitor!");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_1", "Place Yaw Controller under turret mount");
-        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_2", "Link using Display Links");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_2", "Link using Radar Links");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_3", "Repeat for pitch Controller");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".ponder.controller_linking.text_4", "Select Target on monitor for turret to aim/fire at");
 

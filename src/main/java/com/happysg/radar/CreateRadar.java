@@ -44,6 +44,7 @@ public class CreateRadar {
         ModBlockEntityTypes.register();
         ModCreativeTabs.register(modEventBus);
         ModLang.register();
+        ModPartials.init();
         RadarConfig.register(context);
         ModContraptionTypes.register();
         modEventBus.addListener(CreateRadar::init);

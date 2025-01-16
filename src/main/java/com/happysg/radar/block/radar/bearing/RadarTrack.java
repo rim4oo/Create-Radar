@@ -56,7 +56,7 @@ public record RadarTrack(String entityId, Vec3 position, long scannedTime, Color
             return new Color(RadarConfig.client().projectileColor.get());
         if (entity instanceof AbstractContraptionEntity)
             return new Color(RadarConfig.client().contraptionColor.get());
-        return new Color(RadarConfig.client().neutral.get());
+        return new Color(RadarConfig.client().neutralEntityColor.get());
     }
 
     private static boolean isContraption(Entity entity) {

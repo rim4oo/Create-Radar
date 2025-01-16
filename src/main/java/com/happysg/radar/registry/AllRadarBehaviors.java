@@ -1,7 +1,9 @@
 package com.happysg.radar.registry;
 
 import com.happysg.radar.CreateRadar;
-import com.happysg.radar.block.monitor.MonitorLinkBehavior;
+import com.happysg.radar.block.controller.pitch.PitchLinkBehavior;
+import com.happysg.radar.block.controller.yaw.YawLinkBehavior;
+import com.happysg.radar.block.monitor.MonitorRadarBehavior;
 import com.happysg.radar.block.radar.bearing.RadarBearingLinkBehavior;
 import com.happysg.radar.block.radar.link.RadarLinkBehavior;
 import com.happysg.radar.block.radar.link.RadarSource;
@@ -15,7 +17,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -177,18 +178,16 @@ public class AllRadarBehaviors {
         RadarTarget targetOfBlock = targetOf(blockState);
         RadarTarget targetOfBlockEntity = blockEntity == null ? null : targetOf(blockEntity);
 
-        // Commonly added by mods, but with a non-vanilla blockentitytype
-        if (targetOfBlockEntity == null && blockEntity instanceof SignBlockEntity)
-            targetOfBlockEntity = targetOf(BlockEntityType.SIGN);
-
         if (targetOfBlockEntity == null)
             return targetOfBlock;
         return targetOfBlockEntity;
     }
 
     public static void registerDefaults() {
-        assignBlockEntity(register(CreateRadar.asResource("monitor"), new MonitorLinkBehavior()), ModBlockEntityTypes.MONITOR.get());
+        assignBlockEntity(register(CreateRadar.asResource("monitor"), new MonitorRadarBehavior()), ModBlockEntityTypes.MONITOR.get());
         assignBlockEntity(register(CreateRadar.asResource("radar"), new RadarBearingLinkBehavior()), ModBlockEntityTypes.RADAR_BEARING.get());
+        assignBlockEntity(register(CreateRadar.asResource("pitch"), new PitchLinkBehavior()), ModBlockEntityTypes.AUTO_PITCH_CONTROLLER.get());
+        assignBlockEntity(register(CreateRadar.asResource("yaw"), new YawLinkBehavior()), ModBlockEntityTypes.AUTO_YAW_CONTROLLER.get());
     }
 
 }

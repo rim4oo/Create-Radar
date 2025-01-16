@@ -34,7 +34,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     RadarBearingBlockEntity radar;
     protected String hoveredEntity;
     protected String selectedEntity;
-    MonitorFilter filter = MonitorFilter.ALL_ENTITIES;
+    MonitorFilter filter = MonitorFilter.DEFAULT;
 
     public MonitorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -58,7 +58,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     @Override
     public void tick() {
         super.tick();
-        if (ticksSinceLastUpdate > 60)
+        if (ticksSinceLastUpdate > 20)
             setRadarPos(null);
         ticksSinceLastUpdate++;
     }
@@ -99,7 +99,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
             radarPos = NbtUtils.readBlockPos(tag.getCompound("radarPos"));
         if (tag.contains("SelectedEntity"))
             selectedEntity = tag.getString("SelectedEntity");
-        filter = MonitorFilter.values()[tag.getInt("Filter")];
+        filter = MonitorFilter.fromTag(tag.getCompound("Filter"));
         radius = tag.getInt("Size");
     }
 
@@ -112,7 +112,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
             tag.put("radarPos", NbtUtils.writeBlockPos(radarPos));
         if (selectedEntity != null)
             tag.putString("SelectedEntity", selectedEntity);
-        tag.putInt("Filter", filter.ordinal());
+        tag.put("Filter", filter.toTag());
         tag.putInt("Size", radius);
     }
 
@@ -186,6 +186,8 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         getRadar().ifPresent(radar -> {
             double bestDistance = 0.1f * range;
             for (RadarTrack track : radar.getEntityPositions()) {
+                if (!filter.test(track.entityType()))
+                    continue;
                 Vec3 entityPos = track.position();
                 entityPos = entityPos.multiply(1, 0, 1);
                 Vec3 selectedNew = selected.multiply(1, 0, 1);

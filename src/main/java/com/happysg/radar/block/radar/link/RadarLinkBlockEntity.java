@@ -30,14 +30,14 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
-        updateGatheredData();
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+
     }
 
     @Override
-    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-
+    public void tick() {
+        super.tick();
+        updateGatheredData();
     }
 
     public void updateGatheredData() {
@@ -70,7 +70,7 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
         }
 
         ledState = true;
-        activeSource.transferData(this, activeTarget);
+        activeSource.transferData(new RadarLinkContext(level, this), activeTarget);
         sendData();
         //TODO implement advancement
     }

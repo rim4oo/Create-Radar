@@ -1,8 +1,8 @@
 package com.happysg.radar.block.radar.link;
 
+import com.happysg.radar.registry.ModPartials;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.RenderTypes;
@@ -25,11 +25,11 @@ public class RadarLinkRenderer extends SafeBlockEntityRenderer<RadarLinkBlockEnt
                               int light, int overlay) {
         long gameTime = be.getLevel().getGameTime();
         float glow = be.ledState ? (float) (0.5 * (1 + Math.sin(gameTime * 0.1))) : 0;
-        if (glow < .125f)
+        if (glow == 0)
             return;
 
         glow = (float) (1 - (2 * Math.pow(glow - .75f, 2)));
-        glow = Mth.clamp(glow, -1, 1);
+        glow = Mth.clamp(glow, 0.2f, 1.0f);
 
         int color = (int) (200 * glow);
 
@@ -50,11 +50,11 @@ public class RadarLinkRenderer extends SafeBlockEntityRenderer<RadarLinkBlockEnt
                 .rotateX(-AngleHelper.verticalAngle(face) - 90)
                 .unCentre();
 
-        CachedBufferer.partial(AllPartialModels.DISPLAY_LINK_TUBE, blockState)
+        CachedBufferer.partial(ModPartials.RADAR_LINK_TUBE, blockState)
                 .light(LightTexture.FULL_BRIGHT)
                 .renderInto(ms, buffer.getBuffer(RenderType.translucent()));
 
-        CachedBufferer.partial(AllPartialModels.DISPLAY_LINK_GLOW, blockState)
+        CachedBufferer.partial(ModPartials.RADAR_GLOW, blockState)
                 .light(LightTexture.FULL_BRIGHT)
                 .color(color, color, color, 255)
                 .disableDiffuse()
