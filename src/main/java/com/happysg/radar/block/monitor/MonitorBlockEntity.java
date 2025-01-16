@@ -232,7 +232,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
             return this;
         if (level.getBlockEntity(controller) instanceof MonitorBlockEntity controller)
             return controller;
-        return null;
+        return this;
     }
 
     public Vec3 getTargetPos(TargetingConfig targetingConfig) {
@@ -286,6 +286,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     }
 
     public void setFilter(MonitorFilter filter) {
+        this.getController().filter = filter;
         this.filter = filter;
     }
 }
