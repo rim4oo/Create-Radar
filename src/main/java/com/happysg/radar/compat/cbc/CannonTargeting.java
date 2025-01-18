@@ -17,98 +17,45 @@ import static java.lang.Double.NaN;
 //todo fix calculations
 public class CannonTargeting {
 
-    // Constants for drag and gravity
     private static final double DRAG = 0.99;
 
-
-    // Calculate the optimal pitch to hit the target
-
+//    }
     public static double calculatePitch(double chargePower, Vec3 targetPos, Vec3 mountPos, int barrelLength, double drag, double gravity) {
-        double xTarget = targetPos.x - mountPos.x;
-        double yTarget = targetPos.y - mountPos.y;
-
+        if(chargePower == 0){
+            return NaN;
+        }
+        double d1 = targetPos.x - mountPos.x;
+        double d2 = targetPos.z - mountPos.z;
+        double distance = Math.abs(Math.sqrt(d1 * d1 + d2 * d2));
+        double dY = targetPos.y - mountPos.y;
+        double u = chargePower;
         double g = Math.abs(gravity);
-        double k = 1-drag;
+        double k = 1 - drag;
         double bestDiff = Double.MAX_VALUE;
         double bestTheta=0;
-        double theta = Math.toRadians(-90);
-        while(theta<=Math.toRadians(90)) {
-            double v0x = chargePower * Math.cos(theta);
-            double v0y = chargePower * Math.sin(theta);
-            double xTargetLocal = xTarget - Math.cos(theta) * (barrelLength + 0.5);
-            double yTargetLocal = yTarget - Math.sin(theta) * (barrelLength + 0.5);
+        double theta = Math.toRadians(-89.9);
+        while(theta<=Math.toRadians(89.9)) {
+            double dX = distance - (Math.cos(theta) * (barrelLength));
+            double yTargetLocal = dY - (Math.sin(theta) * (barrelLength));
 
-            // Calculate y when x at target
-            double log = Math.log(1 - ((k * xTargetLocal) / (v0x*Math.cos(theta))));
+            double log = Math.log(1-(k*dX)/(u*Math.cos(theta)));
+            if(Double.isInfinite(log)){
+                log = NaN;
+            }
+            double y = (dX*Math.tan(theta)+(dX*g)/(k*u*Math.cos(theta)) + g/(k*k)*log);
 
-            double y = (Math.tan(theta)+(g/(k*v0x*Math.cos(theta))*xTargetLocal + (g / (k * k))*log));
             if (!Double.isNaN(y)){
                 double diff = y - yTargetLocal;
                 if (Math.abs(diff) < Math.abs(bestDiff)) {
                     bestDiff = diff;
-                    bestTheta = theta;
+                     bestTheta = theta;
                 }
             }
-            theta+=Math.toRadians(0.1);
+            theta+=Math.toRadians(0.05);
         }
         return bestTheta/Math.PI*180;
         }
 
-
-    // Calculate airtime for upward motion
-    private static double computeAirtimeUp(double power, double pitch, double dY, double length, double gravity) {
-        double vertVelocity = power * Math.sin(Math.toRadians(pitch));
-        double vertPosition = 0.0;
-        dY -= length * Math.sin(Math.toRadians(pitch));  // Adjust target height based on barrel length
-
-        if (dY < 0) return -1;
-
-        double ticks = 0;
-        while (true) {
-            ticks++;
-            vertPosition += vertVelocity;
-            vertVelocity = vertVelocity * DRAG + gravity;
-            if (vertPosition > dY) return ticks;
-            if (vertVelocity < 0) break;  // Stop if velocity is downward before reaching the target
-        }
-
-        return -1;
-    }
-
-    // Calculate airtime for downward motion
-    private static double computeAirtimeDown(double power, double pitch, double dY, double length, double gravity) {
-        double vertVelocity = power * Math.sin(Math.toRadians(pitch));
-        double vertPosition = 0.0;
-        dY -= length * Math.sin(Math.toRadians(pitch));
-
-        boolean passed = false;
-        double ticks = 0;
-
-        while (true) {
-            ticks++;
-            vertPosition += vertVelocity;
-            vertVelocity = vertVelocity * DRAG + gravity;
-
-            if(vertPosition > dY && vertVelocity < 0) passed = true;
-            if(vertVelocity < 0 && vertPosition < dY && passed) return ticks;
-            if(vertPosition < dY && vertVelocity < 0 ) break;
-
-        }
-
-        return -1;
-    }
-    // Calculate the horizontal projection
-    private static double computeProjection(double power, double pitch, double airtime, double length) {
-        double horizVelocity = power * Math.cos(Math.toRadians(pitch));
-        double horizPosition = Math.sin(Math.abs(pitch))*length;
-
-        for (int ticks = 1; ticks <= airtime; ticks++) {
-            horizPosition += horizVelocity;
-            horizVelocity *= DRAG;
-        }
-
-        return horizPosition;
-    }
     public static double calculatePitch(CannonMountBlockEntity mount, Vec3 targetPos, ServerLevel level) {
         if (mount == null || targetPos == null) {
             return 0;

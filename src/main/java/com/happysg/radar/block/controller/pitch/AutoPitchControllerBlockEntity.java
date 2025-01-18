@@ -16,6 +16,8 @@ import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockE
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
 
+import static java.lang.Double.NaN;
+
 public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
     private static final double TOLERANCE = 0.1;
     private double targetAngle;
@@ -146,7 +148,7 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         Vec3 cannonCenter = getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING)).above(3).getCenter();
 
         if (level.getBlockEntity(getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING))) instanceof CannonMountBlockEntity mount) {
-            targetAngle = CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level);
+            targetAngle = Double.isNaN(CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level)) ? targetAngle : CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level);
         }
 
         // Ensure pitch is within -90 to 90 degrees
