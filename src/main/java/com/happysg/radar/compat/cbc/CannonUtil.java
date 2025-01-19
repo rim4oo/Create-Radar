@@ -64,7 +64,7 @@ public class CannonUtil {
         return isAutoCannon(cannon) ? -0.025 : -0.05;
     }
 
-    public static double getProjectileDrag(AbstractMountedCannonContraption cannon) {
+    public static double getProjectileDrag(AbstractMountedCannonContraption cannon) { //TODO implement
         return 0.99;
     }
 
