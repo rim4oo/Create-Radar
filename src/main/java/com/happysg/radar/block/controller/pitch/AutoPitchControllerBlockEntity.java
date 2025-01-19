@@ -16,12 +16,16 @@ import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockE
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.Double.NaN;
 
 public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
     private static final double TOLERANCE = 0.1;
     private double targetAngle;
     private boolean isRunning;
+    private boolean artillery = false;
     public int chargeCount;
     TargetingConfig targetingConfig = TargetingConfig.DEFAULT;
 
@@ -148,9 +152,14 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         Vec3 cannonCenter = getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING)).above(3).getCenter();
 
         if (level.getBlockEntity(getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING))) instanceof CannonMountBlockEntity mount) {
-            targetAngle = Double.isNaN(CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level)) ? targetAngle : CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level);
-        }
+            List<Double> angles = CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level);
+            if (angles == null || angles.isEmpty()) { //TODO unreachable target stop targeting if auto targeting?
+                isRunning = false;
+                return;
+            }
 
+            targetAngle = artillery && angles.size() == 2 ? angles.get(1) : angles.get(0);
+        }
         // Ensure pitch is within -90 to 90 degrees
         if (targetAngle < -90) {
             targetAngle = -90;

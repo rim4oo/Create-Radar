@@ -4,7 +4,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.math3.analysis.solvers.*;
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.exception.NoBracketingException;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
@@ -17,9 +16,9 @@ import static java.lang.Double.NaN;
 //todo fix calculations
 public class CannonTargeting {
 
-    public static double calculatePitch(double chargePower, Vec3 targetPos, Vec3 mountPos, int barrelLength, double drag, double gravity) {
-        if(chargePower == 0){
-            return NaN;
+    public static List<Double> calculatePitch(double chargePower, Vec3 targetPos, Vec3 mountPos, int barrelLength, double drag, double gravity) {
+        if (chargePower == 0) {
+            return null;
         }
         double d1 = targetPos.x - mountPos.x;
         double d2 = targetPos.z - mountPos.z;
@@ -32,15 +31,16 @@ public class CannonTargeting {
         UnivariateFunction diffFunction = theta -> {
             double thetaRad = Math.toRadians(theta);
 
-            double dX = distance - (Math.cos(thetaRad) * (barrelLength));
+            double dX = distance - (Math.cos(thetaRad) * (barrelLength + 0.5));
             double dY = d3 - (Math.sin(thetaRad) * (barrelLength));
-            double log = Math.log(1-(k*dX)/(u*Math.cos(thetaRad)));
+            double log = Math.log(1 - (k * dX) / (u * Math.cos(thetaRad)));
 
-            if(Double.isInfinite(log)){
+            if (Double.isInfinite(log)) {
                 log = NaN;
             }
 
-            double y = (dX*Math.tan(thetaRad)+(dX*g)/(k*u*Math.cos(thetaRad)) + g/(k*k)*log);;
+            double y = (dX * Math.tan(thetaRad) + (dX * g) / (k * u * Math.cos(thetaRad)) + g / (k * k) * log);
+            ;
 
             return y - dY;
         };
@@ -58,33 +58,33 @@ public class CannonTargeting {
             double currValue = diffFunction.value(theta);
             if (prevValue * currValue < 0) {
                 try {
-                    double root = solver.solve(100, diffFunction, prevTheta, theta);
+                    double root = solver.solve(1000, diffFunction, prevTheta, theta);
                     roots.add(root);
                 } catch (Exception e) {
-                    return NaN;
+                    return null;
                 }
             }
             prevTheta = Double.isNaN(currValue) ? prevTheta : theta;
             prevValue = Double.isNaN(currValue) ? prevValue : currValue;
         }
-        if(roots.isEmpty()){
-            return NaN;
+        if (roots.isEmpty()) {
+            return null;
         }
-        return roots.get(0);
-        }
+        return roots;
+    }
 
-    public static double calculatePitch(CannonMountBlockEntity mount, Vec3 targetPos, ServerLevel level) {
+    public static List<Double> calculatePitch(CannonMountBlockEntity mount, Vec3 targetPos, ServerLevel level) {
         if (mount == null || targetPos == null) {
-            return 0;
+            return null;
         }
 
         PitchOrientedContraptionEntity contraption = mount.getContraption();
         if (contraption == null) {
-            return 0;
+            return null;
         }
 
         if (!(contraption.getContraption() instanceof AbstractMountedCannonContraption cannonContraption)) {
-            return 0;
+            return null;
         }
         float chargePower = CannonUtil.getInitialVelocity(cannonContraption, level);
 
