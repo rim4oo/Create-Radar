@@ -42,10 +42,10 @@ public class CannonUtil {
 
             Block block = containedBlockInfo.state().getBlock();
             if (block instanceof BigCannonPropellantBlock propellantBlock) {
-                chargePower += propellantBlock.getChargePower(containedBlockInfo);
+                chargePower += (int) propellantBlock.getChargePower(containedBlockInfo);
             } else if (block instanceof ProjectileBlock<?> projectileBlock) {
                 AbstractBigCannonProjectile projectile = projectileBlock.getProjectile(level, Collections.singletonList(containedBlockInfo));
-                chargePower += projectile.addedChargePower();
+                chargePower += (int) projectile.addedChargePower();
             }
         }
         return chargePower;
