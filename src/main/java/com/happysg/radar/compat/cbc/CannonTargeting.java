@@ -1,142 +1,79 @@
 package com.happysg.radar.compat.cbc;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.math3.analysis.solvers.*;
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.exception.NoBracketingException;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.Double.NaN;
+
 //todo fix calculations
 public class CannonTargeting {
 
-    // Constants for drag and gravity
-    private static final double DRAG = 0.99;
+    public static double calculatePitch(double chargePower, Vec3 targetPos, Vec3 mountPos, int barrelLength, double drag, double gravity) {
+        if(chargePower == 0){
+            return NaN;
+        }
+        double d1 = targetPos.x - mountPos.x;
+        double d2 = targetPos.z - mountPos.z;
+        double distance = Math.abs(Math.sqrt(d1 * d1 + d2 * d2));
+        double d3 = targetPos.y - mountPos.y;
+        double u = chargePower;
+        double g = Math.abs(gravity);
+        double k = 1 - drag;
 
+        UnivariateFunction diffFunction = theta -> {
+            double thetaRad = Math.toRadians(theta);
 
-    // Calculate the optimal pitch to hit the target
-    public static double calculatePitch(double power, double length, double gravity, Vec3 cannonPos, Vec3 targetPos) {
-        double dX = targetPos.x - cannonPos.x;
-        double dZ = targetPos.z - cannonPos.z;
-        double dY = targetPos.y - cannonPos.y;
-        double distance = Math.sqrt(dX * dX + dZ * dZ);
+            double dX = distance - (Math.cos(thetaRad) * (barrelLength));
+            double dY = d3 - (Math.sin(thetaRad) * (barrelLength));
+            double log = Math.log(1-(k*dX)/(u*Math.cos(thetaRad)));
 
-        double bestPitch = 0.0;
-        double bestAccuracy = Double.MAX_VALUE;
-        double pitch = -60.0;
-        double pitchIncrement = 0.1; // Increased resolution
-
-        while (pitch <= 60.0) {
-            double airtimeUp = computeAirtimeUp(power, pitch, dY, length, gravity);
-            double airtimeDown = computeAirtimeDown(power, pitch, dY, length, gravity);
-
-            if (airtimeUp != -1) {
-                double projection = computeProjection(power, pitch, airtimeUp, length);
-                double accuracy = Math.abs(projection - distance);
-                if (accuracy < bestAccuracy) {
-                    bestAccuracy = accuracy;
-                    bestPitch = pitch;
-                }
+            if(Double.isInfinite(log)){
+                log = NaN;
             }
 
-            if (airtimeDown != -1) {
-                double projection = computeProjection(power, pitch, airtimeDown, length);
-                double accuracy = Math.abs(projection - distance);
-                if (accuracy < bestAccuracy) {
-                    bestAccuracy = accuracy;
-                    bestPitch = pitch;
+            double y = (dX*Math.tan(thetaRad)+(dX*g)/(k*u*Math.cos(thetaRad)) + g/(k*k)*log);;
+
+            return y - dY;
+        };
+
+        UnivariateSolver solver = new BrentSolver(1e-6, 1e-10);
+
+        double start = -90;
+        double end = 90;
+        double step = 1.0;
+        List<Double> roots = new ArrayList<>();
+
+        double prevValue = diffFunction.value(start);
+        double prevTheta = start;
+        for (double theta = start + step; theta <= end; theta += step) {
+            double currValue = diffFunction.value(theta);
+            if (prevValue * currValue < 0) {
+                try {
+                    double root = solver.solve(100, diffFunction, prevTheta, theta);
+                    roots.add(root);
+                } catch (Exception e) {
+                    return NaN;
                 }
             }
-
-            pitch += pitchIncrement;
+            prevTheta = Double.isNaN(currValue) ? prevTheta : theta;
+            prevValue = Double.isNaN(currValue) ? prevValue : currValue;
+        }
+        if(roots.isEmpty()){
+            return NaN;
+        }
+        return roots.get(0);
         }
 
-        // Secondary refinement around the best pitch
-        double refinedBestPitch = bestPitch;
-        bestAccuracy = Double.MAX_VALUE;
-        pitch = bestPitch - pitchIncrement;
-        while (pitch <= bestPitch + pitchIncrement) {
-            double airtimeUp = computeAirtimeUp(power, pitch, dY, length, gravity);
-            double airtimeDown = computeAirtimeDown(power, pitch, dY, length, gravity);
-
-            if (airtimeUp != -1) {
-                double projection = computeProjection(power, pitch, airtimeUp, length);
-                double accuracy = Math.abs(projection - distance);
-                if (accuracy < bestAccuracy) {
-                    bestAccuracy = accuracy;
-                    refinedBestPitch = pitch;
-                }
-            }
-
-            if (airtimeDown != -1) {
-                double projection = computeProjection(power, pitch, airtimeDown, length);
-                double accuracy = Math.abs(projection - distance);
-                if (accuracy < bestAccuracy) {
-                    bestAccuracy = accuracy;
-                    refinedBestPitch = pitch;
-                }
-            }
-
-            pitch += pitchIncrement / 10; // Finer increment for refinement
-        }
-
-        return refinedBestPitch;
-    }
-    // Calculate airtime for upward motion
-    private static double computeAirtimeUp(double power, double pitch, double dY, double length, double gravity) {
-        double vertVelocity = power * Math.sin(Math.toRadians(pitch));
-        double vertPosition = 0.0;
-        dY -= length * Math.sin(Math.toRadians(pitch));  // Adjust target height based on barrel length
-
-        if (dY < 0) return -1;
-
-        double ticks = 0;
-        while (true) {
-            ticks++;
-            vertPosition += vertVelocity;
-            vertVelocity = vertVelocity * DRAG + gravity;
-            if (vertPosition > dY) return ticks;
-            if (vertVelocity < 0) break;  // Stop if velocity is downward before reaching the target
-        }
-
-        return -1;
-    }
-
-    // Calculate airtime for downward motion
-    private static double computeAirtimeDown(double power, double pitch, double dY, double length, double gravity) {
-        double vertVelocity = power * Math.sin(Math.toRadians(pitch));
-        double vertPosition = 0.0;
-        dY -= length * Math.sin(Math.toRadians(pitch));
-
-        boolean passed = false;
-        double ticks = 0;
-
-        while (true) {
-            ticks++;
-            vertPosition += vertVelocity;
-            vertVelocity = vertVelocity * DRAG + gravity;
-
-            if(vertPosition > dY && vertVelocity < 0) passed = true;
-            if(vertVelocity < 0 && vertPosition < dY && passed) return ticks;
-            if(vertPosition < dY && vertVelocity < 0 ) break;
-
-        }
-
-        return -1;
-    }
-
-    // Calculate the horizontal projection
-    private static double computeProjection(double power, double pitch, double airtime, double length) {
-        double horizVelocity = power * Math.cos(Math.toRadians(pitch));
-        double horizPosition = Math.sin(Math.abs(pitch))*length;
-
-        for (int ticks = 1; ticks <= airtime; ticks++) {
-            horizPosition += horizVelocity;
-            horizVelocity *= DRAG;
-        }
-
-        return horizPosition;
-    }
-
-    public static double calculatePitch(CannonMountBlockEntity mount, Vec3 targetPos) {
+    public static double calculatePitch(CannonMountBlockEntity mount, Vec3 targetPos, ServerLevel level) {
         if (mount == null || targetPos == null) {
             return 0;
         }
@@ -149,26 +86,14 @@ public class CannonTargeting {
         if (!(contraption.getContraption() instanceof AbstractMountedCannonContraption cannonContraption)) {
             return 0;
         }
+        float chargePower = CannonUtil.getInitialVelocity(cannonContraption, level);
 
-        return calculatePitch(CannonUtil.getInitialVelocity(cannonContraption), CannonUtil.getFrontBarrelLength(cannonContraption), CannonUtil.getProjectileGravity(cannonContraption), mount.getBlockPos().above(2).getCenter(), targetPos);
-    }
+        Vec3 mountPos = mount.getBlockPos().above(2).getCenter();
+        int barrelLength = CannonUtil.getFrontBarrelLength(cannonContraption);
 
-    public static double calculatePitch(CannonMountBlockEntity mount, Vec3 targetPos, int chargeCount) {
-        if (chargeCount == 0) {
-            return calculatePitch(mount, targetPos);
-        }
-        if (mount == null || targetPos == null) {
-            return 0;
-        }
+        double drag = CannonUtil.getProjectileDrag((AbstractMountedCannonContraption) contraption.getContraption());
+        double gravity = CannonUtil.getProjectileGravity((AbstractMountedCannonContraption) contraption.getContraption());
 
-        PitchOrientedContraptionEntity contraption = mount.getContraption();
-        if (contraption == null) {
-            return 0;
-        }
-
-        if (!(contraption.getContraption() instanceof AbstractMountedCannonContraption cannonContraption)) {
-            return 0;
-        }
-        return calculatePitch(chargeCount * 2.0f, CannonUtil.getFrontBarrelLength(cannonContraption), CannonUtil.getProjectileGravity(cannonContraption), mount.getBlockPos().above(2).getCenter(), targetPos);
+        return calculatePitch(chargePower, targetPos, mountPos, barrelLength, drag, gravity);
     }
 }

@@ -4,15 +4,19 @@ import com.happysg.radar.block.controller.yaw.AutoYawControllerBlockEntity;
 import com.happysg.radar.block.radar.link.screens.TargetingConfig;
 import com.happysg.radar.compat.Mods;
 import com.happysg.radar.compat.cbc.CannonTargeting;
+import com.happysg.radar.compat.cbc.CannonUtil;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
+
+import static java.lang.Double.NaN;
 
 public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
     private static final double TOLERANCE = 0.1;
@@ -144,7 +148,7 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         Vec3 cannonCenter = getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING)).above(3).getCenter();
 
         if (level.getBlockEntity(getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING))) instanceof CannonMountBlockEntity mount) {
-            targetAngle = CannonTargeting.calculatePitch(mount, targetPos, chargeCount);
+            targetAngle = Double.isNaN(CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level)) ? targetAngle : CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level);
         }
 
         // Ensure pitch is within -90 to 90 degrees
