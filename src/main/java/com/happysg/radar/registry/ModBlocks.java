@@ -103,6 +103,19 @@ public class ModBlocks {
                     .simpleItem()
                     .register();
 
+    @SuppressWarnings("unused")
+    public static final BlockEntry<AbstractRadarFrame> CREATIVE_RADAR_PLATE_BLOCK =
+            REGISTRATE.block("creative_radar_plate", properties -> new AbstractRadarFrame(properties, ModShapes.RADAR_PLATE))
+                    .initialProperties(SharedProperties::softMetal)
+                    .transform(BlockStressDefaults.setImpact(0))
+                    .properties(BlockBehaviour.Properties::noOcclusion)
+                    .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
+                            .getExistingFile(ctx.getId().withPath("radar_plate_block")), 0))
+                    .item()
+                    .model((c, p) -> p.withExistingParent(c.getName(), CreateRadar.asResource("block/radar_plate_block")))
+                    .build()
+                    .register();
+
 
     public static final BlockEntry<AutoYawControllerBlock> AUTO_YAW_CONTROLLER_BLOCK =
             REGISTRATE.block("auto_yaw_controller", AutoYawControllerBlock::new)

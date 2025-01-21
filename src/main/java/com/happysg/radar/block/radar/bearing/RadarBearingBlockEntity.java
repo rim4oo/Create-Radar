@@ -27,6 +27,7 @@ import java.util.*;
 public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private static final int MAX_TRACK_TICKS = 100;
     private int dishCount;
+    private boolean creative;
     private Direction receiverFacing = Direction.NORTH;
     Map<String, RadarTrack> entityPositions = new HashMap<>();
     Map<String, VSRadarTracks> VSPositions = new HashMap<>();
@@ -151,7 +152,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         double relativeAngle = Math.abs(angleToEntity - radarAngle);
 
         // Check if the entity is within the field of view
-        return relativeAngle <= fovDegrees / 2;
+        return relativeAngle <= fovDegrees / 2.0;
     }
 
     public float getGlobalAngle() {
@@ -170,27 +171,9 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
             speed += clientAngleDiff / 3f;
         }
 
-        return gearRadarBearingSpeed(speed);
+        return speed / (4f + getDishCount() / 10);
     }
 
-    public float gearRadarBearingSpeed(float speed) {
-        int dishCount = getDishCount();
-        float maxSpeed;
-
-        if (dishCount >= 100) {
-            maxSpeed = 64;
-        } else if (dishCount >= 75) {
-            maxSpeed = 96 + (64 - 96) * (dishCount - 75) / 25.0f;
-        } else if (dishCount >= 50) {
-            maxSpeed = 128 + (96 - 128) * (dishCount - 50) / 25.0f;
-        } else if (dishCount >= 25) {
-            maxSpeed = 196 + (128 - 196) * (dishCount - 25) / 25.0f;
-        } else {
-            maxSpeed = 256 + (196 - 256) * dishCount / 25.0f;
-        }
-
-        return Math.min(speed, maxSpeed);
-    }
 
     //code copied in order to replace with radar contraption and radar advancements
     @Override
@@ -258,6 +241,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     private void updateContraptionData() {
         dishCount = getContraption().map(RadarContraption::getDishCount).orElse(0);
         receiverFacing = getContraption().map(RadarContraption::getReceiverFacing).orElse(Direction.NORTH);
+        creative = getContraption().map(RadarContraption::isCreative).orElse(false);
         notifyUpdate();
     }
 
@@ -273,6 +257,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         dishCount = compound.getInt("dishCount");
+        creative = compound.getBoolean("creative");
         if (compound.contains("receiverFacing"))
             receiverFacing = Direction.from3DDataValue(compound.getInt("receiverFacing"));
         if (clientPacket && compound.contains("entityPositions"))
@@ -285,6 +270,7 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     public void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
         compound.putInt("dishCount", dishCount);
+        compound.putBoolean("creative", creative);
         if (receiverFacing != null)
             compound.putInt("receiverFacing", receiverFacing.get3DDataValue());
         if (clientPacket)
@@ -322,6 +308,8 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
     public float getRange() {
+        if (creative)
+            return RadarConfig.server().maxRadarRange.get();
         return Math.min(RadarConfig.server().radarBaseRange.get() + dishCount * RadarConfig.server().dishRangeIncrease.get(), RadarConfig.server().maxRadarRange.get());
     }
 }
