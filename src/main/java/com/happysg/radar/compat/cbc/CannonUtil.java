@@ -106,12 +106,12 @@ public class CannonUtil {
                     ballisticProperties = (BallisticPropertiesComponent) method.invoke(projectile);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException |
                          ClassCastException e) {
-                    return 0.99;
+                    return 0.01;
                 }
                 return ballisticProperties.drag();
             }
         }
-        return 0.99;
+        return 0.01;
     }
 
     public static boolean isBigCannon(AbstractMountedCannonContraption cannon) {
