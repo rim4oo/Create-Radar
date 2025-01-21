@@ -23,23 +23,21 @@ public class CannonTargeting {
         }
         double d1 = targetPos.x - originPos.x;
         double d2 = targetPos.z - originPos.z;
-        double distance = Math.abs(Math.sqrt(d1 * d1 + d2 * d2));
+            double distance = Math.abs(Math.sqrt(d1 * d1 + d2 * d2));
         double d3 = targetPos.y - originPos.y;
         double g = Math.abs(gravity);
-        double k = 1 - drag;
-
         UnivariateFunction diffFunction = theta -> {
             double thetaRad = Math.toRadians(theta);
 
             double dX = distance - (Math.cos(thetaRad) * (barrelLength));
             double dY = d3 - (Math.sin(thetaRad) * (barrelLength));
-            double log = Math.log(1 - (k * dX) / (speed * Math.cos(thetaRad)));
+            double log = Math.log(1 - (drag * dX) / (speed * Math.cos(thetaRad)));
 
             if (Double.isInfinite(log)) {
                 log = NaN;
             }
 
-            double y = (dX * Math.tan(thetaRad) + (dX * g) / (k * speed * Math.cos(thetaRad)) + g*log / (k * k) );
+            double y = (dX * Math.tan(thetaRad) + (dX * g) / (drag * speed * Math.cos(thetaRad)) + g*log / (drag * drag) );
             return y - dY;
         };
 
