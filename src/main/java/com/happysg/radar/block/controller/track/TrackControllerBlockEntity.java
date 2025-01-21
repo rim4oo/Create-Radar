@@ -23,7 +23,7 @@ public class TrackControllerBlockEntity extends KineticBlockEntity {
         if (!Mods.TRACKWORK.isLoaded())
             return;
         // System.out.println(VS2Utils.getWorldVec(this));
-        getAngleToTarget();
+        //getAngleToTarget();
 
     }
 

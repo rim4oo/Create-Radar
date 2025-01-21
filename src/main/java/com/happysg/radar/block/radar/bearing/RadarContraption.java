@@ -4,6 +4,7 @@ import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.radar.link.RadarLinkBlock;
 import com.happysg.radar.block.radar.receiver.AbstractRadarFrame;
 import com.happysg.radar.block.radar.receiver.RadarReceiverBlock;
+import com.happysg.radar.registry.ModBlocks;
 import com.happysg.radar.registry.ModContraptionTypes;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.ContraptionType;
@@ -21,6 +22,7 @@ public class RadarContraption extends BearingContraption {
 
     private int dishCount;
     private boolean hasReceiver;
+    private boolean creative;
     private Direction receiverFacing;
 
     public RadarContraption() {
@@ -46,6 +48,12 @@ public class RadarContraption extends BearingContraption {
             return;
 
         super.addBlock(pos, capture);
+
+        if (ModBlocks.CREATIVE_RADAR_PLATE_BLOCK.has(capture.getKey().state()))
+            creative = true;
+
+
+
         //todo replace with tag instead of block instance check
         if (capture.getKey().state().getBlock() instanceof AbstractRadarFrame)
             dishCount++;
@@ -68,6 +76,10 @@ public class RadarContraption extends BearingContraption {
 
     public Direction getReceiverFacing() {
         return receiverFacing;
+    }
+
+    public boolean isCreative() {
+        return creative;
     }
 
 
