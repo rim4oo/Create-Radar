@@ -4,6 +4,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id 'com.gradleup.shadow' version '8.3.5'
 }
 
 String buildNumber = System.getenv("GITHUB_RUN_NUMBER")
@@ -61,8 +62,10 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    gradlePluginPortal()
     mavenCentral()
     mavenLocal()
+    maven { url 'https://plugins.gradle.org/' }
     maven { url 'https://maven.parchmentmc.org' }
     maven { url 'https://maven.quiltmc.org/repository/release' }
     maven { url 'https://maven.blamejared.com/' }
@@ -207,6 +210,14 @@ tasks.named('jar', Jar).configure {
 
     // This is the preferred method to reobfuscate your jar file
     finalizedBy 'reobfJar'
+}
+shadowJar {
+    minimize()
+    configurations = [project.configurations.runtimeClasspath]
+    relocate 'org.apache.commons.math3', 'com.happysg.shaded.math3'
+}
+tasks.named('build').configure {
+    dependsOn tasks.shadowJar
 }
 
 tasks.withType(JavaCompile).configureEach {
