@@ -1,5 +1,6 @@
 package com.happysg.radar.block.monitor;
 
+import com.happysg.radar.config.RadarConfig;
 import com.happysg.radar.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,12 +20,11 @@ import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 //todo make better
 public class MonitorMultiBlockHelper {
 
-    public static int MAX_SIZE = 5;
 
     public static void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         if (pState.getValue(SHAPE) != MonitorBlock.Shape.SINGLE && !pIsMoving)
             return;
-        BlockPos.betweenClosedStream(new AABB(pPos).inflate(MAX_SIZE)).forEach(p -> {
+        BlockPos.betweenClosedStream(new AABB(pPos).inflate(RadarConfig.server().monitorMaxSize.get())).forEach(p -> {
                     if (pLevel.getBlockEntity(p) instanceof MonitorBlockEntity monitor) {
                         int size = getSize(pLevel, p);
                         if (size > 1)
@@ -91,7 +91,7 @@ public class MonitorMultiBlockHelper {
             return 0;
         Direction facing = pLevel.getBlockState(pPos).getValue(FACING);
         int potentialsize = 0;
-        for (int i = 0; i < MAX_SIZE; i++) {
+        for (int i = 0; i < RadarConfig.server().monitorMaxSize.get(); i++) {
             AtomicBoolean valid = new AtomicBoolean(true);
             BlockPos.betweenClosed(pPos, pPos.above(i).relative(facing.getClockWise(), i)).forEach(p -> {
                 if (!pLevel.getBlockState(p).is(ModBlocks.MONITOR.get()))
