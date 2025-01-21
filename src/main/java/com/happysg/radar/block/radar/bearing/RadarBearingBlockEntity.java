@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.joml.Vector3d;
+import org.valkyrienskies.core.api.ships.Ship;
 
 import java.util.*;
 
@@ -74,12 +75,16 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
     }
 
     private void scanForEntityTracks() {
-        AABB aabb = getRadarAABB();
-        for (Entity entity : level.getEntities(null, aabb)) {
-            if (entity.isAlive() && isEntityInRadarFov(entity.blockPosition())) {
-                entityPositions.put(entity.getStringUUID(), new RadarTrack(entity));
+        if (level == null) return;
+        List<AABB> AABBs = splitAABB(getRadarAABB(), 999);
+        AABBs.forEach((aabb -> {
+            for (Entity entity : level.getEntities(null, aabb)) {
+                if (entity.isAlive() && isEntityInRadarFov(entity.blockPosition())) {
+                    entityPositions.put(entity.getStringUUID(), new RadarTrack(entity));
+                }
             }
-        }
+        }));
+
     }
 
     private void scanForVSTracks() {
@@ -87,12 +92,17 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
             return;
         if (level == null)
             return;
-        VS2Utils.getLoadedShips(level, getRadarAABB()).forEach(serverShip -> {
-            Vector3d shipPos = serverShip.getWorldAABB().center(new Vector3d());
-            if (isEntityInRadarFov(new BlockPos((int) shipPos.x, (int) shipPos.y, (int) shipPos.z))) {
-                VSPositions.put(String.valueOf(serverShip.getId()), new VSRadarTracks(serverShip, level));
-            }
-        });
+        List<AABB> AABBs = splitAABB(getRadarAABB(), 999);
+        AABBs.forEach((aabb -> {
+            Iterable<Ship> ships = VS2Utils.getLoadedShips(level, aabb);
+            if(ships == null) return;
+            ships.forEach(serverShip -> {
+                Vector3d shipPos = serverShip.getWorldAABB().center(new Vector3d());
+                if (isEntityInRadarFov(new BlockPos((int) shipPos.x, (int) shipPos.y, (int) shipPos.z))) {
+                    VSPositions.put(String.valueOf(serverShip.getId()), new VSRadarTracks(serverShip, level));
+                }
+            });
+        }));
     }
 
     private AABB getRadarAABB() {
@@ -102,6 +112,31 @@ public class RadarBearingBlockEntity extends MechanicalBearingBlockEntity {
         double zOffset = range * Math.cos(Math.toRadians(getGlobalAngle()));
         return new AABB(radarPos.getX() - xOffset, radarPos.getY() - RadarConfig.server().radarYScanRange.get(), radarPos.getZ() - zOffset, radarPos.getX() + xOffset, radarPos.getY() + RadarConfig.server().radarYScanRange.get(), radarPos.getZ() + zOffset);
     }
+    public static List<AABB> splitAABB(AABB aabb, double maxSize) {
+        List<AABB> result = new ArrayList<>();
+
+        double xMin = aabb.minX;
+        double xMax = aabb.maxX;
+        double yMin = aabb.minY;
+        double yMax = aabb.maxY;
+        double zMin = aabb.minZ;
+        double zMax = aabb.maxZ;
+
+        for (double xStart = xMin; xStart < xMax; xStart += maxSize) {
+            double xEnd = Math.min(xStart + maxSize, xMax);
+
+            for (double yStart = yMin; yStart < yMax; yStart += maxSize) {
+                double yEnd = Math.min(yStart + maxSize, yMax);
+
+                for (double zStart = zMin; zStart < zMax; zStart += maxSize) {
+                    double zEnd = Math.min(zStart + maxSize, zMax);
+
+                    result.add(new AABB(xStart, yStart, zStart, xEnd, yEnd, zEnd));
+                }
+            }
+        }
+        return result;
+}
 
     private boolean isEntityInRadarFov(BlockPos entityPos) {
         float radarAngle = getGlobalAngle();
