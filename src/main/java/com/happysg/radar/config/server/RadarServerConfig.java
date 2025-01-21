@@ -9,7 +9,7 @@ public class RadarServerConfig extends ConfigBase {
     }
 
     public final ConfigInt radarLinkRange = i(64, 1, "radarLinkRange", "Maximum possible distance in blocks between radar links in blocks");
-    public final ConfigInt maxRadarRange = i(1000, 1, "maxRadarRange", "Maximum range of a Radar Contraption in blocks");
+    public final ConfigInt maxRadarRange = i(500, 1, "maxRadarRange", "Maximum range of a Radar Contraption in blocks");
     public final ConfigInt dishRangeIncrease = i(10, 1, "dishRangeIncrease", "Range increase per dish block in blocks");
     public final ConfigInt radarYScanRange = i(20, 1, "radarYScanRange", "Maximum vertical scan range of a radar in blocks");
     public final ConfigInt radarBaseRange = i(20, 1, "radarBaseRange", "Base range of a radar receiver in blocks");
