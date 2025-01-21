@@ -1,5 +1,6 @@
 package com.happysg.radar.compat.cbc;
 
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.math3.analysis.solvers.*;
@@ -15,15 +16,15 @@ import static java.lang.Double.NaN;
 
 public class CannonTargeting {
 
-    public static List<Double> calculatePitch(double chargePower, Vec3 targetPos, Vec3 mountPos, int barrelLength, double drag, double gravity) {
-        if (chargePower == 0) {
+
+    public static List<Double> calculatePitch(double speed, Vec3 targetPos, Vec3 originPos, int barrelLength, double drag, double gravity) {
+        if (speed == 0) {
             return null;
         }
-        double d1 = targetPos.x - mountPos.x;
-        double d2 = targetPos.z - mountPos.z;
+        double d1 = targetPos.x - originPos.x;
+        double d2 = targetPos.z - originPos.z;
         double distance = Math.abs(Math.sqrt(d1 * d1 + d2 * d2));
-        double d3 = targetPos.y - mountPos.y-1;
-        double u = chargePower;
+        double d3 = targetPos.y - originPos.y;
         double g = Math.abs(gravity);
         double k = 1 - drag;
 
@@ -32,14 +33,13 @@ public class CannonTargeting {
 
             double dX = distance - (Math.cos(thetaRad) * (barrelLength));
             double dY = d3 - (Math.sin(thetaRad) * (barrelLength));
-            double log = Math.log(1 - (k * dX) / (u * Math.cos(thetaRad)));
+            double log = Math.log(1 - (k * dX) / (speed * Math.cos(thetaRad)));
 
             if (Double.isInfinite(log)) {
                 log = NaN;
             }
 
-            double y = (dX * Math.tan(thetaRad) + (dX * g) / (k * u * Math.cos(thetaRad)) + g*log / (k * k) );
-
+            double y = (dX * Math.tan(thetaRad) + (dX * g) / (k * speed * Math.cos(thetaRad)) + g*log / (k * k) );
             return y - dY;
         };
 
@@ -89,9 +89,9 @@ public class CannonTargeting {
         Vec3 mountPos = mount.getBlockPos().above(2).getCenter();
         int barrelLength = CannonUtil.getFrontBarrelLength(cannonContraption);
 
-        double drag = CannonUtil.getProjectileDrag((AbstractMountedCannonContraption) contraption.getContraption());
-        double gravity = CannonUtil.getProjectileGravity((AbstractMountedCannonContraption) contraption.getContraption());
+        double drag = CannonUtil.getProjectileDrag((AbstractMountedCannonContraption) contraption.getContraption(), level);
+        double gravity = CannonUtil.getProjectileGravity((AbstractMountedCannonContraption) contraption.getContraption(), level);
 
-        return calculatePitch(chargePower, targetPos, mountPos, barrelLength, drag, gravity);
+        return calculatePitch(chargePower, targetPos.relative(Direction.DOWN, 1), mountPos, barrelLength, drag, gravity);
     }
 }

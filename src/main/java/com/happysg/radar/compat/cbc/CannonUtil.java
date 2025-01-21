@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.MountedAutocannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.MountedBigCannonContraption;
@@ -19,7 +18,10 @@ import rbasamoyai.createbigcannons.cannons.big_cannons.IBigCannonBlockEntity;
 import rbasamoyai.createbigcannons.munitions.big_cannon.AbstractBigCannonProjectile;
 import rbasamoyai.createbigcannons.munitions.big_cannon.ProjectileBlock;
 import rbasamoyai.createbigcannons.munitions.big_cannon.propellant.BigCannonPropellantBlock;
+import rbasamoyai.createbigcannons.munitions.config.components.BallisticPropertiesComponent;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
 
@@ -60,11 +62,55 @@ public class CannonUtil {
         return 0;
     }
 
-    public static double getProjectileGravity(AbstractMountedCannonContraption cannon) {
-        return isAutoCannon(cannon) ? -0.025 : -0.05;
+    public static double getProjectileGravity(AbstractMountedCannonContraption cannon, ServerLevel level) {
+        if (isAutoCannon(cannon)) return -0.025;
+        Map<BlockPos, BlockEntity> presentBlockEntities = cannon.presentBlockEntities;
+        for (BlockEntity blockEntity : presentBlockEntities.values()) {
+            if (!(blockEntity instanceof IBigCannonBlockEntity cannonBlockEntity)) continue;
+            BigCannonBehavior behavior = cannonBlockEntity.cannonBehavior();
+            StructureTemplate.StructureBlockInfo containedBlockInfo = behavior.block();
+
+            Block block = containedBlockInfo.state().getBlock();
+            if (block instanceof ProjectileBlock<?> projectileBlock) {
+                AbstractBigCannonProjectile projectile = projectileBlock.getProjectile(level, Collections.singletonList(containedBlockInfo));
+                BallisticPropertiesComponent ballisticProperties;
+                try {
+
+                    Method method = projectile.getClass().getDeclaredMethod("getBallisticProperties");
+                    method.setAccessible(true);
+                    ballisticProperties = (BallisticPropertiesComponent) method.invoke(projectile);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException |
+                         ClassCastException e) {
+                    return 0.05;
+                }
+                return ballisticProperties.gravity();
+            }
+        }
+        return 0.05;
     }
 
-    public static double getProjectileDrag(AbstractMountedCannonContraption cannon) { //TODO implement
+    public static double getProjectileDrag(AbstractMountedCannonContraption cannon, ServerLevel level) { //TODO implement
+        Map<BlockPos, BlockEntity> presentBlockEntities = cannon.presentBlockEntities;
+        for (BlockEntity blockEntity : presentBlockEntities.values()) {
+            if (!(blockEntity instanceof IBigCannonBlockEntity cannonBlockEntity)) continue;
+            BigCannonBehavior behavior = cannonBlockEntity.cannonBehavior();
+            StructureTemplate.StructureBlockInfo containedBlockInfo = behavior.block();
+
+            Block block = containedBlockInfo.state().getBlock();
+            if (block instanceof ProjectileBlock<?> projectileBlock) {
+                AbstractBigCannonProjectile projectile = projectileBlock.getProjectile(level, Collections.singletonList(containedBlockInfo));
+                BallisticPropertiesComponent ballisticProperties;
+                try {
+                    Method method = projectile.getClass().getDeclaredMethod("getBallisticProperties");
+                    method.setAccessible(true);
+                    ballisticProperties = (BallisticPropertiesComponent) method.invoke(projectile);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException |
+                         ClassCastException e) {
+                    return 0.99;
+                }
+                return ballisticProperties.drag();
+            }
+        }
         return 0.99;
     }
 
