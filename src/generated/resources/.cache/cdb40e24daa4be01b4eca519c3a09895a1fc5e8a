@@ -1,4 +1,4 @@
-// 1.20.1	2025-01-20T20:31:23.9189548	Registrate Provider for create_radar [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.20.1	2025-01-21T10:34:09.8860089	Registrate Provider for create_radar [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 204a35578d423a97e017194a77b9e37e955478f7 assets/create_radar/blockstates/auto_pitch_controller.json
 1379e78ca45372404579f52e6d9f7f6e5dd61b7a assets/create_radar/blockstates/auto_yaw_controller.json
 802436ac5c28235b21c7c7053c4adf4854114bc0 assets/create_radar/blockstates/creative_radar_plate.json
@@ -32,5 +32,5 @@ ceac6a33564a05bb10e34cbab5ea130188e9584a data/create_radar/loot_tables/blocks/cr
 f36e6dfba82dd3f410afaffdee2b97f1182cbbcb data/create_radar/loot_tables/blocks/radar_plate_block.json
 8feac7797a7c4f13a4a25dca1f7785bf14db8171 data/create_radar/loot_tables/blocks/radar_receiver_block.json
 3b5776df76b6cdd5f3ac611ab42dfaa0d0202fa8 data/create_radar/loot_tables/blocks/test_controller.json
-42a70d28c9d3278dc0aa36c0b07d365a82a47e38 data/minecraft/tags/blocks/mineable/axe.json
-42a70d28c9d3278dc0aa36c0b07d365a82a47e38 data/minecraft/tags/blocks/mineable/pickaxe.json
+274f3a4ca833686dec856b3d3e89872bba23be78 data/minecraft/tags/blocks/mineable/axe.json
+274f3a4ca833686dec856b3d3e89872bba23be78 data/minecraft/tags/blocks/mineable/pickaxe.json

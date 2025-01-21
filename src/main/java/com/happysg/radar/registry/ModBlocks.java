@@ -38,6 +38,7 @@ public class ModBlocks {
                                         .build();
                             }))
                     .addLayer(() -> RenderType::cutoutMipped)
+                    .transform(axeOrPickaxe())
                     .item()
                     .model((c, p) -> p.withExistingParent(c.getName(), CreateRadar.asResource("block/monitor/monitor_single")))
                     .build()
@@ -62,6 +63,7 @@ public class ModBlocks {
                     .transform(BlockStressDefaults.setImpact(4))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
+                    .transform(axeOrPickaxe())
                     .item()
                     .model(AssetLookup.customBlockItemModel("_", "item"))
                     .build()
@@ -73,6 +75,7 @@ public class ModBlocks {
                     .initialProperties(SharedProperties::softMetal)
                     .transform(BlockStressDefaults.setImpact(0))
                     .properties(BlockBehaviour.Properties::noOcclusion)
+                    .transform(axeOrPickaxe())
                     .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
                             .getExistingFile(ctx.getId()), 0))
                     .simpleItem()
@@ -86,6 +89,7 @@ public class ModBlocks {
                     .transform(BlockStressDefaults.setImpact(0))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .addLayer(() -> RenderType::cutoutMipped)
+                    .transform(axeOrPickaxe())
                     .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
                             .getExistingFile(ctx.getId()), 0))
                     .simpleItem()
@@ -98,6 +102,7 @@ public class ModBlocks {
                     .initialProperties(SharedProperties::softMetal)
                     .transform(BlockStressDefaults.setImpact(0))
                     .properties(BlockBehaviour.Properties::noOcclusion)
+                    .transform(axeOrPickaxe())
                     .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
                             .getExistingFile(ctx.getId()), 0))
                     .simpleItem()
@@ -123,6 +128,7 @@ public class ModBlocks {
                     .properties(properties -> properties.isRedstoneConductor((pState, pLevel, pPos) -> false))
                     .transform(BlockStressDefaults.setImpact(128))
                     .properties(BlockBehaviour.Properties::noOcclusion)
+                    .transform(axeOrPickaxe())
                     .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
                     .simpleItem()
                     .register();
@@ -133,6 +139,7 @@ public class ModBlocks {
                     .properties(properties -> properties.isRedstoneConductor((pState, pLevel, pPos) -> false))
                     .transform(BlockStressDefaults.setImpact(16))
                     .properties(BlockBehaviour.Properties::noOcclusion)
+                    .transform(axeOrPickaxe())
                     .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
                     .simpleItem()
                     .register();
@@ -143,6 +150,7 @@ public class ModBlocks {
                     .properties(properties -> properties.isRedstoneConductor((pState, pLevel, pPos) -> false))
                     .transform(BlockStressDefaults.setImpact(128))
                     .properties(BlockBehaviour.Properties::noOcclusion)
+                    .transform(axeOrPickaxe())
                     .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
                     .simpleItem()
                     .register();
