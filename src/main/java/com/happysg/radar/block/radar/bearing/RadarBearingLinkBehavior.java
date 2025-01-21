@@ -8,6 +8,8 @@ import com.happysg.radar.block.radar.link.RadarSource;
 import com.happysg.radar.block.radar.link.RadarTarget;
 import com.happysg.radar.block.radar.link.screens.AbstractRadarLinkScreen;
 import com.happysg.radar.block.radar.link.screens.RadarFilterScreen;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class RadarBearingLinkBehavior extends RadarSource {
@@ -21,6 +23,8 @@ public class RadarBearingLinkBehavior extends RadarSource {
         }
     }
 
+
+    @OnlyIn(value = Dist.CLIENT)
     @Override
     protected AbstractRadarLinkScreen getScreen(RadarLinkBlockEntity be) {
         return new RadarFilterScreen(be);

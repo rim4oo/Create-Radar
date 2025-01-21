@@ -9,10 +9,13 @@ import com.happysg.radar.block.radar.link.screens.AbstractRadarLinkScreen;
 import com.happysg.radar.block.radar.link.screens.RadarTargetScreen;
 import com.happysg.radar.block.radar.link.screens.TargetingConfig;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class PitchLinkBehavior extends RadarSource {
 
+    @OnlyIn(value = Dist.CLIENT)
     @Override
     protected AbstractRadarLinkScreen getScreen(RadarLinkBlockEntity be) {
         return new RadarTargetScreen(be);

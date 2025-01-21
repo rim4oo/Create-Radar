@@ -8,6 +8,8 @@ import com.happysg.radar.block.radar.link.RadarTarget;
 import com.happysg.radar.block.radar.link.screens.AbstractRadarLinkScreen;
 import com.happysg.radar.block.radar.link.screens.TargetingConfig;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class YawLinkBehavior extends RadarSource {
@@ -29,6 +31,7 @@ public class YawLinkBehavior extends RadarSource {
         controller.setTarget(targetPos);
     }
 
+    @OnlyIn(value = Dist.CLIENT)
     @Override
     protected AbstractRadarLinkScreen getScreen(RadarLinkBlockEntity be) {
         return null;
