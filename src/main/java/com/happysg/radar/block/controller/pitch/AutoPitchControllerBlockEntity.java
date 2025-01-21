@@ -25,7 +25,7 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
     private static final double TOLERANCE = 0.1;
     private double targetAngle;
     private boolean isRunning;
-    private boolean artillery = false;
+    private boolean artillery =  true;
     public int chargeCount;
     TargetingConfig targetingConfig = TargetingConfig.DEFAULT;
 

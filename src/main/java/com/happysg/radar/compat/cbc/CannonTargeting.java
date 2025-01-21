@@ -13,7 +13,6 @@ import java.util.List;
 
 import static java.lang.Double.NaN;
 
-//todo fix calculations
 public class CannonTargeting {
 
     public static List<Double> calculatePitch(double chargePower, Vec3 targetPos, Vec3 mountPos, int barrelLength, double drag, double gravity) {
@@ -23,7 +22,7 @@ public class CannonTargeting {
         double d1 = targetPos.x - mountPos.x;
         double d2 = targetPos.z - mountPos.z;
         double distance = Math.abs(Math.sqrt(d1 * d1 + d2 * d2));
-        double d3 = targetPos.y - mountPos.y;
+        double d3 = targetPos.y - mountPos.y-1;
         double u = chargePower;
         double g = Math.abs(gravity);
         double k = 1 - drag;
@@ -31,7 +30,7 @@ public class CannonTargeting {
         UnivariateFunction diffFunction = theta -> {
             double thetaRad = Math.toRadians(theta);
 
-            double dX = distance - (Math.cos(thetaRad) * (barrelLength + 0.5));
+            double dX = distance - (Math.cos(thetaRad) * (barrelLength));
             double dY = d3 - (Math.sin(thetaRad) * (barrelLength));
             double log = Math.log(1 - (k * dX) / (u * Math.cos(thetaRad)));
 
@@ -39,13 +38,12 @@ public class CannonTargeting {
                 log = NaN;
             }
 
-            double y = (dX * Math.tan(thetaRad) + (dX * g) / (k * u * Math.cos(thetaRad)) + g / (k * k) * log);
-            ;
+            double y = (dX * Math.tan(thetaRad) + (dX * g) / (k * u * Math.cos(thetaRad)) + g*log / (k * k) );
 
             return y - dY;
         };
 
-        UnivariateSolver solver = new BrentSolver(1e-6, 1e-10);
+        UnivariateSolver solver = new BrentSolver(1e-32);
 
         double start = -90;
         double end = 90;
