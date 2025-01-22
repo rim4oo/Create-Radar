@@ -85,11 +85,11 @@ public class CannonTargeting {
         float chargePower = CannonUtil.getInitialVelocity(cannonContraption, level);
 
         Vec3 mountPos = mount.getBlockPos().above(2).getCenter();
-        int barrelLength = CannonUtil.getFrontBarrelLength(cannonContraption);
+        int barrelLength = CannonUtil.getBarrelLength(cannonContraption);
 
         double drag = CannonUtil.getProjectileDrag((AbstractMountedCannonContraption) contraption.getContraption(), level);
         double gravity = CannonUtil.getProjectileGravity((AbstractMountedCannonContraption) contraption.getContraption(), level);
 
-        return calculatePitch(chargePower, targetPos.relative(Direction.DOWN, 1), mountPos, barrelLength, drag, gravity);
+        return calculatePitch(chargePower, targetPos, mountPos, barrelLength, drag, gravity);
     }
 }

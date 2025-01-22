@@ -25,7 +25,7 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
     private static final double TOLERANCE = 0.1;
     private double targetAngle;
     private boolean isRunning;
-    private boolean artillery =  true;
+    private boolean artillery =  false;
     public int chargeCount;
     TargetingConfig targetingConfig = TargetingConfig.DEFAULT;
 
@@ -149,7 +149,6 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         }
 
         isRunning = true;
-        Vec3 cannonCenter = getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING)).above(3).getCenter();
 
         if (level.getBlockEntity(getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING))) instanceof CannonMountBlockEntity mount) {
             List<Double> angles = CannonTargeting.calculatePitch(mount, targetPos, (ServerLevel) level);
@@ -157,14 +156,18 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
                 isRunning = false;
                 return;
             }
-
-            targetAngle = artillery && angles.size() == 2 ? angles.get(1) : angles.get(0);
-        }
-        // Ensure pitch is within -90 to 90 degrees
-        if (targetAngle < -90) {
-            targetAngle = -90;
-        } else if (targetAngle > 90) {
-            targetAngle = 90;
+            List<Double> usableAngles = new ArrayList<>();
+            for (double angle : angles) {
+                if (mount.getContraption() == null) break;
+                if (angle < mount.getContraption().maximumElevation() && angle > -mount.getContraption().maximumDepression()) {
+                    usableAngles.add(angle);
+                }
+            }
+            if (artillery && usableAngles.size() == 2) {
+                targetAngle = angles.get(1);
+            } else if (!usableAngles.isEmpty()) {
+                targetAngle = usableAngles.get(0);
+            }
         }
         notifyUpdate();
     }
