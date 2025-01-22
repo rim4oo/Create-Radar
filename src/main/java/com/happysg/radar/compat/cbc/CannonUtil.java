@@ -3,10 +3,13 @@ package com.happysg.radar.compat.cbc;
 import com.happysg.radar.mixin.AbstractCannonAccessor;
 import com.happysg.radar.mixin.AutoCannonAccessor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlock;
+import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.MountedAutocannonContraption;
 import rbasamoyai.createbigcannons.cannon_control.contraption.MountedBigCannonContraption;
@@ -27,10 +30,16 @@ import java.util.Map;
 
 public class CannonUtil {
 
-    public static int getFrontBarrelLength(AbstractMountedCannonContraption cannon) {
+    public static int getBarrelLength(AbstractMountedCannonContraption cannon) {
         if (cannon == null)
             return 0;
-        return ((AbstractCannonAccessor) cannon).getFrontBarrelCount();
+        if(cannon.initialOrientation() == Direction.WEST || cannon.initialOrientation() == Direction.NORTH){
+            return ((AbstractCannonAccessor) cannon).getBackExtensionLength();
+        }
+        else{
+            return ((AbstractCannonAccessor) cannon).getFrontExtensionLength();
+        }
+
     }
 
     public static int getChargePower(ServerLevel level, PitchOrientedContraptionEntity contraptionEntity) {
