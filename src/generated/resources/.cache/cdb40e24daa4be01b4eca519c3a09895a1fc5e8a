@@ -1,4 +1,4 @@
-// 1.20.1	2025-01-21T10:34:09.8860089	Registrate Provider for create_radar [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.20.1	2025-01-28T20:54:26.7295344	Registrate Provider for create_radar [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 204a35578d423a97e017194a77b9e37e955478f7 assets/create_radar/blockstates/auto_pitch_controller.json
 1379e78ca45372404579f52e6d9f7f6e5dd61b7a assets/create_radar/blockstates/auto_yaw_controller.json
 802436ac5c28235b21c7c7053c4adf4854114bc0 assets/create_radar/blockstates/creative_radar_plate.json
@@ -8,9 +8,9 @@ bfdee35245193d3864339df4282befcc851dc4a5 assets/create_radar/blockstates/monitor
 8523c351bef2fcbd2fddc69ae099d8d55e5acda1 assets/create_radar/blockstates/radar_link.json
 802436ac5c28235b21c7c7053c4adf4854114bc0 assets/create_radar/blockstates/radar_plate_block.json
 6ebe881b05211829ceda7bf291b6493c915174ac assets/create_radar/blockstates/radar_receiver_block.json
-a08c8cce06ecd0d05b4acfd3de0b0645af3a9273 assets/create_radar/blockstates/test_controller.json
-4e5ca1b5bbc02463330a06ad65d755d5ba8b6ab8 assets/create_radar/lang/en_ud.json
-f6465d7b37bd7348ed486ae4b6ab6ecc39980448 assets/create_radar/lang/en_us.json
+cbafb2223d9de7cd7ade3f9093c203d3bfc41038 assets/create_radar/blockstates/track_controller.json
+5986f3a80fc33d630ddc6e19e51126e2f8a07cbc assets/create_radar/lang/en_ud.json
+bca9798d86eb8bd957f48573fe1f48ebb5eba19d assets/create_radar/lang/en_us.json
 b7e248dab41d0eb8b2b498123a9405ab1c71038b assets/create_radar/models/item/auto_pitch_controller.json
 b83fad3ffd429020e9c81862434ad417f4cfd4fe assets/create_radar/models/item/auto_yaw_controller.json
 4302285f36d2ff386ad455b74231f6d36f31fcb8 assets/create_radar/models/item/creative_radar_plate.json
@@ -21,7 +21,7 @@ d3703d13d87f39376ad87af9c5104ddc1296ba00 assets/create_radar/models/item/radar_d
 4ce0b07e330ad56b39eab3f447c6bb1dcbca6f97 assets/create_radar/models/item/radar_link.json
 4302285f36d2ff386ad455b74231f6d36f31fcb8 assets/create_radar/models/item/radar_plate_block.json
 8fd077aa0107824d00727e386f4e8871dcf1bbfb assets/create_radar/models/item/radar_receiver_block.json
-934fb2558325723545dc1b691972f823776c9671 assets/create_radar/models/item/test_controller.json
+6d7ed8918779a851514406c4b97436b6b721f732 assets/create_radar/models/item/track_controller.json
 957d06c218e1b48da1ebf5c8f495aa0fc05859ac data/create_radar/loot_tables/blocks/auto_pitch_controller.json
 e096e11163b02f75c943d0413bbb60f05dd03402 data/create_radar/loot_tables/blocks/auto_yaw_controller.json
 ceac6a33564a05bb10e34cbab5ea130188e9584a data/create_radar/loot_tables/blocks/creative_radar_plate.json
@@ -31,6 +31,6 @@ ceac6a33564a05bb10e34cbab5ea130188e9584a data/create_radar/loot_tables/blocks/cr
 456c283831455e05bba268bcd26ab53cb79c7607 data/create_radar/loot_tables/blocks/radar_link.json
 f36e6dfba82dd3f410afaffdee2b97f1182cbbcb data/create_radar/loot_tables/blocks/radar_plate_block.json
 8feac7797a7c4f13a4a25dca1f7785bf14db8171 data/create_radar/loot_tables/blocks/radar_receiver_block.json
-3b5776df76b6cdd5f3ac611ab42dfaa0d0202fa8 data/create_radar/loot_tables/blocks/test_controller.json
-274f3a4ca833686dec856b3d3e89872bba23be78 data/minecraft/tags/blocks/mineable/axe.json
-274f3a4ca833686dec856b3d3e89872bba23be78 data/minecraft/tags/blocks/mineable/pickaxe.json
+3bed99af375f7cbb4b55f68645b428c5099db98d data/create_radar/loot_tables/blocks/track_controller.json
+3ea4ee686a1af7a1841586fe4c98713ac2f2bbcf data/minecraft/tags/blocks/mineable/axe.json
+3ea4ee686a1af7a1841586fe4c98713ac2f2bbcf data/minecraft/tags/blocks/mineable/pickaxe.json

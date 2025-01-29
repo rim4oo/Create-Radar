@@ -7,7 +7,6 @@
   "block.create_radar.radar_link": "Liaison de radar",
   "block.create_radar.radar_plate_block": "Plaque de radar",
   "block.create_radar.radar_receiver_block": "Récepteur radar",
-  "block.create_radar.test_controller": "Contrôleur de test",
   "create_radar.display_source.pitch_controller": "Contrôleur automatique d'assiette",
   "create_radar.display_source.radar": "Radar",
   "create_radar.display_source.yaw_controller": "Contrôleur automatique de lacet",

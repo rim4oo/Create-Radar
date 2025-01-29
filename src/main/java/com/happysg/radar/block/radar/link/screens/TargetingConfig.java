@@ -1,6 +1,6 @@
 package com.happysg.radar.block.radar.link.screens;
 
-import com.happysg.radar.block.radar.bearing.RadarTrack;
+import com.happysg.radar.block.radar.track.TrackCategory;
 import net.minecraft.nbt.CompoundTag;
 
 public record TargetingConfig(boolean player, boolean contraption, boolean mob, boolean animal, boolean projectile,
@@ -32,11 +32,11 @@ public record TargetingConfig(boolean player, boolean contraption, boolean mob, 
         );
     }
 
-    public boolean test(RadarTrack.EntityType entityType) {
-        return switch (entityType) {
+    public boolean test(TrackCategory trackCategory) {
+        return switch (trackCategory) {
             case PLAYER -> player;
             case CONTRAPTION -> contraption;
-            case MOB -> mob;
+            case HOSTILE -> mob;
             case ANIMAL -> animal;
             case PROJECTILE -> projectile;
             default -> false;
