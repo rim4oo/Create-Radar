@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaterniondc;
+import org.valkyrienskies.core.api.ships.LoadedShip;
 
 public class TrackControllerBlockEntity extends KineticBlockEntity {
 
@@ -20,22 +21,30 @@ public class TrackControllerBlockEntity extends KineticBlockEntity {
     @Override
     public void tick() {
         super.tick();
-        if (!Mods.TRACKWORK.isLoaded())
+        if (!Mods.VALKYRIENSKIES.isLoaded())
             return;
-        // System.out.println(VS2Utils.getWorldVec(this));
-        //getAngleToTarget();
-
+        System.out.println("Yaw offset: " + getAngleOffsetToWorld());
     }
 
-    private double getAngleToTarget() {
-        Vec3 target = getTarget();
-        Vec3 pos = VS2Utils.getWorldVec(this);
-        Quaterniondc worldRotation = VS2Utils.getShipManagingPos(this).getTransform().getShipToWorldRotation();
+    private double getAngleOffsetToWorld() {
+        LoadedShip ship = VS2Utils.getShipManagingPos(this);
+        if (ship == null)
+            return 0;
+        Quaterniondc quaterniondc = ship.getTransform().getShipToWorldRotation();
+        // Extract yaw directly from quaternion
+        double qw = quaterniondc.w();
+        double qx = quaterniondc.x();
+        double qy = quaterniondc.y();
+        double qz = quaterniondc.z();
 
-        return 0;
+        // Calculate yaw in radians
+        double yaw = Math.atan2(2.0 * (qw * qy + qx * qz), 1.0 - 2.0 * (qy * qy + qz * qz));
+
+        // Convert to degrees and normalize to range [-180, 180]
+        yaw = Math.toDegrees(yaw);
+        yaw = (yaw + 360) % 360; // Normalize to range [0, 360)
+
+        return yaw;
     }
 
-    public Vec3 getTarget() {
-        return level.getNearestPlayer(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 100, false).position();
-    }
 }

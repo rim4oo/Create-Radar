@@ -12,6 +12,8 @@ import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 
+import java.util.List;
+
 public class VS2Utils {
 
     public static BlockPos getWorldPos(Level level, BlockPos pos) {
@@ -33,7 +35,7 @@ public class VS2Utils {
 
     public static Iterable<Ship> getLoadedShips(Level level, AABB aabb) {
         if (!Mods.VALKYRIENSKIES.isLoaded())
-            return null;
+            return List.of();
         return VSGameUtilsKt.getShipsIntersecting(level, aabb);
     }
 

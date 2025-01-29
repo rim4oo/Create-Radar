@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "create_radar:test_controller"
+          "name": "create_radar:track_controller"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "create_radar:blocks/test_controller"
+  "random_sequence": "create_radar:blocks/track_controller"
 }

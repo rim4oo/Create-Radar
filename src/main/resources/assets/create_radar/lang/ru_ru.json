@@ -8,7 +8,6 @@
   "block.create_radar.radar_link": "Передатчик радиолокационной информации",
   "block.create_radar.radar_plate_block": "Рефлектор антенны радара",
   "block.create_radar.radar_receiver_block": "Приёмник антенны радара",
-  "block.create_radar.test_controller": "Тестовый контроллер прицеливания пушки",
   "create_radar.display_source.pitch_controller": "Вертикальное прицеливание",
   "create_radar.display_source.radar": "Радар",
   "create_radar.display_source.yaw_controller": "Горизонтальное прицеливание",

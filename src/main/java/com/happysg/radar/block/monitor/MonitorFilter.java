@@ -1,6 +1,7 @@
 package com.happysg.radar.block.monitor;
 
-import com.happysg.radar.block.radar.bearing.RadarTrack;
+import com.happysg.radar.block.radar.track.RadarTrack;
+import com.happysg.radar.block.radar.track.TrackCategory;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 public record MonitorFilter(boolean player, boolean vs2, boolean contraption, boolean mob, boolean projectile,
                             List<String> blacklistPlayers, List<String> whitelistPlayers, List<String> blacklistVS2,
                             List<String> whitelistVS) {
+
     public static final MonitorFilter DEFAULT = new MonitorFilter(true, true, true, true, true);
 
     public MonitorFilter(boolean player, boolean vs2, boolean contraption, boolean mob, boolean projectile) {
@@ -45,16 +47,20 @@ public record MonitorFilter(boolean player, boolean vs2, boolean contraption, bo
         return new MonitorFilter(player, vs2, contraption, mob, projectile, blacklistPlayers, whitelistPlayers, blacklistVS2, whitelistVS);
     }
 
-    public boolean test(RadarTrack.EntityType entityType) {
-        if (entityType == RadarTrack.EntityType.PLAYER) {
+    public boolean test(RadarTrack track) {
+        return test(track.trackCategory());
+    }
+
+    public boolean test(TrackCategory trackCategory) {
+        if (trackCategory == TrackCategory.PLAYER) {
             return player;
-        } else if (entityType == RadarTrack.EntityType.VS2) {
+        } else if (trackCategory == TrackCategory.VS2) {
             return vs2;
-        } else if (entityType == RadarTrack.EntityType.CONTRAPTION) {
+        } else if (trackCategory == TrackCategory.CONTRAPTION) {
             return contraption;
-        } else if (entityType == RadarTrack.EntityType.MOB || entityType == RadarTrack.EntityType.ANIMAL) {
+        } else if (trackCategory == TrackCategory.MOB || trackCategory == TrackCategory.ANIMAL || trackCategory == TrackCategory.HOSTILE) {
             return mob;
-        } else if (entityType == RadarTrack.EntityType.PROJECTILE) {
+        } else if (trackCategory == TrackCategory.PROJECTILE) {
             return projectile;
         }
         return false;

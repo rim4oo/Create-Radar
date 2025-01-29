@@ -134,7 +134,7 @@ public class ModBlocks {
                     .register();
 
     public static final BlockEntry<TrackControllerBlock> TRACK_CONTROLLER_BLOCK =
-            REGISTRATE.block("test_controller", TrackControllerBlock::new)
+            REGISTRATE.block("track_controller", TrackControllerBlock::new)
                     .initialProperties(SharedProperties::softMetal)
                     .properties(properties -> properties.isRedstoneConductor((pState, pLevel, pPos) -> false))
                     .transform(BlockStressDefaults.setImpact(16))
