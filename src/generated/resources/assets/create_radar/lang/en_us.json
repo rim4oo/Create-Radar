@@ -3,6 +3,7 @@
   "block.create_radar.auto_yaw_controller": "Auto Yaw Controller",
   "block.create_radar.creative_radar_plate": "Creative Radar Plate",
   "block.create_radar.monitor": "Monitor",
+  "block.create_radar.plane_radar": "Plane Radar",
   "block.create_radar.radar_bearing": "Radar Bearing",
   "block.create_radar.radar_dish_block": "Radar Dish",
   "block.create_radar.radar_link": "Radar Link",

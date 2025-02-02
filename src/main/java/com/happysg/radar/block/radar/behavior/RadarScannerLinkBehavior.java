@@ -1,6 +1,7 @@
 package com.happysg.radar.block.radar.behavior;
 
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
+import com.happysg.radar.block.monitor.MonitorFilter;
 import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
 import com.happysg.radar.block.radar.link.RadarLinkContext;
 import com.happysg.radar.block.radar.link.RadarSource;
@@ -22,6 +23,9 @@ public class RadarScannerLinkBehavior extends RadarSource {
             if (behavior != null) {
                 if (context.getTargetBlockEntity() instanceof MonitorBlockEntity monitorBlockEntity) {
                     monitorBlockEntity.getController().setRadarPos(context.getSourcePos());
+                    if (context.sourceConfig().contains("filter")) {
+                        monitorBlockEntity.setFilter(MonitorFilter.fromTag(context.sourceConfig().getCompound("filter")));
+                    }
                     monitorBlockEntity.getController().updateCache();
                 }
             }

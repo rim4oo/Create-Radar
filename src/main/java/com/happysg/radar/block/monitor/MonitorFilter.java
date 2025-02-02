@@ -2,6 +2,8 @@ package com.happysg.radar.block.monitor;
 
 import com.happysg.radar.block.radar.track.RadarTrack;
 import com.happysg.radar.block.radar.track.TrackCategory;
+import com.happysg.radar.config.RadarConfig;
+import com.jozufozu.flywheel.util.Color;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.List;
@@ -51,7 +53,27 @@ public record MonitorFilter(boolean player, boolean vs2, boolean contraption, bo
         return test(track.trackCategory());
     }
 
-    public boolean test(TrackCategory trackCategory) {
+    public Color getColor(RadarTrack track) {
+        if (track.trackCategory() == TrackCategory.PLAYER) {
+            if (blacklistPlayers.contains(track.id())) {
+                return new Color(RadarConfig.client().hostileColor.get());
+            }
+            if (whitelistPlayers.contains(track.id())) {
+                return new Color(RadarConfig.client().friendlyColor.get());
+            }
+        }
+        if (track.trackCategory() == TrackCategory.VS2) {
+            if (blacklistVS2.contains(track.id())) {
+                return new Color(RadarConfig.client().hostileColor.get());
+            }
+            if (whitelistVS.contains(track.id())) {
+                return new Color(RadarConfig.client().friendlyColor.get());
+            }
+        }
+        return track.getColor();
+    }
+
+    private boolean test(TrackCategory trackCategory) {
         if (trackCategory == TrackCategory.PLAYER) {
             return player;
         } else if (trackCategory == TrackCategory.VS2) {

@@ -110,6 +110,8 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
             radarPos = NbtUtils.readBlockPos(tag.getCompound("radarPos"));
         if (tag.contains("SelectedEntity"))
             selectedEntity = tag.getString("SelectedEntity");
+        else
+            selectedEntity = null;
         if (tag.contains("HoveredEntity"))
             hoveredEntity = tag.getString("HoveredEntity");
         else

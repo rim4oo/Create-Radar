@@ -117,7 +117,8 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
         VertexConsumer buffer = getBuffer(bufferSource, track.getSprite());
         Matrix4f m = ms.last().pose();
         Matrix3f n = ms.last().normal();
-        Color color = track.getColor();
+        MonitorFilter filter = monitor.filter;
+        Color color = filter.getColor(track);
         float alpha = 1f;
         float deptY = 0.95f + (depthMultiplier * 0.0001f);
         float size = monitor.getSize();

@@ -24,28 +24,28 @@ public class MonitorInputHandler {
     }
 
     public static RadarTrack findTrack(Level level, Vec3 hit, MonitorBlockEntity controller) {
+        if (controller.getRadarCenterPos() == null)
+            return null;
+
         Direction facing = level.getBlockState(controller.getControllerPos())
                 .getValue(MonitorBlock.FACING).getClockWise();
         Direction monitorFacing = level.getBlockState(controller.getControllerPos())
                 .getValue(MonitorBlock.FACING);
 
         int size = controller.getSize();
-
         Vec3 center = Vec3.atCenterOf(controller.getControllerPos())
                 .add(facing.getStepX() * (size - 1) / 2.0, (size - 1) / 2.0, facing.getStepZ() * (size - 1) / 2.0);
 
         Vec3 relative = hit.subtract(center);
         relative = adjustRelativeVectorForFacing(relative, monitorFacing);
-        if (controller.getRadarCenterPos() == null)
-            return null;
 
         Vec3 RadarPos = controller.getRadarCenterPos();
-
         float range = controller.getRange();
         float sizeadj = size == 1 ? 0.5f : ((size - 1) / 2f);
         if (size == 2)
             sizeadj = 0.75f;
         Vec3 selected = RadarPos.add(relative.scale(range / (sizeadj)));
+
         double bestDistance = 0.1f * range;
         RadarTrack bestTrack = null;
         for (RadarTrack track : controller.cachedTracks) {
@@ -78,25 +78,17 @@ public class MonitorInputHandler {
     }
 
     public static InteractionResult onUse(MonitorBlockEntity be, Player pPlayer, InteractionHand pHand, BlockHitResult pHit, Direction facing) {
-        Vec3 selected = pPlayer.pick(5, 0.0F, false).getLocation();
         if (pPlayer.isShiftKeyDown()) {
             be.selectedEntity = null;
+            be.notifyUpdate();
         } else {
-            setSelectedEntity(be, pHit.getLocation(), facing);
+            RadarTrack track = findTrack(be.getLevel(), pHit.getLocation(), be.getController());
+            if (track != null) {
+                be.selectedEntity = track.id();
+                be.notifyUpdate();
+            }
         }
         return InteractionResult.SUCCESS;
-    }
-
-    private static void setSelectedEntity(MonitorBlockEntity be, Vec3 location, Direction monitorFacing) {
-        if (be.getLevel().isClientSide())
-            return;
-        if (be.getRadarCenterPos() == null)
-            return;
-        RadarTrack track = findTrack(be.getLevel(), location, be.getController());
-        if (track != null) {
-            be.selectedEntity = track.id();
-            be.notifyUpdate();
-        }
     }
 
 }

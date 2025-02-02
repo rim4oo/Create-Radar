@@ -8,6 +8,7 @@ import com.happysg.radar.block.monitor.MonitorBlock;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlock;
 import com.happysg.radar.block.radar.link.RadarLinkBlock;
 import com.happysg.radar.block.radar.link.RadarLinkBlockItem;
+import com.happysg.radar.block.radar.plane.PlaneRadarBlock;
 import com.happysg.radar.block.radar.receiver.AbstractRadarFrame;
 import com.happysg.radar.block.radar.receiver.RadarReceiverBlock;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
@@ -67,6 +68,16 @@ public class ModBlocks {
                     .item()
                     .model(AssetLookup.customBlockItemModel("_", "item"))
                     .build()
+                    .register();
+
+    public static final BlockEntry<PlaneRadarBlock> PLANE_RADAR =
+            REGISTRATE.block("plane_radar", PlaneRadarBlock::new)
+                    .initialProperties(SharedProperties::softMetal)
+                    .addLayer(() -> RenderType::cutout)
+                    .properties(BlockBehaviour.Properties::noOcclusion)
+                    .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
+                    .transform(axeOrPickaxe())
+                    .simpleItem()
                     .register();
 
     @SuppressWarnings("unused")

@@ -54,7 +54,8 @@ public class VS2Utils {
             return new Vec3(pos.getX(), pos.getY(), pos.getZ());
         if (VSGameUtilsKt.getShipObjectManagingPos(level, pos) != null) {
             final LoadedShip loadedShip = VSGameUtilsKt.getShipObjectManagingPos(level, pos);
-            final Vector3d vec = loadedShip.getShipToWorld().transformPosition(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
+            Vec3 center = pos.getCenter();
+            final Vector3d vec = loadedShip.getShipToWorld().transformPosition(new Vector3d(center.x, center.y, center.z));
             VectorConversionsMCKt.toMinecraft(vec);
             return new Vec3(vec.x(), vec.y(), vec.z());
         }
