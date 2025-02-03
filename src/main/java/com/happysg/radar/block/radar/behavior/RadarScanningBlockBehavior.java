@@ -136,6 +136,8 @@ public class RadarScanningBlockBehavior extends BlockEntityBehaviour {
         AABBs.forEach((aabb -> {
             VS2Utils.getLoadedShips(blockEntity.getLevel(), aabb).forEach(scannedShips::add);
         }));
+        //remove self
+        scannedShips.remove(VS2Utils.getShipManagingPos(blockEntity));
     }
 
     private AABB getRadarAABB() {

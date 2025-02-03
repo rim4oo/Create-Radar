@@ -40,9 +40,9 @@ public class PlaneRadarBlockEntity extends SmartBlockEntity {
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         scanningBehavior = new RadarScanningBlockBehavior(this);
-        scanningBehavior.setRunning(false);
+        scanningBehavior.setRunning(true);
         scanningBehavior.setRange(250);
-        scanningBehavior.setAngle(0);
+        scanningBehavior.setAngle((getBlockState().getValue(PlaneRadarBlock.FACING).toYRot() + 360) % 360);
         scanningBehavior.setScanPos(VS2Utils.getWorldVec(this));
         behaviours.add(scanningBehavior);
     }

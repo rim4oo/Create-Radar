@@ -41,6 +41,7 @@ public class AllRadarBehaviors {
         assignBlockEntity(register(CreateRadar.asResource("pitch"), new PitchLinkBehavior()), ModBlockEntityTypes.AUTO_PITCH_CONTROLLER.get());
         assignBlockEntity(register(CreateRadar.asResource("yaw"), new YawLinkBehavior()), ModBlockEntityTypes.AUTO_YAW_CONTROLLER.get());
         assignBlockEntity(register(CreateRadar.asResource("track"), new TrackLinkBehavior()), ModBlockEntityTypes.TRACK_CONTROLLER.get());
+        assignBlockEntity(register(CreateRadar.asResource("plane_radar"), new RadarScannerLinkBehavior()), ModBlockEntityTypes.PLANE_RADAR.get());
     }
 
 

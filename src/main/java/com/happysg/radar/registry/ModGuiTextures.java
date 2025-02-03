@@ -26,7 +26,6 @@ public enum ModGuiTextures implements ScreenElement {
     AUTO_FIRE("targeting", 44, 124, 18, 18),
     MANUAL_FIRE("targeting", 64, 124, 18, 18);
 
-
     public static final int FONT_COLOR = 0x575F7A;
 
     public final ResourceLocation location;

@@ -1,20 +1,20 @@
-// 1.20.1	2025-02-02T11:45:50.5124954	Registrate Provider for create_radar [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.20.1	2025-02-02T12:13:11.9604357	Registrate Provider for create_radar [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 204a35578d423a97e017194a77b9e37e955478f7 assets/create_radar/blockstates/auto_pitch_controller.json
 1379e78ca45372404579f52e6d9f7f6e5dd61b7a assets/create_radar/blockstates/auto_yaw_controller.json
-802436ac5c28235b21c7c7053c4adf4854114bc0 assets/create_radar/blockstates/creative_radar_plate.json
+8bced52b19b236abd63ebc9a16ff199df955dd71 assets/create_radar/blockstates/creative_radar_plate.json
 bfdee35245193d3864339df4282befcc851dc4a5 assets/create_radar/blockstates/monitor.json
 c2320499ea0b3f1d0fd01b6308329e390ff0cf09 assets/create_radar/blockstates/plane_radar.json
 66a2079dcc1b1f5dfc01f4065580ec20f647847a assets/create_radar/blockstates/radar_bearing.json
-743a6e261a444a2ff6ed4092ad78358c08c93dcf assets/create_radar/blockstates/radar_dish_block.json
+9ba3167e32773721f2ce1088e0c5e4f43e913dbb assets/create_radar/blockstates/radar_dish_block.json
 8523c351bef2fcbd2fddc69ae099d8d55e5acda1 assets/create_radar/blockstates/radar_link.json
-802436ac5c28235b21c7c7053c4adf4854114bc0 assets/create_radar/blockstates/radar_plate_block.json
-6ebe881b05211829ceda7bf291b6493c915174ac assets/create_radar/blockstates/radar_receiver_block.json
+ab58b143afae87efdfdeff43747bf9b609bdbb96 assets/create_radar/blockstates/radar_plate_block.json
+d9cfbbf69d5957d96dd4f84cbfa5c31ccdc713b0 assets/create_radar/blockstates/radar_receiver_block.json
 cbafb2223d9de7cd7ade3f9093c203d3bfc41038 assets/create_radar/blockstates/track_controller.json
 74b4f94a3a6b05da052596008b5d72d40115f32b assets/create_radar/lang/en_ud.json
 6ca2fd3bd700fe0be1ebc191964b087b48c80b18 assets/create_radar/lang/en_us.json
 b7e248dab41d0eb8b2b498123a9405ab1c71038b assets/create_radar/models/item/auto_pitch_controller.json
 b83fad3ffd429020e9c81862434ad417f4cfd4fe assets/create_radar/models/item/auto_yaw_controller.json
-4302285f36d2ff386ad455b74231f6d36f31fcb8 assets/create_radar/models/item/creative_radar_plate.json
+51d6213d0aeb6efebc775f2e45eb2bb3b1a6d90c assets/create_radar/models/item/creative_radar_plate.json
 d517494b6cc92158a98c0aed7dbdbb56b182c9ab assets/create_radar/models/item/guided_fuze.json
 045bd977956d97aacaf175888f5183c329a6627e assets/create_radar/models/item/monitor.json
 d4337477f81642d9d4a7870638e4c8d3acd4a28d assets/create_radar/models/item/plane_radar.json

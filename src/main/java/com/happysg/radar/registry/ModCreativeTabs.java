@@ -41,6 +41,7 @@ public class ModCreativeTabs {
         pOutput.accept(ModBlocks.RADAR_RECEIVER_BLOCK);
         pOutput.accept(ModBlocks.RADAR_PLATE_BLOCK);
         pOutput.accept(ModBlocks.RADAR_DISH_BLOCK);
+        pOutput.accept(ModBlocks.CREATIVE_RADAR_PLATE_BLOCK);
         pOutput.accept(ModBlocks.AUTO_YAW_CONTROLLER_BLOCK);
         pOutput.accept(ModBlocks.AUTO_PITCH_CONTROLLER_BLOCK);
         if (Mods.CREATEBIGCANNONS.isLoaded()) {
