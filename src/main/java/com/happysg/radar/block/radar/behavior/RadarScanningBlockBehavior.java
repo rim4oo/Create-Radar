@@ -13,6 +13,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -41,6 +42,7 @@ public class RadarScanningBlockBehavior extends BlockEntityBehaviour {
 
     private final Set<Entity> scannedEntities = new HashSet<>();
     private final Set<Ship> scannedShips = new HashSet<>();
+    private final Set<Projectile> scannedProjectiles = new HashSet<>();
     private final HashMap<String, RadarTrack> radarTracks = new HashMap<>();
 
     public RadarScanningBlockBehavior(SmartBlockEntity be) {
@@ -67,6 +69,8 @@ public class RadarScanningBlockBehavior extends BlockEntityBehaviour {
             if (entity.isAlive() && isInFovAndRange(entity.position())) {
                 RadarTrack track = new RadarTrack(entity);
                 radarTracks.put(track.id(), track);
+                if (entity instanceof Projectile)
+                    scannedProjectiles.add((Projectile) entity);
             }
         }
         for (Ship ship : scannedShips) {
@@ -74,6 +78,10 @@ public class RadarScanningBlockBehavior extends BlockEntityBehaviour {
                 RadarTrack track = RadarTrackUtil.getRadarTrack(ship, level);
                 radarTracks.put(track.id(), track);
             }
+        }
+        for (Projectile projectile : scannedProjectiles) {
+            RadarTrack track = new RadarTrack(projectile);
+            radarTracks.put(track.id(), track);
         }
     }
 

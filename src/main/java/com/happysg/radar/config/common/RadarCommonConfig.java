@@ -8,5 +8,4 @@ public class RadarCommonConfig extends ConfigBase {
         return "Radar Common";
     }
 
-    public ConfigInt commonTest = i(1, 0, 100, "commonTest", "This is a test value for the common config.");
 }

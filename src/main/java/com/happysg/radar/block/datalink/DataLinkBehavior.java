@@ -1,8 +1,8 @@
-package com.happysg.radar.block.radar.link;
+package com.happysg.radar.block.datalink;
 
 import net.minecraft.resources.ResourceLocation;
 
-public class RadarLinkBehavior {
+public class DataLinkBehavior {
 
     public ResourceLocation id;
 

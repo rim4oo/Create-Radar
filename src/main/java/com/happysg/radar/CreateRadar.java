@@ -1,7 +1,7 @@
 package com.happysg.radar;
 
+import com.happysg.radar.block.datalink.DataLinkBlockItem;
 import com.happysg.radar.block.monitor.MonitorInputHandler;
-import com.happysg.radar.block.radar.link.RadarLinkBlockItem;
 import com.happysg.radar.config.RadarConfig;
 import com.happysg.radar.networking.ModMessages;
 import com.happysg.radar.registry.*;
@@ -55,7 +55,7 @@ public class CreateRadar {
     }
 
     private static void clientTick(TickEvent.ClientTickEvent event) {
-        RadarLinkBlockItem.clientTick();
+        DataLinkBlockItem.clientTick();
     }
 
     public static Logger getLogger() {
@@ -92,6 +92,6 @@ public class CreateRadar {
     public static void init(final FMLCommonSetupEvent event) {
         event.enqueueWork(ModMessages::register);
         ModDisplayBehaviors.register();
-        AllRadarBehaviors.registerDefaults();
+        AllDataBehaviors.registerDefaults();
     }
 }

@@ -5,8 +5,8 @@ import com.jozufozu.flywheel.core.PartialModel;
 
 public class ModPartials {
 
-    public static final PartialModel RADAR_GLOW = block("radar_link/glow");
-    public static final PartialModel RADAR_LINK_TUBE = block("radar_link/tube");
+    public static final PartialModel RADAR_GLOW = block("data_link/glow");
+    public static final PartialModel RADAR_LINK_TUBE = block("data_link/tube");
 
     private static PartialModel block(String path) {
         return new PartialModel(CreateRadar.asResource("block/" + path));

@@ -1,11 +1,13 @@
-package com.happysg.radar.block.radar.link;
+package com.happysg.radar.block.datalink;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class RadarTarget extends RadarLinkBehavior {
+
+//todo monitor hardcoded for now
+public class DataController extends DataLinkBehavior {
 
     public AABB getMultiblockBounds(LevelAccessor level, BlockPos pos) {
         VoxelShape shape = level.getBlockState(pos)

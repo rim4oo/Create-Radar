@@ -1,8 +1,10 @@
-package com.happysg.radar.block.radar.link;
+package com.happysg.radar.block.datalink;
 
+import com.happysg.radar.CreateRadar;
+import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import com.happysg.radar.compat.vs2.VS2Utils;
 import com.happysg.radar.config.RadarConfig;
-import com.happysg.radar.registry.AllRadarBehaviors;
+import com.happysg.radar.registry.AllDataBehaviors;
 import com.happysg.radar.registry.ModBlocks;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.utility.Lang;
@@ -11,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -27,16 +30,16 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class RadarLinkBlockItem extends BlockItem {
+public class DataLinkBlockItem extends BlockItem {
 
-    public RadarLinkBlockItem(Block pBlock, Properties pProperties) {
+    public DataLinkBlockItem(Block pBlock, Properties pProperties) {
         super(pBlock, pProperties);
     }
 
     @SubscribeEvent
     public static void gathererItemAlwaysPlacesWhenUsed(PlayerInteractEvent.RightClickBlock event) {
         ItemStack usedItem = event.getItemStack();
-        if (usedItem.getItem() instanceof RadarLinkBlockItem) {
+        if (usedItem.getItem() instanceof DataLinkBlockItem) {
             if (ModBlocks.RADAR_LINK.has(event.getLevel()
                     .getBlockState(event.getPos())))
                 return;
@@ -66,6 +69,11 @@ public class RadarLinkBlockItem extends BlockItem {
         if (!stack.hasTag()) {
             if (level.isClientSide)
                 return InteractionResult.SUCCESS;
+            //todo monitor hardcoded for now
+            if (!(pContext.getLevel().getBlockEntity(pContext.getClickedPos()) instanceof MonitorBlockEntity)) {
+                player.displayClientMessage(Component.translatable(CreateRadar.MODID + ".data_link.link_to_monitor"), true);
+                return InteractionResult.FAIL;
+            }
             CompoundTag stackTag = stack.getOrCreateTag();
             stackTag.put("SelectedPos", NbtUtils.writeBlockPos(pos));
             player.displayClientMessage(Lang.translateDirect("display_link.set"), true);
@@ -109,7 +117,7 @@ public class RadarLinkBlockItem extends BlockItem {
         if (player == null)
             return;
         ItemStack heldItemMainhand = player.getMainHandItem();
-        if (!(heldItemMainhand.getItem() instanceof RadarLinkBlockItem))
+        if (!(heldItemMainhand.getItem() instanceof DataLinkBlockItem))
             return;
         if (!heldItemMainhand.hasTag())
             return;
@@ -132,7 +140,7 @@ public class RadarLinkBlockItem extends BlockItem {
     @OnlyIn(Dist.CLIENT)
     private static AABB getBounds(BlockPos pos) {
         Level world = Minecraft.getInstance().level;
-        RadarTarget target = AllRadarBehaviors.targetOf(world, pos);
+        DataController target = AllDataBehaviors.targetOf(world, pos);
 
         if (target != null)
             return target.getMultiblockBounds(world, pos);

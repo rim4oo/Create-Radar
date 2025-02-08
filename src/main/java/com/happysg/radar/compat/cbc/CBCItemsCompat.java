@@ -2,6 +2,7 @@ package com.happysg.radar.compat.cbc;
 
 import com.happysg.radar.CreateRadar;
 import com.happysg.radar.compat.Mods;
+import com.happysg.radar.item.GuidedFuzeItem;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.item.Rarity;

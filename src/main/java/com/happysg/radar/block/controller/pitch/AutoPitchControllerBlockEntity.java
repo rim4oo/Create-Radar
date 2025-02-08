@@ -1,10 +1,9 @@
 package com.happysg.radar.block.controller.pitch;
 
-import com.happysg.radar.block.controller.yaw.AutoYawControllerBlockEntity;
-import com.happysg.radar.block.radar.link.screens.TargetingConfig;
+import com.happysg.radar.block.controller.firing.FiringControlBlockEntity;
+import com.happysg.radar.block.datalink.screens.TargetingConfig;
 import com.happysg.radar.compat.Mods;
 import com.happysg.radar.compat.cbc.CannonTargeting;
-import com.happysg.radar.compat.cbc.CannonUtil;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -19,25 +18,39 @@ import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContr
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Double.NaN;
-
 public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
     private static final double TOLERANCE = 0.1;
     private double targetAngle;
     private boolean isRunning;
     private boolean artillery =  false;
-    public int chargeCount;
-    TargetingConfig targetingConfig = TargetingConfig.DEFAULT;
+
+    //abstract class for firing control to avoid cluttering pitch logic
+    public FiringControlBlockEntity firingControl;
 
     public AutoPitchControllerBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        if (Mods.CREATEBIGCANNONS.isLoaded()) {
+            BlockPos cannonMountPos = getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING));
+            if (level.getBlockEntity(cannonMountPos) instanceof CannonMountBlockEntity mount) {
+                firingControl = new FiringControlBlockEntity(this, mount);
+            }
+        }
+    }
+
+    @Override
     public void tick() {
         super.tick();
-        if (Mods.CREATEBIGCANNONS.isLoaded())
-            tryRotateCannon();
+        if (Mods.CREATEBIGCANNONS.isLoaded()) {
+            if (isRunning)
+                tryRotateCannon();
+            if (firingControl != null)
+                firingControl.tick();
+        }
 
     }
 
@@ -50,10 +63,7 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         if (!(level.getBlockEntity(cannonMountPos) instanceof CannonMountBlockEntity mount))
             return;
 
-        if (!isRunning) {
-            stopFireCannon(mount);
-            return;
-        }
+
 
         PitchOrientedContraptionEntity contraption = mount.getContraption();
         if (contraption == null)
@@ -65,10 +75,6 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         double currentPitch = contraption.pitch;
         int invert = -cannonContraption.initialOrientation().getStepX() + cannonContraption.initialOrientation().getStepZ();
         currentPitch = currentPitch * -invert;
-        if (correctPitch(currentPitch) && correctYaw() && targetingConfig.autoFire())
-            tryFireCannon(mount);
-        else
-            stopFireCannon(mount);
 
         double pitchDifference = targetAngle - currentPitch;
         double speedFactor = Math.abs(getSpeed()) / 32.0;
@@ -86,33 +92,22 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
 
 
         mount.setPitch((float) currentPitch);
-        mount.notifyUpdate();
     }
 
-    private boolean correctPitch(double currentPitch) {
-        return Math.abs(targetAngle - currentPitch) < TOLERANCE;
-    }
-
-    private boolean correctYaw() {
-        BlockPos cannonMountPos = getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING));
-        if (!(level.getBlockEntity(cannonMountPos.below()) instanceof AutoYawControllerBlockEntity yawController))
+    public boolean atTargetPitch() {
+        BlockPos turretPos = getBlockPos().relative(getBlockState().getValue(AutoPitchControllerBlock.HORIZONTAL_FACING));
+        if (!(level.getBlockEntity(turretPos) instanceof CannonMountBlockEntity mount))
             return false;
-
-        return yawController.atTargetYaw();
+        PitchOrientedContraptionEntity contraption = mount.getContraption();
+        if (contraption == null)
+            return false;
+        int invert = contraption.getInitialOrientation().getStepZ() + contraption.getInitialOrientation().getStepX();
+        System.out.println("pitch: " + contraption.pitch + " target: " + targetAngle + " invert: " + invert);
+        return Math.abs(contraption.pitch * invert - targetAngle) < TOLERANCE;
     }
-
-    private void stopFireCannon(CannonMountBlockEntity mount) {
-        mount.onRedstoneUpdate(true, true, false, true, 0);
-    }
-
-    private void tryFireCannon(CannonMountBlockEntity mount) {
-        mount.onRedstoneUpdate(true, true, true, false, 15);
-    }
-
 
     public void setTargetAngle(float targetAngle) {
         this.targetAngle = targetAngle;
-        notifyUpdate();
     }
 
 
@@ -129,7 +124,6 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         super.read(compound, clientPacket);
         targetAngle = compound.getDouble("TargetAngle");
         isRunning = compound.getBoolean("IsRunning");
-        targetingConfig = TargetingConfig.fromTag(compound.getCompound("TargetingConfig"));
     }
 
     @Override
@@ -137,7 +131,6 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         super.write(compound, clientPacket);
         compound.putDouble("TargetAngle", targetAngle);
         compound.putBoolean("IsRunning", isRunning);
-        compound.put("TargetingConfig", targetingConfig.toTag());
     }
 
     public void setTarget(Vec3 targetPos) {
@@ -169,12 +162,11 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
                 targetAngle = usableAngles.get(0);
             }
         }
-        notifyUpdate();
     }
 
-    public void setTargetingConfig(TargetingConfig targetingConfig) {
-        this.targetingConfig = targetingConfig;
-        notifyUpdate();
+    public void setFiringTarget(Vec3 targetPos, TargetingConfig targetingConfig) {
+        if (firingControl == null)
+            return;
+        firingControl.setTarget(targetPos, targetingConfig);
     }
-
 }

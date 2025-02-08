@@ -1,13 +1,13 @@
 package com.happysg.radar.block.monitor;
 
-import com.happysg.radar.block.radar.link.RadarTarget;
+import com.happysg.radar.block.datalink.DataController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class MonitorRadarBehavior extends RadarTarget {
+public class MonitorRadarBehavior extends DataController {
 
     @Override
     public AABB getMultiblockBounds(LevelAccessor level, BlockPos pos) {

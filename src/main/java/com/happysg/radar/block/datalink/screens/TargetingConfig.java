@@ -1,4 +1,4 @@
-package com.happysg.radar.block.radar.link.screens;
+package com.happysg.radar.block.datalink.screens;
 
 import com.happysg.radar.block.radar.track.TrackCategory;
 import net.minecraft.nbt.CompoundTag;
@@ -21,14 +21,17 @@ public record TargetingConfig(boolean player, boolean contraption, boolean mob, 
     }
 
     public static TargetingConfig fromTag(CompoundTag tag) {
+        if (!tag.contains("targeting"))
+            return DEFAULT;
+        CompoundTag targeting = tag.getCompound("targeting");
         return new TargetingConfig(
-                tag.getBoolean("player"),
-                tag.getBoolean("contraption"),
-                tag.getBoolean("mob"),
-                tag.getBoolean("animal"),
-                tag.getBoolean("projectile"),
-                tag.getBoolean("autoTarget"),
-                tag.getBoolean("autoFire")
+                targeting.getBoolean("player"),
+                targeting.getBoolean("contraption"),
+                targeting.getBoolean("mob"),
+                targeting.getBoolean("animal"),
+                targeting.getBoolean("projectile"),
+                targeting.getBoolean("autoTarget"),
+                targeting.getBoolean("autoFire")
         );
     }
 

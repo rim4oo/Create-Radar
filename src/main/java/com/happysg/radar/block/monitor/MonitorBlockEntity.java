@@ -1,8 +1,8 @@
 package com.happysg.radar.block.monitor;
 
+import com.happysg.radar.block.datalink.screens.TargetingConfig;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
 import com.happysg.radar.block.radar.behavior.IHasTracks;
-import com.happysg.radar.block.radar.link.screens.TargetingConfig;
 import com.happysg.radar.block.radar.track.RadarTrack;
 import com.happysg.radar.block.radar.track.RadarTrackUtil;
 import com.happysg.radar.compat.vs2.VS2Utils;
@@ -18,6 +18,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +34,11 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     RadarBearingBlockEntity radar;
     protected String hoveredEntity;
     protected String selectedEntity;
+
+    //todo hashmap for multiple inputs
     Collection<RadarTrack> cachedTracks = List.of();
     MonitorFilter filter = MonitorFilter.DEFAULT;
+    List<AABB> safeZones = new ArrayList<>();
 
     public MonitorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

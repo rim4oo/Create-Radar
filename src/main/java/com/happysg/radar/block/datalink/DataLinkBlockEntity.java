@@ -1,7 +1,7 @@
-package com.happysg.radar.block.radar.link;
+package com.happysg.radar.block.datalink;
 
-import com.happysg.radar.block.radar.link.screens.AbstractRadarLinkScreen;
-import com.happysg.radar.registry.AllRadarBehaviors;
+import com.happysg.radar.block.datalink.screens.AbstractDataLinkScreen;
+import com.happysg.radar.registry.AllDataBehaviors;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.BlockPos;
@@ -15,17 +15,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 import java.util.Optional;
 
-public class RadarLinkBlockEntity extends SmartBlockEntity {
+public class DataLinkBlockEntity extends SmartBlockEntity {
 
     protected BlockPos targetOffset = BlockPos.ZERO;
 
-    public RadarSource activeSource;
-    public RadarTarget activeTarget;
+    public DataPeripheral activeSource;
+    public DataController activeTarget;
 
     private CompoundTag sourceConfig;
     boolean ledState = false;
 
-    public RadarLinkBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public DataLinkBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
@@ -47,8 +47,8 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
         if (!level.isLoaded(targetPosition) || !level.isLoaded(sourcePosition))
             return;
 
-        RadarTarget target = AllRadarBehaviors.targetOf(level, targetPosition);
-        RadarSource source = AllRadarBehaviors.sourcesOf(level, sourcePosition);
+        DataController target = AllDataBehaviors.targetOf(level, targetPosition);
+        DataPeripheral source = AllDataBehaviors.sourcesOf(level, sourcePosition);
         boolean notify = false;
 
         if (activeTarget != target) {
@@ -70,7 +70,7 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
         }
 
         ledState = true;
-        activeSource.transferData(new RadarLinkContext(level, this), activeTarget);
+        activeSource.transferData(new DataLinkContext(level, this), activeTarget);
         sendData();
         //TODO implement advancement
     }
@@ -106,20 +106,20 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
         targetOffset = NbtUtils.readBlockPos(tag.getCompound("TargetOffset"));
         ledState = tag.getBoolean("LedState");
         if (clientPacket && tag.contains("TargetType"))
-            activeTarget = AllRadarBehaviors.getTarget(new ResourceLocation(tag.getString("TargetType")));
+            activeTarget = AllDataBehaviors.getTarget(new ResourceLocation(tag.getString("TargetType")));
 
 
         if (!tag.contains("Source"))
             return;
 
         CompoundTag data = tag.getCompound("Source");
-        activeSource = AllRadarBehaviors.getSource(new ResourceLocation(data.getString("Id")));
+        activeSource = AllDataBehaviors.getSource(new ResourceLocation(data.getString("Id")));
         sourceConfig = new CompoundTag();
         if (activeSource != null)
             sourceConfig = data.copy();
     }
 
-    Optional<AbstractRadarLinkScreen> getScreen() {
+    Optional<AbstractDataLinkScreen> getScreen() {
         return activeSource == null ? Optional.empty() : Optional.ofNullable(activeSource.getScreen(this));
     }
 
@@ -140,7 +140,7 @@ public class RadarLinkBlockEntity extends SmartBlockEntity {
     }
 
     public Direction getDirection() {
-        return getBlockState().getOptionalValue(RadarLinkBlock.FACING)
+        return getBlockState().getOptionalValue(DataLinkBlock.FACING)
                 .orElse(Direction.UP)
                 .getOpposite();
     }

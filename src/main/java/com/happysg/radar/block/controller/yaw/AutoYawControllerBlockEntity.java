@@ -42,8 +42,10 @@ public class AutoYawControllerBlockEntity extends GeneratingKineticBlockEntity {
             return;
 
         double currentYaw = contraption.yaw;
-        if (currentYaw == targetAngle)
+        if (currentYaw == targetAngle) {
+            isRunning = false;
             return;
+        }
 
         // Normalize both currentYaw and targetAngle to [0, 360)
         currentYaw = (currentYaw + 360) % 360;

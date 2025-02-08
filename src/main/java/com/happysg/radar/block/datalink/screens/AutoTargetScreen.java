@@ -1,14 +1,14 @@
-package com.happysg.radar.block.radar.link.screens;
+package com.happysg.radar.block.datalink.screens;
 
 import com.happysg.radar.CreateRadar;
-import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
+import com.happysg.radar.block.datalink.DataLinkBlockEntity;
 import com.happysg.radar.registry.ModGuiTextures;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Indicator;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
-public class RadarTargetScreen extends AbstractRadarLinkScreen {
+public class AutoTargetScreen extends AbstractDataLinkScreen {
 
     boolean player;
     boolean contraption;
@@ -33,7 +33,7 @@ public class RadarTargetScreen extends AbstractRadarLinkScreen {
     protected IconButton autoFireButton;
 
 
-    public RadarTargetScreen(RadarLinkBlockEntity be) {
+    public AutoTargetScreen(DataLinkBlockEntity be) {
         super(be);
         this.background = ModGuiTextures.CANNON_TARGETING;
         TargetingConfig targetingConfig = TargetingConfig.DEFAULT;
@@ -63,7 +63,6 @@ public class RadarTargetScreen extends AbstractRadarLinkScreen {
         });
         addRenderableWidget(playerButton);
         addRenderableWidget(playerIndicator);
-
         contraptionButton = new IconButton(guiLeft + 70, guiTop + 26, ModGuiTextures.CONTRAPTION_BUTTON);
         contraptionButton.setToolTip(Component.translatable(CreateRadar.MODID + ".radar_button.contraption"));
         contraptionIndicator = new Indicator(guiLeft + 70, guiTop + 19, Component.empty());

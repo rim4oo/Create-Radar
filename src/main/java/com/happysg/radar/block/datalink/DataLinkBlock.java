@@ -1,4 +1,4 @@
-package com.happysg.radar.block.radar.link;
+package com.happysg.radar.block.datalink;
 
 import com.happysg.radar.CreateRadar;
 import com.happysg.radar.registry.ModBlockEntityTypes;
@@ -25,9 +25,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 
-public class RadarLinkBlock extends WrenchableDirectionalBlock implements IBE<RadarLinkBlockEntity> {
+public class DataLinkBlock extends WrenchableDirectionalBlock implements IBE<DataLinkBlockEntity> {
 
-    public RadarLinkBlock(Properties properties) {
+    public DataLinkBlock(Properties properties) {
         super(properties);
     }
 
@@ -44,11 +44,11 @@ public class RadarLinkBlock extends WrenchableDirectionalBlock implements IBE<Ra
     }
 
     @OnlyIn(value = Dist.CLIENT)
-    protected void displayScreen(RadarLinkBlockEntity be, Player player) {
+    protected void displayScreen(DataLinkBlockEntity be, Player player) {
         if (!(player instanceof LocalPlayer))
             return;
         if (be.targetOffset.equals(BlockPos.ZERO)) {
-            player.displayClientMessage(Component.translatable(CreateRadar.MODID + "radar_link.fail"), true);
+            player.displayClientMessage(Component.translatable(CreateRadar.MODID + "data_link.fail"), true);
             return;
         }
         be.getScreen().ifPresent(ScreenOpener::open);
@@ -72,12 +72,12 @@ public class RadarLinkBlock extends WrenchableDirectionalBlock implements IBE<Ra
     }
 
     @Override
-    public Class<RadarLinkBlockEntity> getBlockEntityClass() {
-        return RadarLinkBlockEntity.class;
+    public Class<DataLinkBlockEntity> getBlockEntityClass() {
+        return DataLinkBlockEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends RadarLinkBlockEntity> getBlockEntityType() {
+    public BlockEntityType<? extends DataLinkBlockEntity> getBlockEntityType() {
         return ModBlockEntityTypes.RADAR_LINK.get();
     }
 

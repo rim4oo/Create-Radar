@@ -1,30 +1,27 @@
 package com.happysg.radar.block.controller.track;
 
+import com.happysg.radar.block.datalink.DataController;
+import com.happysg.radar.block.datalink.DataLinkBlockEntity;
+import com.happysg.radar.block.datalink.DataLinkContext;
+import com.happysg.radar.block.datalink.DataPeripheral;
+import com.happysg.radar.block.datalink.screens.AbstractDataLinkScreen;
+import com.happysg.radar.block.datalink.screens.TargetingConfig;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
-import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
-import com.happysg.radar.block.radar.link.RadarLinkContext;
-import com.happysg.radar.block.radar.link.RadarSource;
-import com.happysg.radar.block.radar.link.RadarTarget;
-import com.happysg.radar.block.radar.link.screens.AbstractRadarLinkScreen;
-import com.happysg.radar.block.radar.link.screens.TargetingConfig;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
-public class TrackLinkBehavior extends RadarSource {
+public class TrackLinkBehavior extends DataPeripheral {
     @Override
-    protected AbstractRadarLinkScreen getScreen(RadarLinkBlockEntity be) {
+    protected AbstractDataLinkScreen getScreen(DataLinkBlockEntity be) {
         return null;
     }
 
-    public void transferData(RadarLinkContext context, @NotNull RadarTarget activeTarget) {
+    public void transferData(DataLinkContext context, @NotNull DataController activeTarget) {
+
         if (!(context.getSourceBlockEntity() instanceof TrackControllerBlockEntity controller))
             return;
 
-        if (!(context.getTargetBlockEntity() instanceof MonitorBlockEntity))
-            return;
-
-        MonitorBlockEntity monitor = ((MonitorBlockEntity) context.getTargetBlockEntity()).getController();
-
+        MonitorBlockEntity monitor = context.getMonitorBlockEntity();
         if (monitor == null)
             return;
 

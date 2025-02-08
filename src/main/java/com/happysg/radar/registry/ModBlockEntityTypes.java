@@ -4,11 +4,11 @@ import com.happysg.radar.CreateRadar;
 import com.happysg.radar.block.controller.pitch.AutoPitchControllerBlockEntity;
 import com.happysg.radar.block.controller.track.TrackControllerBlockEntity;
 import com.happysg.radar.block.controller.yaw.AutoYawControllerBlockEntity;
+import com.happysg.radar.block.datalink.DataLinkBlockEntity;
+import com.happysg.radar.block.datalink.DataLinkRenderer;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import com.happysg.radar.block.monitor.MonitorRenderer;
 import com.happysg.radar.block.radar.bearing.RadarBearingBlockEntity;
-import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
-import com.happysg.radar.block.radar.link.RadarLinkRenderer;
 import com.happysg.radar.block.radar.plane.PlaneRadarBlockEntity;
 import com.simibubi.create.content.contraptions.bearing.BearingInstance;
 import com.simibubi.create.content.contraptions.bearing.BearingRenderer;
@@ -36,9 +36,9 @@ public class ModBlockEntityTypes {
             .validBlocks(ModBlocks.PLANE_RADAR)
             .register();
 
-    public static final BlockEntityEntry<RadarLinkBlockEntity> RADAR_LINK = REGISTRATE
-            .blockEntity("radar_link", RadarLinkBlockEntity::new)
-            .renderer(() -> RadarLinkRenderer::new)
+    public static final BlockEntityEntry<DataLinkBlockEntity> RADAR_LINK = REGISTRATE
+            .blockEntity("data_link", DataLinkBlockEntity::new)
+            .renderer(() -> DataLinkRenderer::new)
             .validBlocks(ModBlocks.RADAR_LINK)
             .register();
 

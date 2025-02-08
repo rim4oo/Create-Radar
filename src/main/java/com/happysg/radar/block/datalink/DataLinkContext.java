@@ -1,18 +1,19 @@
-package com.happysg.radar.block.radar.link;
+package com.happysg.radar.block.datalink;
 
+import com.happysg.radar.block.monitor.MonitorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class RadarLinkContext {
+import javax.annotation.Nullable;
+
+public class DataLinkContext {
 
     private Level level;
-    private RadarLinkBlockEntity blockEntity;
+    private DataLinkBlockEntity blockEntity;
 
-    public Object flapDisplayContext;
-
-    public RadarLinkContext(Level level, RadarLinkBlockEntity blockEntity) {
+    public DataLinkContext(Level level, DataLinkBlockEntity blockEntity) {
         this.level = level;
         this.blockEntity = blockEntity;
     }
@@ -21,7 +22,7 @@ public class RadarLinkContext {
         return level;
     }
 
-    public RadarLinkBlockEntity blockEntity() {
+    public DataLinkBlockEntity blockEntity() {
         return blockEntity;
     }
 
@@ -33,8 +34,9 @@ public class RadarLinkContext {
         return blockEntity.getSourcePosition();
     }
 
-    public BlockEntity getTargetBlockEntity() {
-        return level.getBlockEntity(getTargetPos());
+    @Nullable
+    public MonitorBlockEntity getMonitorBlockEntity() {
+        return level.getBlockEntity(getTargetPos()) instanceof MonitorBlockEntity monitorBlockEntity ? monitorBlockEntity.getController() : null;
     }
 
     public BlockPos getTargetPos() {

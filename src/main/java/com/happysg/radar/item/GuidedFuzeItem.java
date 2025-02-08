@@ -1,8 +1,8 @@
-package com.happysg.radar.compat.cbc;
+package com.happysg.radar.item;
 
 import com.happysg.radar.CreateRadar;
+import com.happysg.radar.block.datalink.screens.TargetingConfig;
 import com.happysg.radar.block.monitor.MonitorBlockEntity;
-import com.happysg.radar.block.radar.link.screens.TargetingConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;

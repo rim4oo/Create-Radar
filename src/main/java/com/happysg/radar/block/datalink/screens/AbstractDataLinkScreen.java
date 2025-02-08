@@ -1,13 +1,13 @@
-package com.happysg.radar.block.radar.link.screens;
+package com.happysg.radar.block.datalink.screens;
 
 import com.happysg.radar.CreateRadar;
-import com.happysg.radar.block.radar.link.RadarLinkBlock;
-import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
-import com.happysg.radar.block.radar.link.RadarSource;
-import com.happysg.radar.block.radar.link.RadarTarget;
+import com.happysg.radar.block.datalink.DataController;
+import com.happysg.radar.block.datalink.DataLinkBlock;
+import com.happysg.radar.block.datalink.DataLinkBlockEntity;
+import com.happysg.radar.block.datalink.DataPeripheral;
 import com.happysg.radar.networking.ModMessages;
 import com.happysg.radar.networking.packets.RadarLinkConfigurationPacket;
-import com.happysg.radar.registry.AllRadarBehaviors;
+import com.happysg.radar.registry.AllDataBehaviors;
 import com.happysg.radar.registry.ModGuiTextures;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -25,20 +25,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AbstractRadarLinkScreen extends AbstractSimiScreen {
+public class AbstractDataLinkScreen extends AbstractSimiScreen {
 
     private static final ItemStack FALLBACK = new ItemStack(Items.BARRIER);
 
     protected ModGuiTextures background;
-    private final RadarLinkBlockEntity blockEntity;
+    private final DataLinkBlockEntity blockEntity;
     private IconButton confirmButton;
 
     BlockState sourceState;
     BlockState targetState;
-    RadarSource source;
-    RadarTarget target;
+    DataPeripheral source;
+    DataController target;
 
-    public AbstractRadarLinkScreen(RadarLinkBlockEntity be) {
+    public AbstractDataLinkScreen(DataLinkBlockEntity be) {
         this.blockEntity = be;
     }
 
@@ -70,8 +70,8 @@ public class AbstractRadarLinkScreen extends AbstractSimiScreen {
         int y = guiTop;
 
 
-        source = AllRadarBehaviors.sourcesOf(level, blockEntity.getSourcePosition());
-        target = AllRadarBehaviors.targetOf(level, blockEntity.getTargetPosition());
+        source = AllDataBehaviors.sourcesOf(level, blockEntity.getSourcePosition());
+        target = AllDataBehaviors.targetOf(level, blockEntity.getTargetPosition());
 
     }
 
@@ -82,7 +82,7 @@ public class AbstractRadarLinkScreen extends AbstractSimiScreen {
         int y = guiTop;
 
         background.render(graphics, x, y);
-        MutableComponent header = Component.translatable(CreateRadar.MODID + ".radar_link.title");
+        MutableComponent header = Component.translatable(CreateRadar.MODID + ".data_link.title");
         graphics.drawString(font, header, x + background.width / 2 - font.width(header) / 2, y + 4, 0, false);
 
         PoseStack ms = graphics.pose();
@@ -99,7 +99,7 @@ public class AbstractRadarLinkScreen extends AbstractSimiScreen {
                 .rotateX(-22)
                 .rotateY(63);
         GuiGameElement.of(blockEntity.getBlockState()
-                        .setValue(RadarLinkBlock.FACING, Direction.UP))
+                        .setValue(DataLinkBlock.FACING, Direction.UP))
                 .render(graphics);
         ms.popPose();
     }

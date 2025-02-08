@@ -1,4 +1,4 @@
-package com.happysg.radar.block.radar.link;
+package com.happysg.radar.block.datalink;
 
 import com.happysg.radar.registry.ModPartials;
 import com.jozufozu.flywheel.util.transform.TransformStack;
@@ -15,13 +15,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class RadarLinkRenderer extends SafeBlockEntityRenderer<RadarLinkBlockEntity> {
+public class DataLinkRenderer extends SafeBlockEntityRenderer<DataLinkBlockEntity> {
 
-    public RadarLinkRenderer(BlockEntityRendererProvider.Context context) {
+    public DataLinkRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
-    protected void renderSafe(RadarLinkBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
+    protected void renderSafe(DataLinkBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
         long gameTime = be.getLevel().getGameTime();
         float glow = be.ledState ? (float) (0.5 * (1 + Math.sin(gameTime * 0.1))) : 0;
@@ -36,7 +36,7 @@ public class RadarLinkRenderer extends SafeBlockEntityRenderer<RadarLinkBlockEnt
         BlockState blockState = be.getBlockState();
         TransformStack msr = TransformStack.cast(ms);
 
-        Direction face = blockState.getOptionalValue(RadarLinkBlock.FACING)
+        Direction face = blockState.getOptionalValue(DataLinkBlock.FACING)
                 .orElse(Direction.UP);
 
         if (face.getAxis()

@@ -1,15 +1,15 @@
-package com.happysg.radar.block.radar.link.screens;
+package com.happysg.radar.block.datalink.screens;
 
 import com.happysg.radar.CreateRadar;
+import com.happysg.radar.block.datalink.DataLinkBlockEntity;
 import com.happysg.radar.block.monitor.MonitorFilter;
-import com.happysg.radar.block.radar.link.RadarLinkBlockEntity;
 import com.happysg.radar.registry.ModGuiTextures;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Indicator;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
-public class RadarFilterScreen extends AbstractRadarLinkScreen {
+public class RadarFilterScreen extends AbstractDataLinkScreen {
 
     boolean player;
     boolean vs2;
@@ -28,7 +28,7 @@ public class RadarFilterScreen extends AbstractRadarLinkScreen {
     protected IconButton projectileButton;
     protected Indicator projectileIndicator;
 
-    public RadarFilterScreen(RadarLinkBlockEntity be) {
+    public RadarFilterScreen(DataLinkBlockEntity be) {
         super(be);
         this.background = ModGuiTextures.RADAR_FILTER;
         MonitorFilter monitorFilter = MonitorFilter.DEFAULT;
