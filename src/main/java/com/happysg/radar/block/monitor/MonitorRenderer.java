@@ -15,10 +15,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity> {
@@ -45,11 +47,28 @@ public class MonitorRenderer extends SmartBlockEntityRenderer<MonitorBlockEntity
             if (!radar.isRunning())
                 return;
             renderGrid(radar, blockEntity, ms, bufferSource);
+            //renderSafeZones(radar, blockEntity, ms, bufferSource);
             renderRadarTracks(radar, blockEntity, ms, bufferSource);
             renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_FILLER);
             renderBG(blockEntity, ms, bufferSource, MonitorSprite.RADAR_BG_CIRCLE);
             renderSweep(radar, blockEntity, ms, bufferSource);
         });
+    }
+
+    private void renderSafeZones(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {
+        int size = blockEntity.getSize();
+        float range = radar.getRange();
+
+        Matrix4f m = ms.last().pose();
+        Matrix3f n = ms.last().normal();
+
+        Color color = new Color(0x383b42);
+
+        float alpha = .8f;
+        float deptY = 0.97f;
+
+        List<AABB> safeZones = blockEntity.safeZones;
+
     }
 
     private void renderGrid(RadarBearingBlockEntity radar, MonitorBlockEntity blockEntity, PoseStack ms, MultiBufferSource bufferSource) {

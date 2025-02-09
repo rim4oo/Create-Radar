@@ -1,5 +1,6 @@
 package com.happysg.radar;
 
+import com.happysg.radar.block.controller.id.IDManager;
 import com.happysg.radar.block.datalink.DataLinkBlockItem;
 import com.happysg.radar.block.monitor.MonitorInputHandler;
 import com.happysg.radar.config.RadarConfig;
@@ -8,9 +9,11 @@ import com.happysg.radar.registry.*;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -52,6 +55,7 @@ public class CreateRadar {
         modEventBus.addListener(CreateRadar::onLoadComplete);
         MinecraftForge.EVENT_BUS.addListener(MonitorInputHandler::monitorPlayerHovering);
         MinecraftForge.EVENT_BUS.addListener(CreateRadar::clientTick);
+        MinecraftForge.EVENT_BUS.addListener(CreateRadar::onLoadWorld);
     }
 
     private static void clientTick(TickEvent.ClientTickEvent event) {
@@ -86,6 +90,13 @@ public class CreateRadar {
 
         container.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory(RadarConfig::createConfigScreen));
+    }
+
+    public static void onLoadWorld(LevelEvent.Load event) {
+        LevelAccessor world = event.getLevel();
+        if (world.getServer() != null) {
+            IDManager.load(world.getServer());
+        }
     }
 
 
