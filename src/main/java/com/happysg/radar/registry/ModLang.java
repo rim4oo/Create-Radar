@@ -74,6 +74,7 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.start", "Start Position Set");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.reset", "Start Position Clear");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.end", "Safe Zone Set");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.remove", "Safe Zone Removed");
 
     }
 }

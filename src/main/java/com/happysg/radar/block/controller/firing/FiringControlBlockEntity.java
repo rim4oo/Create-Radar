@@ -24,7 +24,7 @@ public class FiringControlBlockEntity {
     }
 
     public void tick() {
-        if (isTargetInRange()) {
+        if (isTargetInRange() && targetingConfig.autoFire()) {
             tryFireCannon();
         } else {
             stopFireCannon();
@@ -43,7 +43,6 @@ public class FiringControlBlockEntity {
     private boolean hasCorrectYawPitch() {
         BlockPos yawControllerPos = cannonMount.getBlockPos().below();
         if (level.getBlockEntity(yawControllerPos) instanceof AutoYawControllerBlockEntity yawController && pitchController != null) {
-            System.out.println("yawController: " + yawController.atTargetYaw() + " pitchController: " + pitchController.atTargetPitch());
             return yawController.atTargetYaw() && pitchController.atTargetPitch();
         }
         return false;

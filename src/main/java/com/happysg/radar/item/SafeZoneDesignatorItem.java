@@ -50,7 +50,7 @@ public class SafeZoneDesignatorItem extends Item {
         if (player == null) {
             return InteractionResult.FAIL;
         }
-
+        boolean isCrouching = player.isCrouching();
         if (level.getBlockEntity(pos) instanceof MonitorBlockEntity monitorBlockEntity) {
             data.put("monitorPos", NbtUtils.writeBlockPos(monitorBlockEntity.getControllerPos()));
             displayMessage(player, CreateRadar.MODID + ".item.safe_zone_designator.set", ChatFormatting.GREEN);
@@ -61,8 +61,15 @@ public class SafeZoneDesignatorItem extends Item {
             displayMessage(player, CreateRadar.MODID + ".item.safe_zone_designator.no_monitor", ChatFormatting.RED);
             return InteractionResult.FAIL;
         }
+        BlockPos monitorPos = NbtUtils.readBlockPos(data.getCompound("monitorPos"));
 
         if (!data.contains("startPos")) {
+            if (level.getBlockEntity(monitorPos) instanceof MonitorBlockEntity monitorBlockEntity) {
+                if (monitorBlockEntity.getController().tryRemoveAABB(pos)) {
+                    displayMessage(player, CreateRadar.MODID + ".item.safe_zone_designator.remove", ChatFormatting.RED);
+                    return InteractionResult.SUCCESS;
+                }
+            }
             data.put("startPos", NbtUtils.writeBlockPos(pos));
             displayMessage(player, CreateRadar.MODID + ".item.safe_zone_designator.start", ChatFormatting.GREEN);
         } else {
@@ -73,10 +80,9 @@ public class SafeZoneDesignatorItem extends Item {
             }
 
             BlockPos startPos = NbtUtils.readBlockPos(data.getCompound("startPos"));
-            BlockPos monitorPos = NbtUtils.readBlockPos(data.getCompound("monitorPos"));
 
             if (level.getBlockEntity(monitorPos) instanceof MonitorBlockEntity monitorBlockEntity) {
-                monitorBlockEntity.setSafeZone(startPos, pos);
+                monitorBlockEntity.addSafeZone(startPos, pos);
                 displayMessage(player, CreateRadar.MODID + ".item.safe_zone_designator.end", ChatFormatting.GREEN);
                 data.remove("startPos");
             } else {
