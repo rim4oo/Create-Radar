@@ -52,14 +52,14 @@ public class ModLang {
 
         REGISTRATE.addRawLang(CreateRadar.MODID + ".data_link.fail", "Data Link has no valid target, try placing it again");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".data_link.no_source", "Not a Data Source");
-        //todo monitor hardcoded for now
         REGISTRATE.addRawLang(CreateRadar.MODID + ".data_link.no_target", "Not a Monitor");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".data_link.title", "Data Link");
 
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.player", "Player");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.vs2", "VS2");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.contraption", "Contraption");
-        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.mob", "Hostile");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.mob", "Mob");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.hostile", "Hostile");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.projectile", "Projectile");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.animal", "Animal");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar_button.auto_target", "Auto Target");
@@ -68,7 +68,12 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar.dish_count", "Dish Count: %s");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".radar.range", "Range: %s");
 
-
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.set", "Monitor Set");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".guided_fuze.linked_monitor", "Linked Monitor: %s");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.no_monitor", "No Monitor Linked");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.start", "Start Position Set");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.reset", "Start Position Clear");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.end", "Safe Zone Set");
 
     }
 }

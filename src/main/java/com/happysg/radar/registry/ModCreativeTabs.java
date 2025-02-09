@@ -36,6 +36,7 @@ public class ModCreativeTabs {
 
     private static void displayItems(CreativeModeTab.ItemDisplayParameters pParameters, CreativeModeTab.Output pOutput) {
         pOutput.accept(ModBlocks.MONITOR);
+        pOutput.accept(ModItems.SAFE_ZONE_DESIGNATOR);
         pOutput.accept(ModBlocks.RADAR_LINK);
         pOutput.accept(ModBlocks.RADAR_BEARING_BLOCK);
         pOutput.accept(ModBlocks.RADAR_RECEIVER_BLOCK);

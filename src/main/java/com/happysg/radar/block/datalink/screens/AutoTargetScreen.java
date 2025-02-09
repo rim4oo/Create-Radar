@@ -75,7 +75,7 @@ public class AutoTargetScreen extends AbstractDataLinkScreen {
         addRenderableWidget(contraptionIndicator);
 
         mobButton = new IconButton(guiLeft + 98, guiTop + 26, ModGuiTextures.MOB_BUTTON);
-        mobButton.setToolTip(Component.translatable(CreateRadar.MODID + ".radar_button.mob"));
+        mobButton.setToolTip(Component.translatable(CreateRadar.MODID + ".radar_button.hostile"));
         mobIndicator = new Indicator(guiLeft + 98, guiTop + 19, Component.empty());
         mobIndicator.state = mob ? Indicator.State.GREEN : Indicator.State.RED;
         mobButton.withCallback((x, y) -> {

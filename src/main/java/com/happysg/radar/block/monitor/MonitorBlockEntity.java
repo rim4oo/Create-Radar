@@ -6,16 +6,23 @@ import com.happysg.radar.block.radar.behavior.IHasTracks;
 import com.happysg.radar.block.radar.track.RadarTrack;
 import com.happysg.radar.block.radar.track.RadarTrackUtil;
 import com.happysg.radar.compat.vs2.VS2Utils;
+import com.simibubi.create.AllSpecialTextures;
+import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -124,6 +131,24 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         radius = tag.getInt("Size");
         if (clientPacket)
             cachedTracks = RadarTrackUtil.deserializeListNBT(tag.getCompound("tracks"));
+
+        readSafeZones(tag);
+    }
+
+    private void readSafeZones(CompoundTag tag) {
+        ListTag safeZonesTag = tag.getList("SafeZones", Tag.TAG_COMPOUND);
+        for (int i = 0; i < safeZonesTag.size(); i++) {
+            CompoundTag safeZoneTag = safeZonesTag.getCompound(i);
+            AABB safeZone = new AABB(
+                    safeZoneTag.getDouble("minX"),
+                    safeZoneTag.getDouble("minY"),
+                    safeZoneTag.getDouble("minZ"),
+                    safeZoneTag.getDouble("maxX"),
+                    safeZoneTag.getDouble("maxY"),
+                    safeZoneTag.getDouble("maxZ")
+            );
+            safeZones.add(safeZone);
+        }
     }
 
     @Override
@@ -141,6 +166,22 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         tag.putInt("Size", radius);
         if (clientPacket)
             tag.put("tracks", RadarTrackUtil.serializeNBTList(cachedTracks));
+        tag.put("SafeZones", saveSafeZones());
+    }
+
+    private @NotNull ListTag saveSafeZones() {
+        ListTag safeZonesTag = new ListTag();
+        for (AABB safeZone : safeZones) {
+            CompoundTag safeZoneTag = new CompoundTag();
+            safeZoneTag.putDouble("minX", safeZone.minX);
+            safeZoneTag.putDouble("minY", safeZone.minY);
+            safeZoneTag.putDouble("minZ", safeZone.minZ);
+            safeZoneTag.putDouble("maxX", safeZone.maxX);
+            safeZoneTag.putDouble("maxY", safeZone.maxY);
+            safeZoneTag.putDouble("maxZ", safeZone.maxZ);
+            safeZonesTag.add(safeZoneTag);
+        }
+        return safeZonesTag;
     }
 
 
@@ -194,6 +235,9 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         );
         if (targetPos.get() == null)
             selectedEntity = null;
+        else if (isInSafeZone(targetPos.get())) //keep selected but don't give position
+            return null;
+
         return targetPos.get();
     }
 
@@ -204,7 +248,10 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         getRadar().ifPresent(
                 radar -> {
                     for (RadarTrack track : getController().cachedTracks) {
-                        if (targetingConfig.test(track.trackCategory()) && track.position().distanceTo(Vec3.atCenterOf(getControllerPos())) < distance[0]) {
+                        if (targetingConfig.test(track.trackCategory()) &&
+                                track.position().distanceTo(Vec3.atCenterOf(getControllerPos())) < distance[0]
+                                && !isInSafeZone(track.position())
+                        ) {
                             selectedEntity = track.id();
                             distance[0] = track.position().distanceTo(Vec3.atCenterOf(getControllerPos()));
                         }
@@ -234,5 +281,28 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
 
     public float getRange() {
         return getRadar().map(RadarBearingBlockEntity::getRange).orElse(0f);
+    }
+
+    public boolean isInSafeZone(Vec3 pos) {
+        for (AABB safeZone : safeZones) {
+            if (safeZone.contains(pos))
+                return true;
+        }
+        return false;
+    }
+
+    public void setSafeZone(BlockPos startPos, BlockPos endPos) {
+        getController().safeZones.add(new AABB(startPos, endPos));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void showSafeZone() {
+        for (AABB safeZone : safeZones) {
+            CreateClient.OUTLINER.showAABB(safeZone, safeZone)
+                    .colored(0x383b42)
+                    .withFaceTextures(AllSpecialTextures.CHECKERED, AllSpecialTextures.HIGHLIGHT_CHECKERED)
+                    .lineWidth(1 / 16f);
+        }
+
     }
 }

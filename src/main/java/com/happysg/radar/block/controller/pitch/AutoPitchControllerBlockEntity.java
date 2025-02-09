@@ -101,7 +101,7 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
         PitchOrientedContraptionEntity contraption = mount.getContraption();
         if (contraption == null)
             return false;
-        int invert = contraption.getInitialOrientation().getStepZ() + contraption.getInitialOrientation().getStepX();
+        int invert = -contraption.getInitialOrientation().getStepZ() + contraption.getInitialOrientation().getStepX();
         System.out.println("pitch: " + contraption.pitch + " target: " + targetAngle + " invert: " + invert);
         return Math.abs(contraption.pitch * invert - targetAngle) < TOLERANCE;
     }

@@ -71,7 +71,7 @@ public class GuidedFuzeItem extends FuzeItem {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         if (pStack.getOrCreateTag().contains("monitorPos")) {
             BlockPos monitorPos = NbtUtils.readBlockPos(pStack.getOrCreateTag().getCompound("monitorPos"));
-            pTooltipComponents.add(Component.literal("Linked Monitor:" + monitorPos));
+            pTooltipComponents.add(Component.translatable(CreateRadar.MODID + ".guided_fuze.linked_monitor", monitorPos));
         } else
             pTooltipComponents.add(Component.translatable(CreateRadar.MODID + ".guided_fuze.no_monitor"));
     }

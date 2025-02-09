@@ -25,7 +25,13 @@
   "create_radar.filter.projectiles_only": "Projectiles Only",
   "create_radar.filter.show": "Show",
   "create_radar.filter.vs2_only": "VS2 Only",
+  "create_radar.guided_fuze.linked_monitor": "Linked Monitor: %s",
   "create_radar.guided_fuze.no_monitor": "No Monitor Linked",
+  "create_radar.item.safe_zone_designator.end": "Safe Zone Set",
+  "create_radar.item.safe_zone_designator.no_monitor": "No Monitor Linked",
+  "create_radar.item.safe_zone_designator.reset": "Start Position Clear",
+  "create_radar.item.safe_zone_designator.set": "Monitor Set",
+  "create_radar.item.safe_zone_designator.start": "Start Position Set",
   "create_radar.pitch.powder_charge": "Powder Charge",
   "create_radar.ponder.controller_linking.header": "Linking a Controller to a Monitor!",
   "create_radar.ponder.controller_linking.text_1": "Place Yaw Controller under turret mount",
@@ -58,5 +64,6 @@
   "create_radar.radar_button.projectile": "Projectile",
   "create_radar.radar_button.vs2": "VS2",
   "item.create_radar.guided_fuze": "Guided Fuze",
+  "item.create_radar.radar_safe_zone_designator": "Radar Safe Zone Designator",
   "itemGroup.create_radar.radar": "Create: Radars"
 }
