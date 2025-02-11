@@ -291,8 +291,17 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
         return false;
     }
 
-    public void setSafeZone(BlockPos startPos, BlockPos endPos) {
-        getController().safeZones.add(new AABB(startPos, endPos));
+    public void addSafeZone(BlockPos startPos, BlockPos endPos) {
+        double minX = Math.min(startPos.getX(), endPos.getX());
+        double minY = Math.min(startPos.getY(), endPos.getY());
+        double minZ = Math.min(startPos.getZ(), endPos.getZ());
+        double maxX = Math.max(startPos.getX(), endPos.getX());
+        double maxY = Math.max(startPos.getY(), endPos.getY());
+        double maxZ = Math.max(startPos.getZ(), endPos.getZ());
+        maxX += 1;
+        maxY += 1;
+        maxZ += 1;
+        getController().safeZones.add(new AABB(minX, minY, minZ, maxX, maxY, maxZ));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -304,5 +313,9 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
                     .lineWidth(1 / 16f);
         }
 
+    }
+
+    public boolean tryRemoveAABB(BlockPos pos) {
+        return safeZones.removeIf(safeZone -> safeZone.contains(Vec3.atCenterOf(pos)));
     }
 }

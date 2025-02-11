@@ -1,6 +1,7 @@
 package com.happysg.radar.registry;
 
 import com.happysg.radar.CreateRadar;
+import com.happysg.radar.block.controller.id.IDBlock;
 import com.happysg.radar.block.controller.pitch.AutoPitchControllerBlock;
 import com.happysg.radar.block.controller.track.TrackControllerBlock;
 import com.happysg.radar.block.controller.yaw.AutoYawControllerBlock;
@@ -45,6 +46,7 @@ public class ModBlocks {
                     .build()
                     .register();
 
+
     public static final BlockEntry<DataLinkBlock> RADAR_LINK =
             REGISTRATE.block("data_link", DataLinkBlock::new)
                     .initialProperties(SharedProperties::softMetal)
@@ -77,6 +79,15 @@ public class ModBlocks {
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
                     .transform(axeOrPickaxe())
+                    .simpleItem()
+                    .register();
+
+    public static BlockEntry<IDBlock> ID_BLOCK =
+            REGISTRATE.block("id_block", IDBlock::new)
+                    .initialProperties(SharedProperties::softMetal)
+                    .properties(BlockBehaviour.Properties::noOcclusion)
+                    .transform(axeOrPickaxe())
+                    .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
                     .simpleItem()
                     .register();
 

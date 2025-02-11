@@ -24,7 +24,9 @@ public enum ModGuiTextures implements ScreenElement {
     CHECKMARK("targeting", 3, 123, 18, 18),
     AUTO_TARGET("targeting", 203, 48, 18, 18),
     AUTO_FIRE("targeting", 44, 124, 18, 18),
-    MANUAL_FIRE("targeting", 64, 124, 18, 18);
+    MANUAL_FIRE("targeting", 64, 124, 18, 18),
+    ID_SCREEN("id_block", 225, 95),
+    ;
 
     public static final int FONT_COLOR = 0x575F7A;
 

@@ -50,6 +50,9 @@ public class ModCreativeTabs {
         }
         if (Mods.TRACKWORK.isLoaded()) {
         }
+        if (Mods.VALKYRIENSKIES.isLoaded()) {
+            pOutput.accept(ModBlocks.ID_BLOCK);
+        }
     }
 
 

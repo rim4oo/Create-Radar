@@ -6,6 +6,7 @@ import com.happysg.radar.block.monitor.MonitorFilter;
 import com.happysg.radar.registry.ModGuiTextures;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Indicator;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
@@ -101,7 +102,11 @@ public class RadarFilterScreen extends AbstractDataLinkScreen {
         addRenderableWidget(projectileButton);
         addRenderableWidget(projectileIndicator);
 
+    }
 
+    @Override
+    protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.renderWindow(graphics, mouseX, mouseY, partialTicks);
     }
 
     @Override

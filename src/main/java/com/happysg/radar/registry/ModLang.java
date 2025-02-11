@@ -74,6 +74,9 @@ public class ModLang {
         REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.start", "Start Position Set");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.reset", "Start Position Clear");
         REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.end", "Safe Zone Set");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".item.safe_zone_designator.remove", "Safe Zone Removed");
 
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".id_block.not_on_vs2", "VS2 not found");
+        REGISTRATE.addRawLang(CreateRadar.MODID + ".id_block.not_on_ship", "Not on a ship");
     }
 }
