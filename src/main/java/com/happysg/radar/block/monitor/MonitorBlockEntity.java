@@ -45,7 +45,7 @@ public class MonitorBlockEntity extends SmartBlockEntity implements IHaveHoverin
     //todo hashmap for multiple inputs
     Collection<RadarTrack> cachedTracks = List.of();
     MonitorFilter filter = MonitorFilter.DEFAULT;
-    List<AABB> safeZones = new ArrayList<>();
+    public List<AABB> safeZones = new ArrayList<>();
 
     public MonitorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

@@ -3,10 +3,21 @@ package com.happysg.radar.block.controller.firing;
 import com.happysg.radar.block.controller.pitch.AutoPitchControllerBlockEntity;
 import com.happysg.radar.block.controller.yaw.AutoYawControllerBlockEntity;
 import com.happysg.radar.block.datalink.screens.TargetingConfig;
+import com.happysg.radar.compat.cbc.CannonUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
+import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
+import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static com.happysg.radar.compat.cbc.CannonTargeting.calculateProjectileYatX;
 
 public class FiringControlBlockEntity {
 
@@ -16,11 +27,16 @@ public class FiringControlBlockEntity {
     CannonMountBlockEntity cannonMount;
     AutoPitchControllerBlockEntity pitchController;
     Level level;
+    public List<AABB> safeZones = new ArrayList<>();
+
 
     public FiringControlBlockEntity(AutoPitchControllerBlockEntity controller, CannonMountBlockEntity cannonMount) {
         this.cannonMount = cannonMount;
         this.pitchController = controller;
         this.level = cannonMount.getLevel();
+    }
+    public void setSafeZones(List<AABB> safeZones) {
+        this.safeZones = safeZones;
     }
 
     public void tick() {
@@ -32,12 +48,44 @@ public class FiringControlBlockEntity {
     }
 
     private boolean isTargetInRange() {
-        if (target == null)
+        if (target == null || !hasCorrectYawPitch() || passesSafeZone())
             return false;
-        if (!hasCorrectYawPitch())
-            return false;
-        //todo range check
         return true;
+    }
+    private boolean passesSafeZone() {
+        if(!(level instanceof ServerLevel)) { return false; }
+        for (AABB aabb : safeZones) {
+            if(aabb.contains(target)){
+                return true;
+            }
+            Vec3 cannonPos = cannonMount.getBlockPos().getCenter();
+
+            Optional<Vec3> optionalMinXMinY = aabb.clip(new Vec3(cannonPos.x, aabb.minY, cannonPos.z), new Vec3(target.x, aabb.minY, target.z));
+            Optional<Vec3> optionalMaxXMinY = aabb.clip(new Vec3(target.x, aabb.minY, target.z), new Vec3(cannonPos.x, aabb.minY, cannonPos.z));
+            if (optionalMinXMinY.isEmpty() || optionalMaxXMinY.isEmpty()) return false;
+            Vec3 minX = optionalMinXMinY.get();
+            Vec3 maxX = optionalMaxXMinY.get();
+
+            double yMax = aabb.maxY - cannonMount.getBlockPos().getY();
+            double yMin = aabb.minY - cannonMount.getBlockPos().getY();
+            PitchOrientedContraptionEntity contraption = cannonMount.getContraption();
+            if ( contraption == null || !(contraption.getContraption() instanceof AbstractMountedCannonContraption cannonContraption)) {
+                return false;
+            }
+            float speed = CannonUtil.getInitialVelocity(cannonContraption, (ServerLevel)  level);
+            double drag = CannonUtil.getProjectileDrag(cannonContraption, (ServerLevel) level);
+            double gravity = CannonUtil.getProjectileGravity(cannonContraption, (ServerLevel) level);
+            int barrelLength = CannonUtil.getBarrelLength(cannonContraption);
+
+            double thetaRad = Math.toRadians(cannonMount.getDisplayPitch());
+            double projectileYatMinX = calculateProjectileYatX(speed, cannonPos.distanceTo(minX) - barrelLength*Math.cos(thetaRad), thetaRad, drag, gravity);
+            double projectileYatMaxX = calculateProjectileYatX(speed, cannonPos.distanceTo(maxX) - barrelLength*Math.cos(thetaRad), thetaRad, drag, gravity);
+
+            if((projectileYatMinX >= yMin && projectileYatMaxX <= yMax) || (projectileYatMinX<= yMin && projectileYatMaxX >= yMin)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean hasCorrectYawPitch() {

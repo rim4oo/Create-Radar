@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
@@ -169,4 +170,8 @@ public class AutoPitchControllerBlockEntity extends KineticBlockEntity {
             return;
         firingControl.setTarget(targetPos, targetingConfig);
     }
+    public void setSafeZones(List<AABB> safeZones) {
+        if (firingControl == null)
+            return;
+        firingControl.setSafeZones(safeZones);    }
 }

@@ -15,7 +15,11 @@ import java.util.List;
 import static java.lang.Double.NaN;
 
 public class CannonTargeting {
-
+    public static double calculateProjectileYatX(double speed, double dX, double thetaRad,double drag, double g ) {
+        double log = Math.log(1 - (drag * dX) / (speed * Math.cos(thetaRad)));
+        if (Double.isInfinite(log)) log = NaN;
+        return dX * Math.tan(thetaRad) + (dX * g) / (drag * speed * Math.cos(thetaRad)) + g*log / (drag * drag);
+    }
 
     public static List<Double> calculatePitch(double speed, Vec3 targetPos, Vec3 originPos, int barrelLength, double drag, double gravity) {
         if (speed == 0) {
@@ -23,7 +27,7 @@ public class CannonTargeting {
         }
         double d1 = targetPos.x - originPos.x;
         double d2 = targetPos.z - originPos.z;
-            double distance = Math.abs(Math.sqrt(d1 * d1 + d2 * d2));
+        double distance = Math.abs(Math.sqrt(d1 * d1 + d2 * d2));
         double d3 = targetPos.y - originPos.y;
         double g = Math.abs(gravity);
         UnivariateFunction diffFunction = theta -> {
@@ -31,13 +35,7 @@ public class CannonTargeting {
 
             double dX = distance - (Math.cos(thetaRad) * (barrelLength));
             double dY = d3 - (Math.sin(thetaRad) * (barrelLength));
-            double log = Math.log(1 - (drag * dX) / (speed * Math.cos(thetaRad)));
-
-            if (Double.isInfinite(log)) {
-                log = NaN;
-            }
-
-            double y = (dX * Math.tan(thetaRad) + (dX * g) / (drag * speed * Math.cos(thetaRad)) + g*log / (drag * drag) );
+            double y = calculateProjectileYatX(speed, dX, thetaRad, drag, g);
             return y - dY;
         };
 
@@ -75,11 +73,7 @@ public class CannonTargeting {
         }
 
         PitchOrientedContraptionEntity contraption = mount.getContraption();
-        if (contraption == null) {
-            return null;
-        }
-
-        if (!(contraption.getContraption() instanceof AbstractMountedCannonContraption cannonContraption)) {
+        if ( contraption == null || !(contraption.getContraption() instanceof AbstractMountedCannonContraption cannonContraption)) {
             return null;
         }
         float chargePower = CannonUtil.getInitialVelocity(cannonContraption, level);
@@ -87,8 +81,8 @@ public class CannonTargeting {
         Vec3 mountPos = mount.getBlockPos().above(2).getCenter();
         int barrelLength = CannonUtil.getBarrelLength(cannonContraption);
 
-        double drag = CannonUtil.getProjectileDrag((AbstractMountedCannonContraption) contraption.getContraption(), level);
-        double gravity = CannonUtil.getProjectileGravity((AbstractMountedCannonContraption) contraption.getContraption(), level);
+        double drag = CannonUtil.getProjectileDrag(cannonContraption, level);
+        double gravity = CannonUtil.getProjectileGravity(cannonContraption, level);
 
         return calculatePitch(chargePower, targetPos, mountPos, barrelLength, drag, gravity);
     }
