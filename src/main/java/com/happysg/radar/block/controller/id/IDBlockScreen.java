@@ -67,7 +67,6 @@ public class IDBlockScreen extends AbstractSimiScreen {
     @Override
     public void onClose() {
         super.onClose();
-        if (id.isEmpty() && name.isEmpty()) return;
         ModMessages.sendToServer(new IDRecordPacket(ship.getSlug(), id, name));
     }
 }

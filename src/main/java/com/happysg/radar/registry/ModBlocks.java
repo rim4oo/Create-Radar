@@ -98,7 +98,8 @@ public class ModBlocks {
                     .transform(BlockStressDefaults.setImpact(0))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .transform(axeOrPickaxe())
-                    .blockstate((c, p) -> p.directionalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
+                    .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
+                            .getExistingFile(ctx.getId()), 0))
                     .simpleItem()
                     .register();
 
@@ -111,7 +112,8 @@ public class ModBlocks {
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .addLayer(() -> RenderType::cutoutMipped)
                     .transform(axeOrPickaxe())
-                    .blockstate((c, p) -> p.directionalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
+                    .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
+                            .getExistingFile(ctx.getId()), 0))
                     .simpleItem()
                     .register();
 
@@ -123,7 +125,8 @@ public class ModBlocks {
                     .transform(BlockStressDefaults.setImpact(0))
                     .properties(BlockBehaviour.Properties::noOcclusion)
                     .transform(axeOrPickaxe())
-                    .blockstate((c, p) -> p.directionalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
+                    .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
+                            .getExistingFile(ctx.getId()), 0))
                     .simpleItem()
                     .register();
 
@@ -133,7 +136,8 @@ public class ModBlocks {
                     .initialProperties(SharedProperties::softMetal)
                     .transform(BlockStressDefaults.setImpact(0))
                     .properties(BlockBehaviour.Properties::noOcclusion)
-                    .blockstate((c, p) -> p.directionalBlock(c.getEntry(), AssetLookup.standardModel(c, p)))
+                    .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
+                            .getExistingFile(ctx.getId()), 0))
                     .simpleItem()
                     .register();
 

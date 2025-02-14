@@ -10,6 +10,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
+import java.util.List;
+
 public class RadarFilterScreen extends AbstractDataLinkScreen {
 
     boolean player;
@@ -29,6 +31,10 @@ public class RadarFilterScreen extends AbstractDataLinkScreen {
     protected IconButton projectileButton;
     protected Indicator projectileIndicator;
 
+    List<String> playerBlacklist;
+    List<String> playerWhitelist;
+    List<String> vs2Whitelist;
+
     public RadarFilterScreen(DataLinkBlockEntity be) {
         super(be);
         this.background = ModGuiTextures.RADAR_FILTER;
@@ -41,6 +47,9 @@ public class RadarFilterScreen extends AbstractDataLinkScreen {
         contraption = monitorFilter.contraption();
         mob = monitorFilter.mob();
         projectile = monitorFilter.projectile();
+        playerBlacklist = monitorFilter.blacklistPlayers();
+        playerWhitelist = monitorFilter.whitelistPlayers();
+        vs2Whitelist = monitorFilter.whitelistVS();
     }
 
 
@@ -112,7 +121,7 @@ public class RadarFilterScreen extends AbstractDataLinkScreen {
     @Override
     public void onClose(CompoundTag tag) {
         super.onClose(tag);
-        MonitorFilter monitorFilter = new MonitorFilter(player, vs2, contraption, mob, projectile);
+        MonitorFilter monitorFilter = new MonitorFilter(player, vs2, contraption, mob, projectile, playerBlacklist, playerWhitelist, List.of(), vs2Whitelist);
         tag.put("filter", monitorFilter.toTag());
     }
 }

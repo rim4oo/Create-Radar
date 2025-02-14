@@ -42,6 +42,10 @@ public class IDBlock extends Block {
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+        if (!Mods.VALKYRIENSKIES.isLoaded()) {
+            super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+            return;
+        }
         Ship ship = VS2Utils.getShipManagingPos(pLevel, pPos);
         if (ship != null) {
             IDManager.removeIDRecord(ship);
