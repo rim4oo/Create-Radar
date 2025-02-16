@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "create:electron_tube"
+    },
+    "B": {
+      "item": "minecraft:ender_eye"
+    },
+    "C": {
+      "item": "create:redstone_link"
+    },
+    "D": {
+      "item": "create:golden_sheet"
+    },
+    "E": {
+      "item": "createbigcannons:impact_fuze"
+    },
+    "F": {
+      "item": "create:white_sail"
+    },
+    "G": {
+      "item": "create:propeller"
+    }
+  },
+  "pattern": [
+    "ABC",
+    "DED",
+    "FGF"
+  ],
+  "result": {
+    "count": 1,
+    "item": "create_radar:guided_fuze"
+  },
+  "show_notification": true
+}

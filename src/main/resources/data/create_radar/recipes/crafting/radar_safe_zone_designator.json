@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:lightning_rod"
+    },
+    "B": {
+      "item": "minecraft:redstone_torch"
+    },
+    "C": {
+      "item": "create:linked_controller"
+    },
+    "D": {
+      "item": "create:iron_sheet"
+    }
+  },
+  "pattern": [
+    "BA",
+    "CD"
+  ],
+  "result": {
+    "count": 1,
+    "item": "create_radar:radar_safe_zone_designator"
+  },
+  "show_notification": true
+}

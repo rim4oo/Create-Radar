@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:name_tag"
+    },
+    "B": {
+      "item": "create:andesite_casing"
+    }
+  },
+  "pattern": [
+    "A",
+    "B"
+  ],
+  "result": {
+    "count": 1,
+    "item": "create_radar:id_block"
+  },
+  "show_notification": true
+}
